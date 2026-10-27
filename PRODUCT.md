@@ -19,7 +19,7 @@ Product truth for the INFINT site. Visual decisions live in DESIGN.md.
 | Route | Mode | Job |
 |---|---|---|
 | Home `#/` | Persuade / Experience | First impression, the work up front, path to Work, Rates and Book |
-| Work `#/work` | Experience | Browse 227 photos by category, open the viewer |
+| Work `#/work` | Experience | Browse photos by category (from the menu), open the viewer |
 | Rates `#/rates` | Persuade | Packages, hourly rates, add-ons, day-rate estimator |
 | Book `#/book` | Operate | 3-step enquiry form, WhatsApp and email fallback |
 | Contact `#/contact` | Operate | Details plus a short message form |
@@ -28,7 +28,7 @@ Product truth for the INFINT site. Visual decisions live in DESIGN.md.
 
 ## Truths and limits
 
-- Real numbers only: photo counts come from the data, prices from his 2026 rate cards. No invented stats, follower counts, posts or testimonials.
+- Real numbers only: prices from his 2026 rate cards. No photo counts anywhere on the site (his request). No invented stats, follower counts, posts or testimonials.
 - Contact: phone and WhatsApp 073 296 5528, info@infint.co.za (main), tshedza@infint.co.za (direct), bookings@infint.co.za (booking fallback).
 - Socials: Instagram and TikTok @infint_co, YouTube @tshedza_tt, linktr.ee/tshedzatt.
 - Plain HTML, CSS and JS, no build step, hosted on Cloudflare Pages. Forms post to `functions/api/enquiry.js`.

@@ -207,7 +207,6 @@ nav.main .nav-book{display:none}
 .cat h3{font-size:clamp(1.5rem,2.2vw,2.4rem);font-stretch:75%;letter-spacing:-.02em;line-height:.92}
 .cat:first-child h3{font-size:clamp(2.4rem,4.4vw,4.6rem)}
 .cat p{margin:8px 0 0;color:rgba(255,255,255,.72);font-size:.9rem;max-width:40ch;line-height:1.45}
-.cat .n{font-family:var(--display);font-stretch:62%;font-weight:700;font-size:1.05rem;color:var(--accent);white-space:nowrap;font-variant-numeric:tabular-nums}
 .cat:not(:first-child) p{display:none}
 @media(hover:hover) and (pointer:fine){
   .cats:has(.cat:hover) .cat:not(:hover) img{opacity:.6}
@@ -311,10 +310,8 @@ nav.main .nav-book{display:none}
   font-family:var(--display);font-size:.74rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.75);
   transition:background-color .2s ease,border-color .2s ease,color .2s ease,transform .14s var(--ease)}
 .chip:active{transform:scale(.97)}
-.chip .n{font-stretch:62%;font-size:.9rem;letter-spacing:0;color:var(--mute);font-variant-numeric:tabular-nums}
 .chip:hover{border-color:rgba(255,255,255,.4);color:#fff}
 .chip.on{background:var(--accent);border-color:var(--accent);color:var(--ink);box-shadow:0 8px 24px -10px rgba(255,160,0,.7)}
-.chip.on .n{color:rgba(14,17,21,.65)}
 .work-grid{padding:clamp(24px,3vw,44px) 0 var(--sec)}
 
 /* Rates */

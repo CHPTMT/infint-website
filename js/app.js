@@ -27,7 +27,6 @@ function toast(msg,bad){const t=$("#toast");t.textContent=msg;t.classList.toggle
   t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),3600);}
 function waLink(text){return "https://wa.me/"+CONFIG.contact.whatsapp+(text?"?text="+encodeURIComponent(text):"");}
 function mailtoLink(subject,body,to){return "mailto:"+(to||CONFIG.contact.email)+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);}
-const catCount = key => PHOTOS.filter(p=>p.cat===key).length;
 const catName = key => (CATEGORIES.find(c=>c.key===key)||{}).name||"";
 
 /* One photo as an <img>. Thumbs are 720 px wide; full photos are 2000 px on the long side. */
@@ -152,7 +151,7 @@ V.home = () => {
         </div>
       </div>
       <div class="specs">
-        <div><span class="mega">${PHOTOS.length}</span><span class="label">Photos on this site</span></div>
+        <div><span class="mega">JHB</span><span class="label">Based here, shooting Gauteng and beyond</span></div>
         <div><span class="mega">${CATEGORIES.length}</span><span class="label">Kinds of work</span></div>
         <div><span class="mega">24<sup>H</sup></span><span class="label">To a written quote</span></div>
       </div>
@@ -173,7 +172,7 @@ V.home = () => {
     <div class="cats">
       ${CATEGORIES.map((c,i)=>`<a class="cat rv" style="--d:${(i%5)*.06}s" href="#/work?f=${c.key}">
         ${pic(c.cover,i===0?{sizes:"(max-width:1200px) 360px, 40vw",alt:""}:{thumb:true,alt:""})}
-        <span class="meta"><span><h3>${esc(c.name)}</h3><p>${esc(c.blurb)}</p></span><span class="n">${catCount(c.key)}</span></span>
+        <span class="meta"><span><h3>${esc(c.name)}</h3><p>${esc(c.blurb)}</p></span></span>
       </a>`).join("")}
     </div>
   </div></section>
@@ -181,7 +180,7 @@ V.home = () => {
   <section class="section pt0"><div class="wrap wide">
     <div class="head-row">
       <h2 class="h2 rv">Recent <span class="it">frames</span>.</h2>
-      <a class="link rv" href="#/work">Full portfolio, ${PHOTOS.length} photos ${ICON.go}</a>
+      <a class="link rv" href="#/work">Full portfolio ${ICON.go}</a>
     </div>
     ${tileGrid(HOME.featured)}
   </div></section>
@@ -226,10 +225,10 @@ V.work = (q) => {
   const f = CATEGORIES.some(c=>c.key===q.f) ? q.f : "all";
   S.filter = f;
   return `
-  ${pageHead(`The <span class="it">work</span>.`,"Events, portraits, matric dances, match days, fashion and the small details in between. "+PHOTOS.length+" photos from real shoots.")}
+  ${pageHead(`The <span class="it">work</span>.`,"Events, portraits, matric dances, match days, fashion and the small details in between. All from real shoots.")}
   <div class="filterbar"><div class="wrap wide"><div class="filters" role="group" aria-label="Filter photos">
-    <button class="chip ${f==="all"?"on":""}" data-filter="all" aria-pressed="${f==="all"}">Everything <span class="n">${PHOTOS.length}</span></button>
-    ${CATEGORIES.map(c=>`<button class="chip ${f===c.key?"on":""}" data-filter="${c.key}" aria-pressed="${f===c.key}">${esc(c.name)} <span class="n">${catCount(c.key)}</span></button>`).join("")}
+    <button class="chip ${f==="all"?"on":""}" data-filter="all" aria-pressed="${f==="all"}">Everything</button>
+    ${CATEGORIES.map(c=>`<button class="chip ${f===c.key?"on":""}" data-filter="${c.key}" aria-pressed="${f===c.key}">${esc(c.name)}</button>`).join("")}
   </div></div></div>
   <section class="work-grid"><div class="wrap wide" id="work-grid">${workGrid(f)}</div></section>
   ${ctaBlock()}`;

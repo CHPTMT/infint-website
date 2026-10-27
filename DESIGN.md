@@ -66,7 +66,7 @@ Fonts, both self-hosted in `assets/fonts` (Latin subset): **Outfit** (variable 2
 
 - `--max: 1600px` main container, `--max-wide: 1880px` for photo grids. Gutters `clamp(20px, 4vw, 64px)`.
 - Heroes and photo sections are full bleed.
-- Work grid: masonry columns, 2 at phone, 3 at 760 px, 4 at 1100 px, 5 at 1440 px, 6 at 1800 px.
+- Work grid: masonry built as real flex columns by `layoutMasonry()` in app.js: 2 up to 700 px, 3 up to 1100 px, 4 up to 1279 px, 5 from 1280 px, 6 from 1800 px. Each photo goes to the shortest column, so the order reads left to right. Never CSS multi-column: iOS Safari drops transformed photos at the top of a column.
 - Split screen (photo plus ink panel) is the signature layout: Home hero, Book and Contact. On phones the photo stacks on top at a fixed height.
 - Section rhythm: `clamp(80px, 11vw, 180px)` vertical padding. More space above a heading than below.
 
@@ -90,29 +90,33 @@ Library: none. CSS transitions and keyframes, IntersectionObserver for reveals, 
 | Route | 380 ms out and in | Page changes |
 
 Moments, in order of importance:
-1. **Hero:** photos crossfade with a slow zoom (7 s each), the big condensed category word swaps with a clip reveal, and the amber mesh drifts.
-2. **Photo lift:** the hovered photo scales to 1.04, rises 6 px, gains the amber edge glow; siblings dim to 55% brightness and desaturate slightly. Pure CSS (`:has()`), so moving across the grid stays smooth. On touch screens the photo nearest the middle of the screen lifts as you scroll.
+1. **Hero:** five slides (Fashion, Prom, Sport, Events, Portraits). Each page load picks one photo per slide at random from `HOME.slides` pools (tall photos that hold up full screen). Photos crossfade with a slow zoom (7 s each), the big category word swaps with a clip reveal, and the amber mesh drifts.
+2. **Photo lift:** the hovered photo scales to 1.04, rises 6 px, gains the amber edge glow; siblings dim to 55% brightness and desaturate slightly. Pure CSS (`:has()`), so moving across the grid stays smooth. On touch screens the photo crossing the middle of the screen lifts. The lift moves the inner `.tile-in`; the observed `.tile` never moves, so the lift cannot switch itself on and off.
 3. **Reveal on scroll:** elements fade up 28 px with a light blur, grid items stagger by 50 ms within a row.
-4. **Marquee:** a horizontal strip of photos drifting at a constant linear speed, pausing on hover.
+4. **Marquee:** two strips of 12 photos drifting at a constant linear speed, pausing on hover. Picked at random per page load from `HOME.strips`, round robin over the categories so neighbours never come from the same shoot.
 5. **Parallax:** large images move up to 8% of their height against scroll. Desktop only.
 6. **Buttons:** primary amber pills have a soft amber glow that grows on hover and follow the pointer by up to 6 px (magnetic). Desktop only.
 
 `prefers-reduced-motion: reduce` turns off the marquee drift, parallax, magnetic pull, hero zoom and reveal movement. Opacity fades stay.
 
+## Counts
+
+No photo counts anywhere: not on categories, the Work page, the hero, captions or the viewer (Tshedza's request).
+
 ## Components
 
-- **Header:** transparent over the hero, turns into blurred ink with a hairline once you scroll. White wordmark image (`assets/brand/infint-wordmark-white-transparent.png`). Links: Work, Rates, About, Socials, Contact, plus an amber "Book a shoot" pill. On phones a full-screen ink menu with large type.
+- **Header:** transparent over the hero, turns into blurred ink with a hairline once you scroll. White wordmark image (`assets/brand/infint-wordmark-white-transparent.png`). The amber "Book a shoot" pill (desktop) and a burger at every width. The burger opens one full-screen ink menu: Work with every category under it (Everything, Events, Portraits, Prom, Sports & active, Fashion & editorial, Street, Details), then Rates, About, Socials, Contact, Book a shoot. Big links in Montserrat Black; categories in thin Outfit. On desktop the categories sit in a second column headed Work. The header drops its blur while the menu is open, otherwise the fixed menu would be trapped in the header's box.
 - **Buttons:** `.btn` (amber pill), `.btn.ghost` (1 px line pill), `.btn.light` (white pill on photos). Arrow icon slides 3 px on hover.
-- **Chips:** pill filters with counts, active chip is amber.
-- **Photo tile:** 14 px radius, caption fades in on hover, lifts as described above.
-- **Category card:** tall photo, name in condensed display over a bottom gradient, count in the corner.
+- **Work categories:** chosen from the menu, not from filter pills. A filtered Work page takes the category's name as its title and its blurb as the lede, with an "Other categories" link that opens the menu.
+- **Photo tile:** 14 px radius, caption (the photo's category) fades in on hover, lifts as described above.
+- **Category card:** tall photo, name in Montserrat over a bottom gradient. No counts.
 - **Rate card:** ink-3 surface, mega price, includes list with hairlines. The featured card has an amber ring and glow.
 - **Rate table:** large rows, condensed price on the right.
 - **Estimator:** glow panel with grid lines, inputs on the left, mega number output on the right.
 - **Steps:** three segments with condensed numbers and an amber progress fill.
 - **Inputs:** ink-3 fill, 1 px border, amber focus ring.
 - **FAQ:** hairline accordion, plus icon rotates to a cross.
-- **Viewer:** full-screen ink, image fades and scales in from .98, counter in condensed type, arrow buttons as round line icons.
+- **Viewer:** full-screen ink, image fades and scales in from .98, the photo's category in the top bar, arrow buttons as round line icons. No counter.
 - **Social card:** full photo, platform icon, handle, "Open on Instagram" style action. No counts.
 - **Colour-block CTA:** full-width amber panel with ink text and an ink button.
 

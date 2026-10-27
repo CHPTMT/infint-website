@@ -166,7 +166,7 @@ These 16 appear on the homepage in this order (set by `HOME.featured`): `portrai
 | `matric-15` | `From Portfolio 2026\portfolio-2026-005-023.jpg` | Portrait |  |
 | `matric-16` | `From Portfolio 2026\portfolio-2026-014-056.jpg` | Portrait |  |
 
-### Sports & active (`active`), 48 photos
+### Sports (`active`), 48 photos
 
 | Id | Original file | Shape | Homepage |
 |---|---|---|---|

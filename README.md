@@ -24,7 +24,7 @@ Most day-to-day changes (prices, a new photo, a new FAQ answer) only touch `js/c
 | URL | Page |
 |---|---|
 | `#/` | Home: header image, what I shoot, recent frames, how it works |
-| `#/work` | Portfolio, with categories in the menu: Events, Portraits, Prom, Sports & active, Fashion & editorial, Street, Details |
+| `#/work` | Portfolio, with categories in the menu: Events, Portraits, Prom, Sports, Fashion & editorial, Street, Details |
 | `#/rates` | Graduation packages, short shoots, day rates, add-ons, day-rate estimator |
 | `#/book` | Three-step booking enquiry |
 | `#/contact` | Contact details and message form |

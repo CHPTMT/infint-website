@@ -36,9 +36,11 @@
 4. The hero Fashion slide is always the original `fashion-16` (his choice); the other four slides still rotate.
 5. `tools/serve.ps1` no longer stops when a browser cancels a download.
 
-**Open questions:** none from this round. Still open from before: banking details for booking acceptance emails.
+**Open questions:**
+1. "The original picture for fashion": read as the hero Fashion slide, now always `fashion-16`. If he meant the order of the Fashion page, restore it from commit 93c23f1 (`git show 93c23f1:js/content.js`).
+2. From before: banking details for booking acceptance emails (`CONFIG.booking.payment` on `preview`).
 
-**Next steps:** Tshedza checks https://redesign.infint.pages.dev on his phone (especially the photo grids on iPhone) and sends the next round of feedback.
+**Next steps:** Tshedza tests https://redesign.infint.pages.dev on his phone: photo grids on iPhone (no blank or flickering photos), photo order on each Work category, sharpness of the hero and cards, the burger menu. Then he sends the next round of feedback. Nothing from the redesign goes to `main` until he says so.
 
 **Brand files (in the repo, use these, don't recreate the logo):**
 - `assets/brand/infint-logo-white-on-black.png`: white INFINT wordmark on dark grey #262626, 1080 px square. Tshedza's preferred version.
@@ -100,3 +102,5 @@ Total running cost: about R208 a year, or about R109 without the add-on.
 - 27 Oct 2026, chat to Claude Code: initial handover (this document).
 - 27 Oct 2026, chat: added tshedza@, bookings@ and info@infint.co.za forwarding; form emails now sent as "INFINT Bookings" and "INFINT Info".
 - 27 Oct 2026, chat: logo files and tab icons added to assets/brand and assets/icons; Claude Code CLI, Node.js and Python installed on his PC; skills impeccable and emil-design-eng plus Playwright MCP set up for this folder. Resend key "gmail-send-as" created for Gmail "Send mail as".
+- 27 Oct 2026, Claude Code: contact details, tab title and icons live on main; booking Accept and Decline built on preview.
+- 27 Oct 2026, Claude Code: redesign feedback rounds 1 and 2 done on the redesign branch (see Latest handover).

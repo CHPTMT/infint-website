@@ -422,6 +422,9 @@ textarea.input{min-height:140px;resize:vertical;line-height:1.5}
 .opt.on::after{content:"";position:absolute;top:14px;right:14px;width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
 .opt strong{display:block;font-family:var(--display);font-weight:500;font-size:1.02rem;color:#fff;margin-bottom:4px}
 .opt span{font-size:.84rem;color:var(--mute);line-height:1.4;display:block}
+/* Booking sent: replaces the form inside .split-body */
+#booked .booked-k{color:var(--accent);margin:0 0 16px}
+#booked .lede{margin:20px 0 30px}
 .review{border-top:1px solid var(--line)}
 .review .r{display:grid;grid-template-columns:160px minmax(0,1fr);gap:16px;padding:12px 0;border-bottom:1px solid var(--line);font-size:.95rem}
 .review .r span:first-child{color:var(--mute)}

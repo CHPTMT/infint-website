@@ -295,7 +295,9 @@ const CONFIG = {
      WhatsApp and email instead, so no enquiry is lost. */
   forms:{endpoint:"/api/enquiry"},
 
-  booking:{depositPct:50,
+  /* depositPct and terms are also used in the booking emails (functions/_shared/booking.js).
+     Bank details are NOT kept here: they live in the BANK_DETAILS secret in Cloudflare and only go into the acceptance email. */
+  booking:{depositPct:50,replyHours:24,
     terms:"A 50% booking fee secures the date. The balance is due on or before the shoot day. Booking fees are non-refundable but transferable once, up to 14 days before the shoot."},
 
   /* Shoot types offered in the booking form */
@@ -360,3 +362,6 @@ const CONFIG = {
 
   aboutTags:["Event","Detail","Wedding","Portrait","Headshots","Corporate","Graduation","Prom","Fashion","Sport"]
 };
+
+/* Lets the Cloudflare functions read CONFIG (booking terms, services, contact details). */
+globalThis.INFINT_CONFIG = CONFIG;

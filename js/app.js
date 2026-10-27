@@ -32,12 +32,16 @@ function waLink(text){return "https://wa.me/"+CONFIG.contact.whatsapp+(text?"?te
 function mailtoLink(subject,body,to){return "mailto:"+(to||CONFIG.contact.email)+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);}
 const catName = key => (CATEGORIES.find(c=>c.key===key)||{}).name||"";
 
-/* One photo as an <img>. Thumbs are 720 px wide; full photos are 2000 px on the long side. */
-function pic(id,{sizes="(max-width:700px) 50vw, 25vw",eager=false,cls="",alt,thumb=false}={}){
+/* Image files: thumbs are 720 px and full photos 2000 px on the LONG side (a portrait thumb is only about 480 px wide).
+   assets/hero holds 2600 px copies of the photos shown biggest (tools/resize-hero.ps1).
+   srcset must state each file's real width, or the browser picks a file that is too small and the photo looks soft. */
+const xlPath = id => "assets/hero/"+id+".jpg";
+const widthAt = (p,long) => Math.round(long*Math.min(p.r,1));
+const srcsetOf = (id,xl) => { const p=photo(id)||{r:.667};
+  return `${thumbPath(id)} ${widthAt(p,720)}w, ${fullPath(id)} ${widthAt(p,2000)}w${xl?`, ${xlPath(id)} ${widthAt(p,2600)}w`:""}`; };
+function pic(id,{sizes="(max-width:700px) 50vw, 25vw",eager=false,cls="",alt,xl=false}={}){
   const p=photo(id)||{r:.667,alt:""};
-  const fw=p.r>=1?2000:Math.round(2000*p.r);
-  const set=thumb?"":`srcset="${thumbPath(id)} 720w, ${fullPath(id)} ${fw}w" sizes="${sizes}"`; /* thumb: the 720 px file only, for small cards */
-  return `<img ${cls?`class="${cls}"`:""} src="${thumbPath(id)}" ${set}
+  return `<img ${cls?`class="${cls}"`:""} src="${thumbPath(id)}" srcset="${srcsetOf(id,xl)}" sizes="${sizes}"
     width="720" height="${Math.round(720/p.r)}" ${eager?'fetchpriority="high"':'loading="lazy"'} decoding="async" alt="${esc(alt??(p.alt||"INFINT photograph"))}">`;
 }
 
@@ -105,7 +109,7 @@ const SOCIALS = [
 ];
 function socialCards(){
   return `<div class="socials">${SOCIALS.map((s,i)=>`<a class="soc rv" style="--d:${i*.08}s" href="${esc(s.url())}" target="_blank" rel="noopener" aria-label="${s.plat} ${s.handle} (opens in a new tab)">
-      ${pic(PAGE_PHOTOS.socials[s.key],{thumb:true,alt:""})}
+      ${pic(PAGE_PHOTOS.socials[s.key],{sizes:"(max-width:900px) 100vw, 34vw",alt:""})}
       <span class="ico" aria-hidden="true">${ICON[s.key]}</span>
       <span class="plat">${s.plat}</span>
       <span class="handle">${s.handle}</span>
@@ -144,9 +148,9 @@ V.home = () => {
   return `
   <section class="hero" style="--slide:6.5s">
     <div class="hero-photo" id="hero-photo">
-      ${sl.map((s,i)=>{const p=photo(s.id), fw=Math.round(2000*Math.min(p.r,1));
+      ${sl.map((s,i)=>{const p=photo(s.id), set=srcsetOf(s.id,true);
         return `<div class="slide ${i===0?"on":""}" data-word="${esc(s.word)}">
-          <img ${i===0?`src="${thumbPath(s.id)}" srcset="${thumbPath(s.id)} 720w, ${fullPath(s.id)} ${fw}w" fetchpriority="high"`:`data-src="${thumbPath(s.id)}" data-srcset="${thumbPath(s.id)} 720w, ${fullPath(s.id)} ${fw}w"`}
+          <img ${i===0?`src="${thumbPath(s.id)}" srcset="${set}" fetchpriority="high"`:`data-src="${thumbPath(s.id)}" data-srcset="${set}"`}
             sizes="(max-width:960px) 100vw, 56vw" width="720" height="${Math.round(720/p.r)}" decoding="async" alt="${esc(p.alt||"INFINT photograph")}"></div>`;}).join("")}
       <div class="hero-dots" role="group" aria-label="Choose a photo">${sl.map((s,i)=>`<button type="button" class="${i===0?"on":""}" data-go="${i}" aria-label="Show ${esc(s.word)} photo"></button>`).join("")}</div>
       <div class="hero-word" aria-hidden="true">
@@ -176,7 +180,7 @@ V.home = () => {
 
   <section class="marquee" aria-label="A moving strip of recent photos">
     ${PICK.strips.map((row,ri)=>{const ok=row;
-      const cell=(id,dup)=>`<a href="#/work?f=${photo(id).cat}" ${dup?'tabindex="-1" aria-hidden="true"':""}>${pic(id,{thumb:true,alt:dup?"":undefined})}</a>`;
+      const cell=(id,dup)=>`<a href="#/work?f=${photo(id).cat}" ${dup?'tabindex="-1" aria-hidden="true"':""}>${pic(id,{sizes:Math.round(280*photo(id).r)+"px",alt:dup?"":undefined})}</a>`;
       return `<div class="mq-track ${ri%2?"rev":""}">${ok.map(id=>cell(id,0)).join("")}${ok.map(id=>cell(id,1)).join("")}</div>`;}).join("")}
   </section>
 
@@ -187,7 +191,8 @@ V.home = () => {
     </div>
     <div class="cats">
       ${CATEGORIES.map((c,i)=>`<a class="cat rv" style="--d:${(i%5)*.06}s" href="#/work?f=${c.key}">
-        ${pic(c.cover,i===0?{sizes:"(max-width:1200px) 360px, 40vw",alt:""}:{thumb:true,alt:""})}
+        ${pic(c.cover,{alt:"",sizes:i===0?(photo(c.cover).r>1?"(max-width:1200px) 100vw, 65vw":"(max-width:1200px) 100vw, 40vw")
+        :(photo(c.cover).r>1?"(max-width:700px) 80vw, (max-width:1200px) 55vw, 36vw":"(max-width:700px) 50vw, (max-width:1200px) 34vw, 22vw")})}
         <span class="meta"><span><h3>${esc(c.name)}</h3><p>${esc(c.blurb)}</p></span></span>
       </a>`).join("")}
     </div>
@@ -203,7 +208,7 @@ V.home = () => {
 
   <section class="feature">
     <div class="feature-photo">
-      ${pic(HOME.ratesPhoto,{sizes:"(max-width:900px) 100vw, 50vw",cls:"px",alt:""})}
+      ${pic(HOME.ratesPhoto,{sizes:"(max-width:900px) 100vw, 50vw",cls:"px",alt:"",xl:true})}
       <div class="over"><span class="label">Graduation shoots</span><span class="mega">${fromPrice(minOf(r.grads.items))}</span></div>
     </div>
     <div class="feature-body glow">

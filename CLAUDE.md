@@ -40,11 +40,12 @@ Plain HTML, CSS and JavaScript with no build step and no framework. Live at http
 - Fonts: Outfit (thin modern sans: body, most headings, labels, buttons) and Montserrat Bold or Black (big titles, menu links, prices and big numbers, About text). Both self-hosted in `assets/fonts`. No italic accent words.
 - About photo is black and white with extra contrast; keep it that height.
 - No thin decorative lines beside headings. No client gallery, admin page or database (removed on purpose).
-- Within each Work category, photos are ordered so frames from the same shoot never sit next to each other. Keep that when adding photos.
+- Within each Work category, photos are ordered so frames from the same shoot never sit next to each other. `node tools/order-photos.js --write` does this: it works out shoots from the original file names and checks the real grid at 2 to 6 columns. Run it after adding photos.
+- No low-res photos: `srcset` widths must be each file's real width (thumbs are 720 px on the LONG side). Photos shown big (hero pools, rates teaser) also have 2600 px copies in `assets/hero`; rebuild them with `tools\resize-hero.ps1` after changing a pool, and only put photos into a hero pool whose original is at least 2600 px on the long side.
 
 ## Adding photos
 
-See ASSETS.md. Originals live on Tshedza's PC in `C:\Users\tshed\Pictures\INF JPG\Website Commits\` (sorted into folders). Add rows to `tools/photos.csv`, run `tools\resize-photos.ps1`, then add entries to `PHOTOS` in `js/content.js` using the sizes in `tools/photos-manifest.csv`.
+See ASSETS.md. Originals live on Tshedza's PC in `C:\Users\tshed\Pictures\INF JPG\Website Commits\` (sorted into folders). Add rows to `tools/photos.csv`, run `tools\resize-photos.ps1`, then add entries to `PHOTOS` in `js/content.js` using the sizes in `tools/photos-manifest.csv`, then run `node tools/order-photos.js --write`.
 
 ## Secrets
 

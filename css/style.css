@@ -1,4 +1,10 @@
 /* INFINT site styles. Design system in DESIGN.md. Colours, fonts and sizes live in :root below. */
+/* Fonts, self-hosted from Google Fonts (Latin subset, SIL Open Font Licence) so nothing blocks the first paint */
+@font-face{font-family:'Archivo';font-style:normal;font-weight:600 800;font-stretch:62% 100%;font-display:swap;src:url(../assets/fonts/archivo-latin.woff2) format('woff2')}
+@font-face{font-family:'Archivo';font-style:italic;font-weight:300;font-stretch:100%;font-display:swap;src:url(../assets/fonts/archivo-italic-300-latin.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:400 600;font-display:swap;src:url(../assets/fonts/inter-latin.woff2) format('woff2')}
+@font-face{font-family:'Montserrat';font-style:normal;font-weight:700;font-display:swap;src:url(../assets/fonts/montserrat-700-latin.woff2) format('woff2')}
+
 :root{
   --ink:#0E1115;--ink-2:#08090B;--ink-3:#151A20;--ink-4:#1C222A;
   --line:rgba(255,255,255,.09);--line-2:rgba(255,255,255,.16);
@@ -66,9 +72,9 @@ p{margin:0 0 1em}
   -webkit-mask-image:radial-gradient(ellipse 70% 60% at var(--gx,70%) var(--gy,30%),#000 0%,transparent 75%);mask-image:radial-gradient(ellipse 70% 60% at var(--gx,70%) var(--gy,30%),#000 0%,transparent 75%)}
 .mesh{position:absolute;inset:-20%;z-index:-1;pointer-events:none;opacity:.9}
 .mesh i{position:absolute;border-radius:50%;display:block}
-.mesh i:nth-child(1){width:48%;aspect-ratio:1;left:40%;top:6%;background:radial-gradient(closest-side,rgba(255,160,0,.42),transparent);animation:drift1 24s var(--ease-io) infinite alternate}
-.mesh i:nth-child(2){width:40%;aspect-ratio:1;left:10%;top:48%;background:radial-gradient(closest-side,rgba(255,122,0,.3),transparent);animation:drift2 28s var(--ease-io) infinite alternate}
-.mesh i:nth-child(3){width:30%;aspect-ratio:1;left:58%;top:52%;background:radial-gradient(closest-side,rgba(255,226,176,.16),transparent);animation:drift3 20s var(--ease-io) infinite alternate}
+.mesh i:nth-child(1){width:48%;aspect-ratio:1;left:40%;top:6%;background:radial-gradient(closest-side,rgba(255,160,0,.34),rgba(255,160,0,.14) 45%,rgba(255,160,0,.04) 75%,transparent);animation:drift1 24s var(--ease-io) infinite alternate}
+.mesh i:nth-child(2){width:40%;aspect-ratio:1;left:10%;top:48%;background:radial-gradient(closest-side,rgba(255,122,0,.24),rgba(255,122,0,.09) 45%,rgba(255,122,0,.02) 75%,transparent);animation:drift2 28s var(--ease-io) infinite alternate}
+.mesh i:nth-child(3){width:30%;aspect-ratio:1;left:58%;top:52%;background:radial-gradient(closest-side,rgba(255,226,176,.12),rgba(255,226,176,.04) 50%,transparent);animation:drift3 20s var(--ease-io) infinite alternate}
 @keyframes drift1{to{transform:translate(-18%,22%) scale(1.15)}}
 @keyframes drift2{to{transform:translate(30%,-18%) scale(.9)}}
 @keyframes drift3{to{transform:translate(-24%,-20%) scale(1.2)}}

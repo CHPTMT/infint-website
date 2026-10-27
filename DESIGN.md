@@ -63,7 +63,7 @@ Fonts: **Archivo** (variable, with width axis 62 to 125) for display and UI labe
 
 ## Layout
 
-- `--max: 1560px` main container, `--max-wide: 1880px` for photo grids. Gutters `clamp(20px, 4vw, 64px)`.
+- `--max: 1600px` main container, `--max-wide: 1880px` for photo grids. Gutters `clamp(20px, 4vw, 64px)`.
 - Heroes and photo sections are full bleed.
 - Work grid: masonry columns, 2 at phone, 3 at 760 px, 4 at 1100 px, 5 at 1440 px, 6 at 1800 px.
 - Split screen (photo plus ink panel) is the signature layout: Home hero, Book and Contact. On phones the photo stacks on top at a fixed height.

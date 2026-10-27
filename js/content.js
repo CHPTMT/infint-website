@@ -240,20 +240,41 @@ const PHOTOS = [
 /* Homepage settings */
 const HOME = {
   hero: "fashion-01",
-  heroStamp: "Selected work 2024 to 2026",
+  /* Hero slideshow: photo id and the big word shown over it. Tall (portrait) photos work best. */
+  slides: [
+    {id:"fashion-16", word:"Fashion"},
+    {id:"matric-11", word:"Matric"},
+    {id:"active-02", word:"Sport"},
+    {id:"event-13", word:"Events"},
+    {id:"portrait-02", word:"Portraits"}
+  ],
+  /* The two moving photo strips under the hero */
+  marquee: [
+    ["fashion-13","event-03","active-27","portrait-13","matric-05","street-07","event-27","detail-12","active-44","portrait-31","fashion-07","event-18"],
+    ["active-14","event-47","matric-09","street-04","portrait-25","detail-14","event-61","active-39","fashion-19","street-13","portrait-06","event-55"]
+  ],
   featured: ["portrait-01","event-01","active-01","fashion-02","matric-01","street-01","event-02","detail-01",
-             "matric-02","active-02","event-04","fashion-03","portrait-27","event-07","active-03","street-03"]
+             "matric-02","active-05","event-04","fashion-03","portrait-28","event-12","active-03","street-03","detail-17","event-09"],
+  /* Photo beside the rates teaser on the homepage */
+  ratesPhoto: "portrait-27"
 };
 
-/* Work page filters, in display order. Also used for the "what i've shot" list on the homepage. */
+/* Photos used on other pages: one per booking step, the Contact page and the three social cards */
+const PAGE_PHOTOS = {
+  book: ["portrait-31","event-22","matric-14"],
+  contact: "street-09",
+  socials: {instagram:"fashion-17", tiktok:"event-11", youtube:"active-12"}
+};
+
+/* Work page filters, in display order. Also used for the category cards on the homepage (cover = the photo on its card). */
 const CATEGORIES = [
-  {key:"event", name:"Events", blurb:"Activations, launches, concerts, parties and baby showers. Candid coverage plus the shots the client needs."},
-  {key:"portrait", name:"Portraits", blurb:"Graduation, headshots, studio, maternity and on location."},
-  {key:"matric", name:"Matric dance", blurb:"Pre-dance shoots at home, in the car and at the venue."},
-  {key:"active", name:"Sports & active", blurb:"Match days, fan culture, airshows and motorsport."},
-  {key:"fashion", name:"Fashion & editorial", blurb:"Lookbooks and campaign shoots for designers and brands."},
-  {key:"street", name:"Street", blurb:"Johannesburg in the middle of the day: taxis, traffic and the people in it."},
-  {key:"detail", name:"Details", blurb:"Rings, hands, decor and brand activations. The small frames that hold a day together."}
+  {key:"event", cover:"event-07", name:"Events", blurb:"Activations, launches, concerts, parties and baby showers. Candid coverage plus the shots the client needs."},
+  {key:"portrait", cover:"portrait-17", name:"Portraits", blurb:"Graduation, headshots, studio, maternity and on location."},
+  {key:"matric", cover:"matric-01", name:"Matric dance", blurb:"Pre-dance shoots at home, in the car and at the venue."},
+  {key:"active", cover:"active-06", name:"Sports & active", blurb:"Match days, fan culture, airshows and motorsport."},
+  {key:"fashion", cover:"fashion-01", name:"Fashion & editorial", blurb:"Lookbooks and campaign shoots for designers and brands."},
+  {key:"street", cover:"street-06", name:"Street", blurb:"Johannesburg in the middle of the day: taxis, traffic and the people in it."},
+  {key:"detail", cover:"detail-20", name:"Details", blurb:"Rings, hands, decor and brand activations. The small frames that hold a day together."}
 ];
 
 const CONFIG = {

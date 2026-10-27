@@ -239,15 +239,15 @@ const PHOTOS = [
 
 /* Homepage settings */
 const HOME = {
-  /* Hero slideshow: one slide per category, in this order, with the big word shown over it.
-     Each page load picks one photo at random from the slide's pool. Only tall photos that hold up full screen.
+  /* Hero slideshow (the opening reel): the original five photos, the same on every visit (his choice).
+     A slide with more than one id in its pool shows one of them at random per visit.
      Bigger 2600 px copies for retina screens live in assets/hero: run tools/resize-hero.ps1 after changing a pool. */
   slides: [
-    {word:"Fashion",   pool:["fashion-16"]},  /* always the original Fashion photo (his choice) */
-    {word:"Prom",      pool:["matric-11","matric-15","matric-04","matric-16","matric-06","matric-05","matric-01"]},
-    {word:"Sport",     pool:["active-02","active-13","active-08","active-44","active-12","active-01","active-03","active-27"]},
-    {word:"Events",    pool:["event-13","event-53","event-25","event-12","event-16","event-09","event-04","event-24","event-01"]},
-    {word:"Portraits", pool:["portrait-02","portrait-16","portrait-28","portrait-01","portrait-11","portrait-32","portrait-13"]}
+    {word:"Fashion",   pool:["fashion-16"]},
+    {word:"Prom",      pool:["matric-11"]},
+    {word:"Sport",     pool:["active-02"]},
+    {word:"Events",    pool:["event-13"]},
+    {word:"Portraits", pool:["portrait-02"]}
   ],
   /* The two moving photo strips under the hero: 12 photos each, picked at random per page load from these pools.
      Neighbours always come from different categories, so two frames from one shoot never sit side by side. */

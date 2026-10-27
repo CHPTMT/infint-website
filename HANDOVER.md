@@ -33,12 +33,11 @@
 1. Photos within each category reordered so frames from the same shoot are spread out. Shoots come from the original file names (camera frame numbers close together); the order is checked against the real grid at 2 to 6 columns, phones first. Result: on phones and at 5 columns no near-identical frames touch in any category. Categories that are mostly one shoot (Fashion is all Silk & Cotton, Sports is mostly one match day, Street is one walk) cannot be fully separated; Street can still have 2 near-identical pairs touching on tablets. Script: `tools/order-photos.js`.
 2. "Sports & active" now shows as "Sports".
 3. Low-res check: every site photo is 2000 px on the long side (one PDF photo is 1953 px, its original size). The softness came from the code: `srcset` claimed portrait thumbs were 720 px wide (they are about 480), and category and social cards only ever used thumbs. Fixed, and the photos shown biggest (hero, rates teaser) now have 2600 px copies in `assets/hero` (`tools/resize-hero.ps1`). Measured on iPhone (3x), a 1440 px retina laptop (2x) and a 1920 px monitor: every visible photo now gets at least the pixels it is drawn at. PDF photos without a 2600 px original were taken out of the hero pools (they stay in the grid).
-4. The hero Fashion slide is always the original `fashion-16` (his choice); the other four slides still rotate.
+4. Opening reel (hero) reverted to the original five photos (fashion-16, matric-11, active-02, event-13, portrait-02), the same on every visit: he did not like the random selection. The photo strips under it still change per visit.
 5. `tools/serve.ps1` no longer stops when a browser cancels a download.
 
 **Open questions:**
-1. "The original picture for fashion": read as the hero Fashion slide, now always `fashion-16`. If he meant the order of the Fashion page, restore it from commit 93c23f1 (`git show 93c23f1:js/content.js`).
-2. From before: banking details for booking acceptance emails (`CONFIG.booking.payment` on `preview`).
+1. From before: banking details for booking acceptance emails (`CONFIG.booking.payment` on `preview`).
 
 **Next steps:** Tshedza tests https://redesign.infint.pages.dev on his phone: photo grids on iPhone (no blank or flickering photos), photo order on each Work category, sharpness of the hero and cards, the burger menu. Then he sends the next round of feedback. Nothing from the redesign goes to `main` until he says so.
 

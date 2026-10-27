@@ -90,7 +90,7 @@ Library: none. CSS transitions and keyframes, IntersectionObserver for reveals, 
 | Route | 380 ms out and in | Page changes |
 
 Moments, in order of importance:
-1. **Hero:** five slides (Fashion, Prom, Sport, Events, Portraits). Each page load picks one photo per slide at random from `HOME.slides` pools (tall photos that hold up full screen). Photos crossfade with a slow zoom (7 s each), the big category word swaps with a clip reveal, and the amber mesh drifts.
+1. **Hero:** five slides (Fashion, Prom, Sport, Events, Portraits), always the original five photos (`HOME.slides`, his choice after trying random picks; 2600 px copies in `assets/hero`). Photos crossfade with a slow zoom (7 s each), the big category word swaps with a clip reveal, and the amber mesh drifts.
 2. **Photo lift:** the hovered photo scales to 1.04, rises 6 px, gains the amber edge glow; siblings dim to 55% brightness and desaturate slightly. Pure CSS (`:has()`), so moving across the grid stays smooth. On touch screens the photo crossing the middle of the screen lifts. The lift moves the inner `.tile-in`; the observed `.tile` never moves, so the lift cannot switch itself on and off.
 3. **Reveal on scroll:** elements fade up 28 px with a light blur, grid items stagger by 50 ms within a row.
 4. **Marquee:** two strips of 12 photos drifting at a constant linear speed, pausing on hover. Picked at random per page load from `HOME.strips`, round robin over the categories so neighbours never come from the same shoot.

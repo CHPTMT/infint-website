@@ -222,15 +222,14 @@ V.home = () => {
 };
 
 V.work = (q) => {
-  const f = CATEGORIES.some(c=>c.key===q.f) ? q.f : "all";
-  S.filter = f;
+  const cat = CATEGORIES.find(c=>c.key===q.f);
+  S.filter = cat ? cat.key : "all";
+  /* Categories are chosen from the menu; this button opens it */
+  const pick = `<p class="rv" style="--d:.14s;margin:22px 0 0"><button type="button" class="link" data-open-menu>${cat?"Other categories":"Choose a category"} ${ICON.go}</button></p>`;
   return `
-  ${pageHead(`The <span class="it">work</span>.`,"Events, portraits, proms, match days, fashion and the small details in between. All from real shoots.")}
-  <div class="filterbar"><div class="wrap wide"><div class="filters" role="group" aria-label="Filter photos">
-    <button class="chip ${f==="all"?"on":""}" data-filter="all" aria-pressed="${f==="all"}">Everything</button>
-    ${CATEGORIES.map(c=>`<button class="chip ${f===c.key?"on":""}" data-filter="${c.key}" aria-pressed="${f===c.key}">${esc(c.name)}</button>`).join("")}
-  </div></div></div>
-  <section class="work-grid"><div class="wrap wide" id="work-grid">${workGrid(f)}</div></section>
+  ${cat ? pageHead(esc(cat.name)+".",cat.blurb,pick)
+        : pageHead("The work.","Events, portraits, proms, match days, fashion and the small details in between. All from real shoots.",pick)}
+  <section class="work-grid pt0"><div class="wrap wide" id="work-grid">${workGrid(S.filter)}</div></section>
   ${ctaBlock()}`;
 };
 function workGrid(f){
@@ -508,7 +507,7 @@ function paint(opts={}){
   app.innerHTML=V[page](q,opts);
   const token=S.paintId=(S.paintId||0)+1;
   document.title = TITLES[page] ? TITLES[page]+" · Infint" : "Infint";
-  $$("nav.main a").forEach(a=>{const on=a.getAttribute("href")==="#/"+page; a.classList.toggle("active",on); on?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current");});
+  markNav(page);
   setMenu(false);
   if(opts.keepScroll){ const st=$("#stepper"); if(st) window.scrollTo(0,Math.max(0,st.getBoundingClientRect().top+scrollY-120)); }
   else if(q.s && document.getElementById(q.s)){
@@ -600,23 +599,11 @@ function wireTiles(){
 function wireView(page,q){
   wireTiles(page);
   if(page==="home") wireHero();
-  if(page==="work") $$(".chip").forEach(c=>c.addEventListener("click",()=>setFilter(c.dataset.filter)));
+  $$("[data-open-menu]").forEach(b=>b.addEventListener("click",()=>setMenu(true)));
   if(page==="rates") wireEstimator();
   if(page==="book") wireBooking();
   if(page==="contact") wireContactForm();
   if(page==="about") wireFaq();
-}
-
-/* Work filters swap the grid in place, so the page does not jump back to the top. */
-function setFilter(f){
-  if(f===S.filter) return;
-  S.filter=f;
-  history.pushState(null,"","#/work"+(f==="all"?"":"?f="+f));
-  $$(".chip").forEach(c=>{const on=c.dataset.filter===f;c.classList.toggle("on",on);c.setAttribute("aria-pressed",on);});
-  const swap=()=>{$("#work-grid").innerHTML=workGrid(f);wireTiles("work");observeReveal();};
-  if(document.startViewTransition&&!RM.matches) viewTransition(swap); else swap();
-  const bar=$(".filterbar"), top=bar.getBoundingClientRect().top+scrollY-parseFloat(getComputedStyle(bar).top);
-  if(scrollY>top) window.scrollTo({top,behavior:RM.matches?"auto":"smooth"});
 }
 
 /* Home hero slideshow */
@@ -779,13 +766,24 @@ function wireContactForm(){
 }
 
 /* Global wiring */
+/* Menu: Work, then every category, then the other pages */
+function paintNav(){
+  const link=(href,name)=>`<li><a href="${href}">${esc(name)}</a></li>`;
+  $("#nav-cats").innerHTML=`<li class="nav-h label" aria-hidden="true">Work</li>`+link("#/work","Everything")+CATEGORIES.map(c=>link("#/work?f="+c.key,c.name)).join("");
+}
+function markNav(page){
+  const set=(a,on)=>{a.classList.toggle("active",on); on?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current");};
+  $$(".nav-l").forEach(a=>set(a,a.getAttribute("href")==="#/"+page));
+  $$("#nav-cats a").forEach(a=>set(a,page==="work"&&a.getAttribute("href")===(S.filter==="all"?"#/work":"#/work?f="+S.filter)));
+}
 function setMenu(open){
   $("#nav").classList.toggle("open",open);
   $("#burger").setAttribute("aria-expanded",String(open));
   document.body.classList.toggle("menu-open",open);
 }
 $("#burger").addEventListener("click",()=>setMenu(!$("#nav").classList.contains("open")));
-$$("nav.main a").forEach(a=>a.addEventListener("click",()=>{ if(a.getAttribute("href")===location.hash) setMenu(false); }));
+/* Picking the page you are already on just closes the menu */
+$("#nav").addEventListener("click",e=>{ const a=e.target.closest("a"); if(a&&a.getAttribute("href")===(location.hash||"#/")) setMenu(false); });
 /* "Skip to content" moves focus to the page without the router treating #app as a page */
 $(".skip").addEventListener("click",e=>{e.preventDefault();$("#app").focus();});
 $("#totop").addEventListener("click",()=>window.scrollTo({top:0,behavior:RM.matches?"auto":"smooth"}));
@@ -818,5 +816,6 @@ function paintFooter(){
     <li>${iconLink("mail","mailto:"+CONFIG.contact.direct,CONFIG.contact.direct)}</li>`;
 }
 
+paintNav();
 paintFooter();
 render();

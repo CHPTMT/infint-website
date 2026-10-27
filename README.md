@@ -8,7 +8,7 @@ Portfolio and booking site for INFINT, Tshedza Tshiololi's photography business 
 index.html                 page shell: header, footer, photo viewer
 css/style.css              all styling (colours and fonts at the top in :root)
 js/content.js              photos, categories, rates, contact details, FAQ, copy
-js/app.js                  page logic and router (pages are V.home, V.work, V.rates, V.book, V.contact, V.about)
+js/app.js                  page logic and router (pages are V.home, V.work, V.rates, V.book, V.contact, V.about, V.socials; real paths like /work)
 functions/api/enquiry.js   Cloudflare Pages Function that emails form enquiries through Resend
 assets/thumbs/             grid images, 720 px
 assets/photos/             full-size images, 2000 px
@@ -23,12 +23,12 @@ Most day-to-day changes (prices, a new photo, a new FAQ answer) only touch `js/c
 
 | URL | Page |
 |---|---|
-| `#/` | Home: header image, what I shoot, recent frames, how it works |
-| `#/work` | Portfolio, 227 photos, with filters: Events, Portraits, Matric dance, Sports & active, Fashion & editorial, Street, Details |
-| `#/rates` | Graduation packages, short shoots, day rates, add-ons, day-rate estimator |
-| `#/book` | Three-step booking enquiry |
-| `#/contact` | Contact details and message form |
-| `#/about` | About, before-your-shoot tips, FAQ |
+| `/` | Home: header image, what I shoot, recent frames, how it works |
+| `/work` | Portfolio, with categories in the menu: Events, Portraits, Prom, Sports, Fashion & editorial, Street, Details |
+| `/rates` | Graduation packages, short shoots, day rates, add-ons, day-rate estimator |
+| `/book` | Three-step booking enquiry |
+| `/contact` | Contact details and message form |
+| `/about` | About, before-your-shoot tips, FAQ |
 
 There is no client gallery, admin page or database. Photos are plain files served by Cloudflare, so no database is needed for them. The full set of 227 photos is about 85 MB; Cloudflare Pages allows 20,000 files per site on the free plan, so there is room for thousands more photos. If the collection ever outgrows the repository, the next step is Cloudflare R2 (10 GB free, no charge for visitors viewing images).
 
@@ -73,7 +73,7 @@ Open the repository in Claude Code and ask in plain words, for example:
 - "Change the Signature graduation package to R1,800."
 - "Add these five photos to the Events filter." (attach them)
 - "Swap the homepage header photo for street-04."
-- "Add a Matric dance rate card to the Rates page."
+- "Add a Prom rate card to the Rates page."
 
 Writing rules for any copy on the site: no long dashes, plain direct language, no filler words.
 

@@ -23,7 +23,7 @@ The order of `PHOTOS` in `js/content.js` is the order on the site. Within each c
 
 | File | Where it appears |
 |---|---|
-| `assets/photos/fashion-01.jpg` | Homepage header image (set by `HOME.hero`) and the link preview on WhatsApp and social |
+| `assets/photos/fashion-01.jpg` | Link preview on WhatsApp and social (`og:image` in index.html). The homepage hero and photo strips pick at random from `HOME.slides` and `HOME.strips` in `js/content.js` |
 | `assets/photos/about-tshedza.jpg` | About page, shown in black and white with extra contrast (filter in `css/style.css`, `.about-photo img`) |
 
 ## Homepage "recent frames"
@@ -166,7 +166,7 @@ These 16 appear on the homepage in this order (set by `HOME.featured`): `portrai
 | `matric-15` | `From Portfolio 2026\portfolio-2026-005-023.jpg` | Portrait |  |
 | `matric-16` | `From Portfolio 2026\portfolio-2026-014-056.jpg` | Portrait |  |
 
-### Sports & active (`active`), 48 photos
+### Sports (`active`), 48 photos
 
 | Id | Original file | Shape | Homepage |
 |---|---|---|---|
@@ -303,3 +303,9 @@ These 16 appear on the homepage in this order (set by `HOME.featured`): `portrai
 4. Add the photo to `PHOTOS` in `js/content.js`: `{"id": "event-70", "cat": "event", "r": 0.667, "alt": "Short description"}`, where `r` is width divided by height. Put it somewhere in the middle of its category rather than next to a frame from the same shoot.
 
 Or ask Claude Code to do steps 2 to 4. A new category needs one line in `CATEGORIES` in `js/content.js` as well.
+
+## Social profile screenshots
+
+`assets/socials/instagram`, `tiktok` and `youtube` (`.png` and `.webp`, 1000 px tall) are phone screenshots of the real profiles, shown in phone frames on the Socials page and in "Follow along" on the home page. The originals are in `Website Commits\socials`. On Instagram the "Followed by ..." row is blurred because it shows other people.
+
+Refresh them every few months: save new screenshots over the originals, then run `node tools/make-socials.js` (after `npm --prefix tools install` once). Check the Instagram blur still covers the "Followed by" row; the position is set at the top of the script.

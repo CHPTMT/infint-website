@@ -512,6 +512,9 @@ textarea.input{min-height:140px;resize:vertical;line-height:1.5}
 @keyframes vtOut{to{opacity:0;filter:blur(6px)}}
 @keyframes vtIn{from{opacity:0;transform:translateY(18px)}}
 
+/* Hold the footer below the fold until the page has rendered, so nothing jumps */
+#app:empty{min-height:100vh;min-height:100svh}
+
 /* Footer */
 footer.site{background:var(--ink-2);color:var(--text);padding:clamp(72px,9vw,140px) 0 28px;border-top:1px solid var(--line);position:relative;overflow:hidden}
 footer.site a{color:rgba(255,255,255,.72);transition:color .2s ease}

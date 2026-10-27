@@ -196,7 +196,7 @@ V.home = () => {
       <p class="lede rv">Every price includes editing and delivery by download link. Prices hold for the ${esc(r.updated)} season.</p>
       <div class="pricelist rv">
         <a href="#/rates?s=grads"><span><strong>Graduation packages</strong><small>${r.grads.items.length} packages, ${esc(r.grads.items[0].dur)} to ${esc(r.grads.items[r.grads.items.length-1].dur)}</small></span><span class="mega">${money(minOf(r.grads.items))}</span><span class="go">${ICON.go}</span></a>
-        <a href="#/rates?s=short"><span><strong>Short shoots</strong><small>Portraits, headshots, matric dance</small></span><span class="mega">${money(minOf(r.short.items))}</span><span class="go">${ICON.go}</span></a>
+        <a href="#/rates?s=short"><span><strong>Short shoots</strong><small>Portraits, headshots, prom</small></span><span class="mega">${money(minOf(r.short.items))}</span><span class="go">${ICON.go}</span></a>
         <a href="#/rates?s=day"><span><strong>Events and day rates</strong><small>From ${esc(r.day.items[0].hours)} of coverage</small></span><span class="mega">${money(minOf(r.day.items))}</span><span class="go">${ICON.go}</span></a>
       </div>
       <div class="rv"><a class="btn ghost" href="#/rates">See all rates ${ARR}</a></div>
@@ -225,7 +225,7 @@ V.work = (q) => {
   const f = CATEGORIES.some(c=>c.key===q.f) ? q.f : "all";
   S.filter = f;
   return `
-  ${pageHead(`The <span class="it">work</span>.`,"Events, portraits, matric dances, match days, fashion and the small details in between. All from real shoots.")}
+  ${pageHead(`The <span class="it">work</span>.`,"Events, portraits, proms, match days, fashion and the small details in between. All from real shoots.")}
   <div class="filterbar"><div class="wrap wide"><div class="filters" role="group" aria-label="Filter photos">
     <button class="chip ${f==="all"?"on":""}" data-filter="all" aria-pressed="${f==="all"}">Everything</button>
     ${CATEGORIES.map(c=>`<button class="chip ${f===c.key?"on":""}" data-filter="${c.key}" aria-pressed="${f===c.key}">${esc(c.name)}</button>`).join("")}

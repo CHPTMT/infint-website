@@ -24,7 +24,7 @@ Most day-to-day changes (prices, a new photo, a new FAQ answer) only touch `js/c
 | URL | Page |
 |---|---|
 | `#/` | Home: header image, what I shoot, recent frames, how it works |
-| `#/work` | Portfolio, 227 photos, with filters: Events, Portraits, Matric dance, Sports & active, Fashion & editorial, Street, Details |
+| `#/work` | Portfolio, with categories in the menu: Events, Portraits, Prom, Sports & active, Fashion & editorial, Street, Details |
 | `#/rates` | Graduation packages, short shoots, day rates, add-ons, day-rate estimator |
 | `#/book` | Three-step booking enquiry |
 | `#/contact` | Contact details and message form |
@@ -73,7 +73,7 @@ Open the repository in Claude Code and ask in plain words, for example:
 - "Change the Signature graduation package to R1,800."
 - "Add these five photos to the Events filter." (attach them)
 - "Swap the homepage header photo for street-04."
-- "Add a Matric dance rate card to the Rates page."
+- "Add a Prom rate card to the Rates page."
 
 Writing rules for any copy on the site: no long dashes, plain direct language, no filler words.
 

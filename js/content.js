@@ -110,22 +110,22 @@ const PHOTOS = [
   {"id": "portrait-17", "cat": "portrait", "r": 0.665, "alt": "Portrait by INFINT"},
   {"id": "portrait-25", "cat": "portrait", "r": 0.665, "alt": "Portrait by INFINT"},
   {"id": "portrait-02", "cat": "portrait", "r": 0.665, "alt": "Studio portrait in a red bow dress on white"},
-  {"id": "matric-11", "cat": "matric", "r": 0.665, "alt": "Matric dance portrait by INFINT"},
-  {"id": "matric-06", "cat": "matric", "r": 0.665, "alt": "Matric dance portrait by INFINT"},
-  {"id": "matric-14", "cat": "matric", "r": 0.666, "alt": "Matric dance portrait by INFINT"},
-  {"id": "matric-15", "cat": "matric", "r": 0.75, "alt": "Matric dance portrait by INFINT"},
-  {"id": "matric-03", "cat": "matric", "r": 0.665, "alt": "Matric dance portrait reflected in an oval mirror"},
-  {"id": "matric-04", "cat": "matric", "r": 0.665, "alt": "Matric dance portrait in a beaded black gown at night"},
-  {"id": "matric-16", "cat": "matric", "r": 0.75, "alt": "Matric dance portrait by INFINT"},
-  {"id": "matric-08", "cat": "matric", "r": 0.665, "alt": "Matric dance portrait by INFINT"},
-  {"id": "matric-12", "cat": "matric", "r": 0.665, "alt": "Matric dance portrait by INFINT"},
-  {"id": "matric-09", "cat": "matric", "r": 0.665, "alt": "Matric dance portrait by INFINT"},
+  {"id": "matric-11", "cat": "matric", "r": 0.665, "alt": "Prom portrait by INFINT"},
+  {"id": "matric-06", "cat": "matric", "r": 0.665, "alt": "Prom portrait by INFINT"},
+  {"id": "matric-14", "cat": "matric", "r": 0.666, "alt": "Prom portrait by INFINT"},
+  {"id": "matric-15", "cat": "matric", "r": 0.75, "alt": "Prom portrait by INFINT"},
+  {"id": "matric-03", "cat": "matric", "r": 0.665, "alt": "Prom portrait reflected in an oval mirror"},
+  {"id": "matric-04", "cat": "matric", "r": 0.665, "alt": "Prom portrait in a beaded black gown at night"},
+  {"id": "matric-16", "cat": "matric", "r": 0.75, "alt": "Prom portrait by INFINT"},
+  {"id": "matric-08", "cat": "matric", "r": 0.665, "alt": "Prom portrait by INFINT"},
+  {"id": "matric-12", "cat": "matric", "r": 0.665, "alt": "Prom portrait by INFINT"},
+  {"id": "matric-09", "cat": "matric", "r": 0.665, "alt": "Prom portrait by INFINT"},
   {"id": "matric-02", "cat": "matric", "r": 0.665, "alt": "Close portrait framed by a car window"},
   {"id": "matric-05", "cat": "matric", "r": 0.665, "alt": "Close portrait with soft curls and a diamond necklace"},
-  {"id": "matric-01", "cat": "matric", "r": 0.665, "alt": "Matric dance portrait in a white off-shoulder gown inside a car"},
-  {"id": "matric-10", "cat": "matric", "r": 0.665, "alt": "Matric dance portrait by INFINT"},
-  {"id": "matric-07", "cat": "matric", "r": 0.665, "alt": "Matric dance portrait by INFINT"},
-  {"id": "matric-13", "cat": "matric", "r": 0.665, "alt": "Matric dance portrait by INFINT"},
+  {"id": "matric-01", "cat": "matric", "r": 0.665, "alt": "Prom portrait in a white off-shoulder gown inside a car"},
+  {"id": "matric-10", "cat": "matric", "r": 0.665, "alt": "Prom portrait by INFINT"},
+  {"id": "matric-07", "cat": "matric", "r": 0.665, "alt": "Prom portrait by INFINT"},
+  {"id": "matric-13", "cat": "matric", "r": 0.665, "alt": "Prom portrait by INFINT"},
   {"id": "active-08", "cat": "active", "r": 0.734, "alt": "Fan smiling in the stands at a rugby match"},
   {"id": "active-13", "cat": "active", "r": 0.8, "alt": "Sports and active photograph by INFINT"},
   {"id": "active-07", "cat": "active", "r": 1.503, "alt": "Four aerobatic planes flying in formation"},
@@ -243,7 +243,7 @@ const HOME = {
   /* Hero slideshow: photo id and the big word shown over it. Tall (portrait) photos work best. */
   slides: [
     {id:"fashion-16", word:"Fashion"},
-    {id:"matric-11", word:"Matric"},
+    {id:"matric-11", word:"Prom"},
     {id:"active-02", word:"Sport"},
     {id:"event-13", word:"Events"},
     {id:"portrait-02", word:"Portraits"}
@@ -270,7 +270,7 @@ const PAGE_PHOTOS = {
 const CATEGORIES = [
   {key:"event", cover:"event-07", name:"Events", blurb:"Activations, launches, concerts, parties and baby showers. Candid coverage plus the shots the client needs."},
   {key:"portrait", cover:"portrait-17", name:"Portraits", blurb:"Graduation, headshots, studio, maternity and on location."},
-  {key:"matric", cover:"matric-01", name:"Matric dance", blurb:"Pre-dance shoots at home, in the car and at the venue."},
+  {key:"matric", cover:"matric-01", name:"Prom", blurb:"Pre-prom shoots at home, in the car and at the venue."},
   {key:"active", cover:"active-06", name:"Sports & active", blurb:"Match days, fan culture, airshows and motorsport."},
   {key:"fashion", cover:"fashion-01", name:"Fashion & editorial", blurb:"Lookbooks and campaign shoots for designers and brands."},
   {key:"street", cover:"street-06", name:"Street", blurb:"Johannesburg in the middle of the day: taxis, traffic and the people in it."},
@@ -294,7 +294,7 @@ const CONFIG = {
   /* Shoot types offered in the booking form */
   services:[
     {slug:"graduation",name:"Graduation",blurb:"Cap, gown, scroll, family."},
-    {slug:"matric",name:"Matric dance",blurb:"Pre-dance shoot at home or the venue."},
+    {slug:"matric",name:"Prom",blurb:"Pre-prom shoot at home or the venue."},
     {slug:"portrait",name:"Portraits & headshots",blurb:"Personal branding, LinkedIn, birthdays, maternity."},
     {slug:"event",name:"Events",blurb:"Activations, parties, conferences, launches."},
     {slug:"wedding",name:"Weddings",blurb:"Traditional and white weddings."},
@@ -309,7 +309,7 @@ const CONFIG = {
         {name:"The Signature",price:1700,dur:"35 minutes",images:"30+ edited images",feature:true,includes:["One location, two setups","Solo, family and friends","Download link delivery","5 social-ready crops"]},
         {name:"The Prestige",price:2400,dur:"50 minutes",images:"45+ edited images",feature:false,includes:["Two locations","Outfit change","Download link delivery","10 social-ready crops","Short highlight reel"]}
       ]},
-    short:{title:"Short shoot rates",note:"Portraits, headshots, brand content and matric dance. Same-day sneak peek on request.",
+    short:{title:"Short shoot rates",note:"Portraits, headshots, brand content and prom. Same-day sneak peek on request.",
       items:[{dur:"20 minutes",price:1200,images:"20+ edited images"},{dur:"30 minutes",price:1600,images:"35+ edited images"},{dur:"45 minutes",price:1900,images:"50+ edited images"},{dur:"60 minutes",price:2500,images:"60+ edited images"}]},
     day:{title:"Event, wedding & corporate day rates",note:"Coverage billed by the hour. Overtime is charged in full hours, to a maximum of 12 hours on the day.",overtime:1000,overtimeMax:12,
       items:[{hours:"2 hours",price:3000},{hours:"3 hours",price:4000},{hours:"4 hours",price:5000},{hours:"5 hours",price:6000},{hours:"6 hours",price:7000},{hours:"7 hours",price:8000},{hours:"8 hours",price:9000}]},
@@ -351,5 +351,5 @@ const CONFIG = {
     {t:"Say what you want to see",d:"Send me three reference images before the day. It saves ten minutes of guessing."}
   ],
 
-  aboutTags:["Event","Detail","Wedding","Portrait","Headshots","Corporate","Graduation","Matric dance","Fashion","Sport"]
+  aboutTags:["Event","Detail","Wedding","Portrait","Headshots","Corporate","Graduation","Prom","Fashion","Sport"]
 };

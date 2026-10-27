@@ -5,12 +5,12 @@ Product truth for the INFINT site. Visual decisions live in DESIGN.md.
 ## Who and what
 
 - INFINT is the photography business of Tshedza Tshiololi, one person, based in Johannesburg (Braamfontein for travel distance).
-- Work: events, portraits (graduation, headshots, maternity), matric dance, sport and active, fashion and editorial, street, details. Also weddings and corporate days on request.
+- Work: events, portraits (graduation, headshots, maternity), prom (matric dance; shown as "Prom" on the site, internal id `matric`), sport and active, fashion and editorial, street, details. Also weddings and corporate days on request.
 - The site speaks as "I". Never "we".
 
 ## Who visits and what they need
 
-- Students and families booking graduation and matric dance shoots, mostly on phones, often from Instagram or TikTok.
+- Students and families booking graduation and prom shoots, mostly on phones, often from Instagram or TikTok.
 - Brands and event organisers checking the portfolio before asking for a day rate, mostly on laptops.
 - Success: they see enough real work to trust him, find the price that fits, and send a booking enquiry or a WhatsApp.
 

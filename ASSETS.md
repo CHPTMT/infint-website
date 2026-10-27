@@ -23,7 +23,7 @@ The order of `PHOTOS` in `js/content.js` is the order on the site. Within each c
 
 | File | Where it appears |
 |---|---|
-| `assets/photos/fashion-01.jpg` | Homepage header image (set by `HOME.hero`) and the link preview on WhatsApp and social |
+| `assets/photos/fashion-01.jpg` | Link preview on WhatsApp and social (`og:image` in index.html). The homepage hero and photo strips pick at random from `HOME.slides` and `HOME.strips` in `js/content.js` |
 | `assets/photos/about-tshedza.jpg` | About page, shown in black and white with extra contrast (filter in `css/style.css`, `.about-photo img`) |
 
 ## Homepage "recent frames"

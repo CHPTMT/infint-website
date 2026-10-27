@@ -239,20 +239,26 @@ const PHOTOS = [
 
 /* Homepage settings */
 const HOME = {
-  hero: "fashion-01",
-  /* Hero slideshow: photo id and the big word shown over it. Tall (portrait) photos work best. */
+  /* Hero slideshow: one slide per category, in this order, with the big word shown over it.
+     Each page load picks one photo at random from the slide's pool. Only tall photos that hold up full screen. */
   slides: [
-    {id:"fashion-16", word:"Fashion"},
-    {id:"matric-11", word:"Prom"},
-    {id:"active-02", word:"Sport"},
-    {id:"event-13", word:"Events"},
-    {id:"portrait-02", word:"Portraits"}
+    {word:"Fashion",   pool:["fashion-16","fashion-19","fashion-05","fashion-17","fashion-03","fashion-07","fashion-14","fashion-18"]},
+    {word:"Prom",      pool:["matric-11","matric-15","matric-04","matric-16","matric-06","matric-14","matric-05","matric-01"]},
+    {word:"Sport",     pool:["active-02","active-13","active-08","active-44","active-12","active-01","active-03","active-27"]},
+    {word:"Events",    pool:["event-13","event-53","event-25","event-12","event-16","event-09","event-04","event-58","event-24","event-01"]},
+    {word:"Portraits", pool:["portrait-02","portrait-16","portrait-28","portrait-26","portrait-25","portrait-01","portrait-11","portrait-32","portrait-13"]}
   ],
-  /* The two moving photo strips under the hero */
-  marquee: [
-    ["fashion-13","event-03","active-27","portrait-13","matric-05","street-07","event-27","detail-12","active-44","portrait-31","fashion-07","event-18"],
-    ["active-14","event-47","matric-09","street-04","portrait-25","detail-14","event-61","active-39","fashion-19","street-13","portrait-06","event-55"]
-  ],
+  /* The two moving photo strips under the hero: 12 photos each, picked at random per page load from these pools.
+     Neighbours always come from different categories, so two frames from one shoot never sit side by side. */
+  strips: {
+    event:    ["event-07","event-30","event-26","event-47","event-17","event-13","event-53","event-03","event-22","event-69","event-60","event-41","event-35","event-61","event-09","event-14"],
+    portrait: ["portrait-01","portrait-11","portrait-16","portrait-28","portrait-26","portrait-25","portrait-13","portrait-31","portrait-14","portrait-15","portrait-30","portrait-10","portrait-05"],
+    matric:   ["matric-11","matric-15","matric-04","matric-06","matric-14","matric-05","matric-01","matric-09","matric-03","matric-12","matric-16"],
+    active:   ["active-07","active-02","active-42","active-09","active-29","active-05","active-27","active-44","active-12","active-03","active-39","active-04","active-10","active-14","active-36"],
+    fashion:  ["fashion-01","fashion-13","fashion-16","fashion-19","fashion-05","fashion-17","fashion-03","fashion-04","fashion-15","fashion-07"],
+    street:   ["street-06","street-12","street-16","street-04","street-18","street-07","street-14","street-13","street-01","street-03"],
+    detail:   ["detail-21","detail-22","detail-12","detail-13","detail-08","detail-17","detail-01","detail-18","detail-19","detail-02"]
+  },
   featured: ["portrait-01","event-01","active-01","fashion-02","matric-01","street-01","event-02","detail-01",
              "matric-02","active-05","event-04","fashion-03","portrait-28","event-12","active-03","street-03","detail-17","event-09"],
   /* Photo beside the rates teaser on the homepage */

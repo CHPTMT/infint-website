@@ -122,11 +122,25 @@ function mixed(){
   return out;
 }
 
+/* Hero and strip photos: chosen once per page load, so they change between visits but not while browsing */
+const shuffle = list => { const a=[...list]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+const PICK = (()=>{
+  const slides=HOME.slides.map(s=>({word:s.word,id:shuffle(s.pool.filter(photo))[0]})).filter(s=>s.id);
+  const used=new Set(slides.map(s=>s.id));
+  /* Round robin over the categories in one shuffled order: neighbours always differ. 12 per row is not a multiple of 7,
+     so the join where each strip loops back to its start differs too. */
+  const cats=shuffle(Object.keys(HOME.strips));
+  const pools=Object.fromEntries(cats.map(k=>[k,shuffle(HOME.strips[k].filter(id=>photo(id)&&!used.has(id)))]));
+  const seq=[];
+  for(let round=0;seq.length<24&&round<30;round++) cats.forEach(k=>{const id=pools[k][round]; if(id&&seq.length<24) seq.push(id);});
+  return {slides, strips:[seq.slice(0,12),seq.slice(12)]};
+})();
+
 /* Pages */
 const V = {};
 
 V.home = () => {
-  const r=CONFIG.rates, sl=HOME.slides.filter(s=>photo(s.id));
+  const r=CONFIG.rates, sl=PICK.slides;
   return `
   <section class="hero" style="--slide:6.5s">
     <div class="hero-photo" id="hero-photo">
@@ -161,7 +175,7 @@ V.home = () => {
   </section>
 
   <section class="marquee" aria-label="A moving strip of recent photos">
-    ${HOME.marquee.map((row,ri)=>{const ok=row.filter(photo);
+    ${PICK.strips.map((row,ri)=>{const ok=row;
       const cell=(id,dup)=>`<a href="#/work?f=${photo(id).cat}" ${dup?'tabindex="-1" aria-hidden="true"':""}>${pic(id,{thumb:true,alt:dup?"":undefined})}</a>`;
       return `<div class="mq-track ${ri%2?"rev":""}">${ok.map(id=>cell(id,0)).join("")}${ok.map(id=>cell(id,1)).join("")}</div>`;}).join("")}
   </section>

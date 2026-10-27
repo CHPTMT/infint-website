@@ -3,22 +3,39 @@
 ## Latest handover
 
 **From:** Claude Code  **To:** Claude chat
-**Date:** 27 October 2026
+**Date:** 28 October 2026
 
-**Three branches, three sites (all in the Cloudflare Pages project `infint`):**
+**The redesign is live on https://infint.co.za** (merge commit 9a1efc5 on `main`, with booking Accept and Decline included).
 
-| Branch | Site | What it is for |
-|---|---|---|
-| `main` | https://infint.co.za | The live site. Only merge into it when Tshedza says so. |
-| `preview` | https://preview.infint.pages.dev | Small changes to the current design, and the booking Accept and Decline flow. Folder: `C:\Users\tshed\Pictures\INF JPG\infint-website`. |
-| `redesign` | https://redesign.infint.pages.dev | The new "after dark" redesign. Folder: `C:\Users\tshed\Pictures\INF JPG\infint-redesign`. Push only to `origin redesign`; never touch `main` or `preview` from here. |
+**Rollback point:** `690f813` (the old design, `main` before the merge). If the live site breaks, ask Tshedza first, then undo the merge with:
+`git checkout main && git revert -m 1 9a1efc5 && git push origin main`
 
-**State:**
-- `main` (live): new contact details, tab title "Infint", tab icons. Nothing pending.
-- `preview`: booking Accept and Decline (commit 7472e37), waiting for Tshedza to add `BOOKING_SECRET` (and `RESEND_API_KEY`, `NOTIFY_EMAIL` for Preview) in Cloudflare and test. Banking details for the acceptance email are still a placeholder in `CONFIG.booking.payment`.
-- `redesign`: this round of his feedback is done and pushed (below). It branched from `main` at 690f813, so it does **not** have the booking Accept and Decline work. Before the redesign goes live, merge `preview` (or `main`, once the bookings are live) into `redesign` and resolve `js/app.js` (booking form validation and success screen), `js/content.js` (`CONFIG.booking` gets `replyHours` and `payment`, plus the `globalThis.INFINT_CONFIG` line the functions need) and `functions/`.
+**Branches now:** `main`, `preview` and `redesign` all point at the same commit. `preview` (https://preview.infint.pages.dev, folder `C:\Users\tshed\Pictures\INF JPG\infint-website`) is again the place for small changes: work there, Tshedza checks it, then merge into `main` when he says "push it live". `redesign` and its folder `infint-redesign` are no longer needed for new work.
 
-**Redesign feedback round 1, done on `redesign`:**
+**Final round before going live (28 October):**
+1. No grey text: body and supporting text is white (`--text`) or bone (`--mute` is now `#F5F5F3`), Outfit at 400 or 500, a size up everywhere (home intro, rates descriptions, package details and notes, labels, captions, form hints, footer). Checked at 390, 1440 and 1920 px.
+2. Footer links bigger, in the body font, weight and colour.
+3. About: "Infint" instead of "INFINT" in the text (the logo image is unchanged), and a new "People first." section in his voice (`CONFIG.aboutMe` in `js/content.js`).
+4. Socials page and home "Follow along": real profile screenshots (Instagram @infint_co, TikTok @infint_co, YouTube @tshedza_tt "Infint Co") in phone frames, each with an Open button; the phone opens the profile too. Files in `assets/socials` (PNG and WebP, 1000 px tall), made by `node tools/make-socials.js` from `Website Commits\socials`. The Instagram "Followed by" row is blurred (other people). **Refresh these screenshots every few months** (steps in ASSETS.md).
+5. Real page paths: `/work`, `/work?f=fashion`, `/rates`, `/about`, `/book`, `/contact`, `/socials`. Old `#/` links are swapped for the path in the browser. Cloudflare serves `index.html` for any path without a file (there is no `404.html`; keep it that way). New `robots.txt` and `sitemap.xml`. `tools/serve.ps1` does the same locally.
+6. Unfinished WebP work (`tools/make-webp.js`) is committed, but its output `assets/w/` is not used by the site and is kept out of git.
+
+**Checked after going live:** every page loads on infint.co.za and www.infint.co.za (www serves the site directly; the canonical link points search engines at infint.co.za), old `#/` links redirect, menu categories work, tab titles and icons show, robots.txt and sitemap.xml are real files, no console errors or broken files. A test contact message and a test booking (to infintco@gmail.com) returned success, and the booking acknowledgement went out.
+
+**Cloudflare Production variables:** could not be read directly (no browser or CLI access). `RESEND_API_KEY` is confirmed by the live API. Not confirmed: `NOTIFY_EMAIL` (falls back to infintco@gmail.com), `BOOKING_SECRET` (without it the booking email has no Accept and Decline buttons), `BANK_DETAILS` (without it the acceptance email leaves the bank details out). There is no Turnstile in the code, so no Turnstile secret is needed yet.
+
+**Open questions:**
+1. Tshedza to confirm the test emails arrived and to press Accept on the test booking (it shows whether `BOOKING_SECRET` and `BANK_DETAILS` are set).
+2. Turnstile (spam check on the forms) is not built. Add it only if spam becomes a problem.
+3. "INFINT" is still written in capitals in text outside the About page (home intro, footer). Change everywhere if he wants.
+
+**Next steps:** small changes on `preview`; nothing pending.
+
+---
+
+### Earlier: redesign rounds 1 and 2 (now live)
+
+**Redesign feedback round 1:**
 1. Photos vanishing or flickering on phones (top right of the 2-column grids, with a faded "SELECTED · 010" caption). Cause: the grids used CSS multi-column layout with every tile on its own GPU layer and animated; WebKit paints transformed items at the top of a later column wrongly. The touch "lift" also moved the very element its observer measured, so it could flip on and off. Fix: `layoutMasonry()` builds real flex columns, the forced layers are gone, and the lift moves an inner `.tile-in`. Tested with iPhone and Pixel emulation in Chromium, scrolling down and up. Real iOS Safari (WebKit) could not be run here, so Tshedza should confirm on his phone.
 2. No photo counts anywhere (categories, Work page, hero, captions, viewer). The hero stat is now "JHB, Home base".
 3. "Matric dance" shows as "Prom" everywhere. Internal ids (`matric`, `matric-01.jpg`) unchanged.
@@ -29,17 +46,12 @@
 8. Hero slides and the two photo strips pick at random on each page load from curated pools in `HOME.slides` and `HOME.strips` (`js/content.js`). Strip neighbours never share a category.
 9. About photo crop moved up (`object-position: 50% 10%`) so his whole head shows.
 
-**Redesign feedback round 2, done on `redesign`:**
+**Redesign feedback round 2:**
 1. Photos within each category reordered so frames from the same shoot are spread out. Shoots come from the original file names (camera frame numbers close together); the order is checked against the real grid at 2 to 6 columns, phones first. Result: on phones and at 5 columns no near-identical frames touch in any category. Categories that are mostly one shoot (Fashion is all Silk & Cotton, Sports is mostly one match day, Street is one walk) cannot be fully separated; Street can still have 2 near-identical pairs touching on tablets. Script: `tools/order-photos.js`.
 2. "Sports & active" now shows as "Sports".
 3. Low-res check: every site photo is 2000 px on the long side (one PDF photo is 1953 px, its original size). The softness came from the code: `srcset` claimed portrait thumbs were 720 px wide (they are about 480), and category and social cards only ever used thumbs. Fixed, and the photos shown biggest (hero, rates teaser) now have 2600 px copies in `assets/hero` (`tools/resize-hero.ps1`). Measured on iPhone (3x), a 1440 px retina laptop (2x) and a 1920 px monitor: every visible photo now gets at least the pixels it is drawn at. PDF photos without a 2600 px original were taken out of the hero pools (they stay in the grid).
 4. Opening reel (hero) reverted to the original five photos (fashion-16, matric-11, active-02, event-13, portrait-02), the same on every visit: he did not like the random selection. The photo strips under it still change per visit.
 5. `tools/serve.ps1` no longer stops when a browser cancels a download.
-
-**Open questions:**
-1. From before: banking details for booking acceptance emails (`CONFIG.booking.payment` on `preview`).
-
-**Next steps:** Tshedza tests https://redesign.infint.pages.dev on his phone: photo grids on iPhone (no blank or flickering photos), photo order on each Work category, sharpness of the hero and cards, the burger menu. Then he sends the next round of feedback. Nothing from the redesign goes to `main` until he says so.
 
 **Brand files (in the repo, use these, don't recreate the logo):**
 - `assets/brand/infint-logo-white-on-black.png`: white INFINT wordmark on dark grey #262626, 1080 px square. Tshedza's preferred version.

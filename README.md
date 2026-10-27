@@ -37,8 +37,10 @@ There is no client gallery, admin page or database. Photos are plain files serve
 From this folder:
 
 ```
-python -m http.server 8000
+powershell -ExecutionPolicy Bypass -File tools\serve.ps1
 ```
+
+(Claude Code's desktop app can start this itself from `.claude/launch.json`.) To preview online instead, push the `preview` branch and open https://preview.infint.pages.dev.
 
 Then open http://localhost:8000. Everything works locally except the forms actually sending email, because the email function only runs on Cloudflare. Locally the forms fall back to "use WhatsApp or email instead", with the message already filled in.
 
@@ -60,7 +62,7 @@ After that, every push to the main branch redeploys automatically in about a min
    - `NOTIFY_EMAIL`: `infintco@gmail.com`
 3. Redeploy.
 
-Until a domain is verified in Resend, emails come from `onboarding@resend.dev` and Resend only delivers them to the address the Resend account was created with, so sign up to Resend with infintco@gmail.com. Once the domain is bought, verify it in Resend (it gives you DNS records to add in Cloudflare) and add `FROM_EMAIL` as e.g. `INFINT Website <bookings@infint.co.za>`.
+Until a domain is verified in Resend, emails come from `onboarding@resend.dev` and Resend only delivers them to the address the Resend account was created with, so sign up to Resend with infintco@gmail.com. The domain infint.co.za is now verified in Resend. Booking enquiries are sent as "INFINT Bookings <bookings@infint.co.za>" and contact messages as "INFINT Info <info@infint.co.za>". To change either, edit `SENDERS` in `functions/api/enquiry.js` or set `FROM_BOOKINGS` / `FROM_INFO` in Cloudflare.
 
 Reply-to is set to the visitor's email, so hitting reply in Gmail answers the client directly. A hidden "company" field quietly drops most spam bots.
 

@@ -224,7 +224,7 @@ V.book = (q) => {
         <div class="err" id="e-service">Choose the type of shoot.</div></div>
       <div class="grid g2 stack-sm">
         <div class="field"><label>Date <span class="req">*</span></label>
-          <input class="input" type="date" name="date" value="${esc(b.date||"")}"><div class="err" id="e-date">Pick a date.</div></div>
+          <input class="input" type="date" name="date" min="${new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10)}" value="${esc(b.date||"")}"><div class="err" id="e-date">Pick a date from today onwards.</div></div>
         <div class="field"><label>Start time</label>
           <input class="input" type="time" name="time" value="${esc(b.time||"")}"></div>
       </div>
@@ -247,7 +247,7 @@ V.book = (q) => {
         <div class="field"><label>Full name <span class="req">*</span></label>
           <input class="input" name="name" autocomplete="name" value="${esc(b.name||"")}"><div class="err" id="e-name">I need a name for the agreement.</div></div>
         <div class="field"><label>Mobile number <span class="req">*</span></label>
-          <input class="input" name="phone" type="tel" autocomplete="tel" placeholder="+27" value="${esc(b.phone||"")}"><div class="err" id="e-phone">A reachable number, please.</div></div>
+          <input class="input" name="phone" type="tel" autocomplete="tel" placeholder="+27" value="${esc(b.phone||"")}"><div class="err" id="e-phone">A reachable number, please, at least 9 digits.</div></div>
       </div>
       <div class="grid g2 stack-sm">
         <div class="field"><label>Email <span class="req">*</span></label>
@@ -421,14 +421,13 @@ function wireFaq(){
   }));
 }
 
-/* Sending forms. Returns true only when the server confirms the email went out. */
+/* Sending forms. Returns the server's reply; ok is true only when the server confirms the email went out. */
 async function postEnquiry(payload){
   try{
     const res=await fetch(CONFIG.forms.endpoint,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
-    if(!res.ok) return false;
     const data=await res.json().catch(()=>({}));
-    return data.ok===true;
-  }catch(e){ return false; }
+    return {...data, ok:res.ok && data.ok===true};
+  }catch(e){ return {ok:false}; }
 }
 
 /* Booking form */
@@ -460,27 +459,46 @@ function wireBooking(){
   if((b.step||1)===3) $("#review").innerHTML=`<table class="ratetable contact-table"><tbody>${bookingLines().map(([k,v])=>`<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join("")}</tbody></table>`;
 }
 function saveStep(){ for(const [k,v] of new FormData($("#bookform")).entries()) S.booking[k]=v; }
+/* Same rules as validateBooking in functions/_shared/booking.js */
+const BOOKING_CHECKS = {
+  service: v => CONFIG.services.some(s=>s.slug===v),
+  date: v => /^\d{4}-\d{2}-\d{2}$/.test(v||"") && v >= new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10),
+  location: v => !!(v||"").trim(),
+  name: v => !!(v||"").trim(),
+  phone: v => /^\+?[\d\s()]{9,20}$/.test((v||"").trim()) && (v||"").replace(/\D/g,"").length>=9,
+  email: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((v||"").trim())
+};
+const STEP_FIELDS = {1:["service","date","location"], 2:["name","phone","email"]};
 function validateStep(step){
   let ok=true;
-  const need = step===1 ? ["date","location"] : step===2 ? ["name","phone","email"] : [];
-  need.forEach(k=>{
-    const bad = !S.booking[k] || (k==="email" && !/^\S+@\S+\.\S+$/.test(S.booking[k]));
+  (STEP_FIELDS[step]||[]).forEach(k=>{
+    const bad=!BOOKING_CHECKS[k](S.booking[k]);
     $("#e-"+k)?.classList.toggle("show",bad);
     if(bad)ok=false;
   });
-  if(step===1 && !S.booking.service){$("#e-service").classList.add("show");ok=false;}
   return ok;
 }
 async function sendBooking(){
   const btn=$("#sendbtn"); btn.disabled=true; btn.textContent="Sending…";
   const b=S.booking;
-  const sent=await postEnquiry({kind:"booking",subject:bookingSubject(),name:b.name,email:b.email,phone:b.phone,message:bookingText(),company:b.company||""});
-  if(sent){
-    $("#bookform").style.display="none";
+  const fields=["service","pkg","date","time","hours","location","notes","name","phone","email","handle","billing","source","company"];
+  const reply=await postEnquiry({kind:"booking",...Object.fromEntries(fields.map(k=>[k,b[k]||""]))});
+  if(reply.ok){
+    const svc=CONFIG.services.find(s=>s.slug===b.service);
+    $("#bookform").style.display="none"; $(".steps").style.display="none";
     const done=$("#booked"); done.style.display="block";
-    done.innerHTML=`<div class="notice ok"><strong>Enquiry sent.</strong> You'll hear back within 24 hours with a quote and a hold on the date. Banking details come with the written quote.</div>
-      <a class="btn ghost" style="margin-top:22px" href="#/">Back to home</a>`;
-    S.booking={};
+    done.innerHTML=`<h2 style="margin:6px 0 14px">Thanks, ${esc((b.name||"").split(/\s+/)[0])}. Your enquiry is in.</h2>
+      <p class="lede" style="margin-bottom:22px">I'll reply within ${CONFIG.booking.replyHours} hours to let you know if I'm available for your ${esc(svc?svc.name:"")} shoot on ${esc(new Date(b.date+"T00:00").toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"}))}, with a quote.
+      ${reply.acknowledged?`A copy of your details is on its way to <strong>${esc(b.email)}</strong>. If it isn't in your inbox in a few minutes, check spam.`:""}</p>
+      <table class="ratetable contact-table"><tbody>${bookingLines().filter(([,v])=>v!=="-").map(([k,v])=>`<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join("")}</tbody></table>
+      <div class="notice" style="margin-top:22px">Nothing to pay yet. Your date is held once the ${CONFIG.booking.depositPct}% booking fee reflects, and I'll send the payment details when I confirm.</div>
+      <div style="display:flex;gap:10px;margin-top:22px;flex-wrap:wrap"><a class="btn accent" href="#/work">See my work</a><a class="btn ghost" href="#/">Back to home</a></div>`;
+    S.booking={}; window.scrollTo(0,0);
+  }else if(reply.fields&&reply.fields.length){
+    const first=reply.fields.map(k=>Object.keys(STEP_FIELDS).find(s=>STEP_FIELDS[s].includes(k))).filter(Boolean).sort()[0];
+    b.step=Number(first)||1; render();
+    reply.fields.forEach(k=>$("#e-"+k)?.classList.add("show"));
+    toast("Please check the highlighted details.",1);
   }else{
     toast("That didn't go through. Use WhatsApp or email next to it, your details are already filled in.",1);
     btn.disabled=false; btn.textContent="Try again";
@@ -497,7 +515,7 @@ function wireContactForm(){
     e.preventDefault();
     const f=Object.fromEntries(new FormData(form).entries()), btn=form.querySelector("button");
     btn.disabled=true; btn.textContent="Sending…";
-    const sent=await postEnquiry({kind:"contact",subject:"New message: INFINT site",name:f.name,email:/@/.test(f.contact)?f.contact:"",phone:/@/.test(f.contact)?"":f.contact,message:body(f),company:f.company||""});
+    const {ok:sent}=await postEnquiry({kind:"contact",subject:"New message: INFINT site",name:f.name,email:/@/.test(f.contact)?f.contact:"",phone:/@/.test(f.contact)?"":f.contact,message:body(f),company:f.company||""});
     if(sent){
       form.reset(); form.style.display="none";
       $("#cf-note").textContent="Message sent. I'll get back to you shortly.";

@@ -267,8 +267,11 @@ const CONFIG = {
      WhatsApp and email instead, so no enquiry is lost. */
   forms:{endpoint:"/api/enquiry"},
 
-  booking:{depositPct:50,
-    terms:"A 50% booking fee secures the date. The balance is due on or before the shoot day. Booking fees are non-refundable but transferable once, up to 14 days before the shoot."},
+  /* depositPct, terms and payment are also used in the booking emails
+     (functions/_shared/booking.js). Replace the payment placeholder with real banking details. */
+  booking:{depositPct:50,replyHours:24,
+    terms:"A 50% booking fee secures the date. The balance is due on or before the shoot day. Booking fees are non-refundable but transferable once, up to 14 days before the shoot.",
+    payment:"[BANKING DETAILS GO HERE: bank, account holder, account number, branch code]. Use your name and shoot date as the payment reference."},
 
   /* Shoot types offered in the booking form */
   services:[
@@ -332,3 +335,6 @@ const CONFIG = {
 
   aboutTags:["Event","Detail","Wedding","Portrait","Headshots","Corporate","Graduation","Matric dance","Fashion","Sport"]
 };
+
+/* Lets the Cloudflare functions read CONFIG (booking terms, payment, services). */
+globalThis.INFINT_CONFIG = CONFIG;

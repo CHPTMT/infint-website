@@ -6,6 +6,7 @@
     RESEND_API_KEY  (secret)  from resend.com > API Keys
     NOTIFY_EMAIL    where enquiries go, e.g. infintco@gmail.com
     BOOKING_SECRET  (secret)  long random string that signs the Accept and Decline links
+    BANK_DETAILS    (secret)  bank details for the acceptance email only (see booking-response.js)
     FROM_BOOKINGS   optional, sender for the booking form (default INFINT Bookings <bookings@infint.co.za>)
     FROM_INFO       optional, sender for the contact form (default INFINT Info <info@infint.co.za>)
   infint.co.za is verified in Resend, so both senders work. Replies go to the visitor.
@@ -93,7 +94,7 @@ async function booking(data, request, env) {
       "Thanks for your booking enquiry. I'll reply within " + hours + " hours to let you know if I'm available and to send a quote.",
       { heading: "What you sent" },
       { rows: summaryRows(b) },
-      "If anything here is wrong, reply to this email and I'll update it. Your date is only held once the booking fee reflects, and I'll explain how that works when I reply.",
+      "If anything here is wrong, reply to this email and I'll update it. Please don't pay anything yet. I'll send payment details only once I've confirmed I'm available.",
       SIGN_OFF + "\n" + config().contact.phone
     ]
   });

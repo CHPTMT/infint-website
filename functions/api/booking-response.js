@@ -10,10 +10,13 @@
   No database, so "already done" is remembered two ways, both best effort:
     - Resend's Idempotency-Key stops a second email for the same booking within 24 hours.
     - Cloudflare's cache keeps a note of the decision so reopening the link says it's done.
+
+  Bank details come only from the BANK_DETAILS secret in Cloudflare and only go into the acceptance
+  email, so nobody can pay before Tshedza confirms the date. They are never in the repo or on the site.
 */
 
 import {
-  SIGN_OFF, esc, clean, summaryRows, serviceName, niceDate, firstName, sendEmail,
+  SIGN_OFF, esc, clean, isDate, summaryRows, serviceName, niceDate, firstName, sendEmail,
   emailFromBlocks, readToken, notifyTo, bookingFrom, config
 } from "../_shared/booking.js";
 
@@ -56,7 +59,7 @@ export async function onRequestPost({ request, env }) {
     subject: action === "accept"
       ? "Your INFINT booking: " + serviceName(b.service) + ", " + niceDate(b)
       : "Your INFINT booking enquiry for " + niceDate(b),
-    blocks: action === "accept" ? acceptBlocks(b, message) : declineBlocks(b, message)
+    blocks: action === "accept" ? acceptBlocks(b, message, env.BANK_DETAILS) : declineBlocks(b, message)
   });
 
   const res = await sendEmail(env, msg, "booking-" + t.id);
@@ -73,25 +76,32 @@ export async function onRequest() {
 
 /* Client emails */
 
-function acceptBlocks(b, message) {
+function acceptBlocks(b, message, bankDetails) {
   const c = config(), pct = c.booking.depositPct || 50;
   const rows = summaryRows(b, { withContact: false }).filter(([k]) => k !== "Notes");
+  const bank = String(bankDetails || "").replace(/\r\n?/g, "\n").trim();
+  const shortDate = isDate(b.date)
+    ? new Date(b.date + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" })
+    : b.date;
+  const reference = (b.name || "your name") + " " + shortDate;
   const blocks = [
     "Hi " + firstName(b) + ",",
-    "Good news, I'm available and I'd be glad to do your shoot. Here's what I have:",
+    "Good news, I'm available on " + niceDate(b) + " and I'd be glad to do your shoot. Here's what I have:",
     { rows }
   ];
   if (message) blocks.push(message);
   blocks.push(
     { heading: "Next steps" },
     { list: [
-      "Pay the " + pct + "% booking fee to secure your date. The date is only held once the payment reflects.",
-      "How to pay: " + c.booking.payment,
+      "A " + pct + "% deposit (half the quoted price) secures your booking. Your date is held once the deposit reflects.",
+      "The balance is due on the day of the shoot.",
+      "Use this payment reference: " + reference,
       "Reply to this email with your proof of payment.",
-      "The balance is due on or before the shoot day.",
       "The day before the shoot, I'll send you a short shot list so we're both clear on timing."
     ] },
-    c.booking.terms,
+    { heading: "Payment details" },
+    bank || "I'll send payment details separately.",
+    "The deposit is non-refundable, but you can move it to a new date once, up to 14 days before the shoot.",
     "Any questions, reply here or WhatsApp me on " + c.contact.phone + ".",
     SIGN_OFF
   );

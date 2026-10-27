@@ -78,7 +78,7 @@ function ctaBlock(){
     </div></div></div></div></section>`;
 }
 const SOCIALS = [
-  {key:"instagram",plat:"Instagram",handle:"@infint_co",url:()=>CONFIG.social.instagram,note:"INFINT on Instagram. Photos from shoots and booking updates."},
+  {key:"instagram",plat:"Instagram",handle:"@infint_co",url:()=>CONFIG.social.instagram,note:"INFINT on Instagram. Photos from shoots."},
   {key:"tiktok",plat:"TikTok",handle:"@infint_co",url:()=>CONFIG.social.tiktok,note:"INFINT on TikTok. Short videos from shoots."},
   {key:"youtube",plat:"YouTube",handle:"@tshedza_tt",url:()=>CONFIG.social.youtube,note:"Tshedza on YouTube. Longer videos."}
 ];

@@ -2,16 +2,36 @@
 
 ## Latest handover
 
-**From:** Claude chat (browser and PC automation)  **To:** Claude Code
+**From:** Claude Code  **To:** Claude chat
 **Date:** 27 October 2026
 
-**State:** Everything is live and working. Nothing is pending on `main`. The `preview` branch exists and matches `main`. Latest change: new addresses tshedza@, bookings@ and info@infint.co.za (all forward to infintco@gmail.com) and form emails sent as "INFINT Bookings" and "INFINT Info".
+**Three branches, three sites (all in the Cloudflare Pages project `infint`):**
 
-**What Tshedza wants next:** to make changes to the website and see them before they go live. Work on `preview`, push it, send him https://preview.infint.pages.dev to check, and only merge to `main` when he says so.
+| Branch | Site | What it is for |
+|---|---|---|
+| `main` | https://infint.co.za | The live site. Only merge into it when Tshedza says so. |
+| `preview` | https://preview.infint.pages.dev | Small changes to the current design, and the booking Accept and Decline flow. Folder: `C:\Users\tshed\Pictures\INF JPG\infint-website`. |
+| `redesign` | https://redesign.infint.pages.dev | The new "after dark" redesign. Folder: `C:\Users\tshed\Pictures\INF JPG\infint-redesign`. Push only to `origin redesign`; never touch `main` or `preview` from here. |
 
-**Known small issues worth fixing early (ask him first):**
-1. Enquiry emails list the visitor's contact twice ("Contact:" in the message body and "Email:" in the footer). `functions/api/enquiry.js` appends phone and email after the message; the contact form already includes them. Remove the duplicate footer lines when the message already contains them.
-2. The `preview` branch has no `RESEND_API_KEY` (Cloudflare keeps preview variables separate), so forms on preview fall back to WhatsApp and email. That's fine for checking layout.
+**State:**
+- `main` (live): new contact details, tab title "Infint", tab icons. Nothing pending.
+- `preview`: booking Accept and Decline (commit 7472e37), waiting for Tshedza to add `BOOKING_SECRET` (and `RESEND_API_KEY`, `NOTIFY_EMAIL` for Preview) in Cloudflare and test. Banking details for the acceptance email are still a placeholder in `CONFIG.booking.payment`.
+- `redesign`: this round of his feedback is done and pushed (below). It branched from `main` at 690f813, so it does **not** have the booking Accept and Decline work. Before the redesign goes live, merge `preview` (or `main`, once the bookings are live) into `redesign` and resolve `js/app.js` (booking form validation and success screen), `js/content.js` (`CONFIG.booking` gets `replyHours` and `payment`, plus the `globalThis.INFINT_CONFIG` line the functions need) and `functions/`.
+
+**Redesign feedback round 1, done on `redesign`:**
+1. Photos vanishing or flickering on phones (top right of the 2-column grids, with a faded "SELECTED · 010" caption). Cause: the grids used CSS multi-column layout with every tile on its own GPU layer and animated; WebKit paints transformed items at the top of a later column wrongly. The touch "lift" also moved the very element its observer measured, so it could flip on and off. Fix: `layoutMasonry()` builds real flex columns, the forced layers are gone, and the lift moves an inner `.tile-in`. Tested with iPhone and Pixel emulation in Chromium, scrolling down and up. Real iOS Safari (WebKit) could not be run here, so Tshedza should confirm on his phone.
+2. No photo counts anywhere (categories, Work page, hero, captions, viewer). The hero stat is now "JHB, Home base".
+3. "Matric dance" shows as "Prom" everywhere. Internal ids (`matric`, `matric-01.jpg`) unchanged.
+4. Large faded footer wordmark removed.
+5. Filter pills removed. One burger menu at every width: Work with all categories under it, then Rates, About, Socials, Contact, Book a shoot. Also fixed: the menu used to open only 104 px tall after scrolling (the blurred header trapped it).
+6. Fonts: Outfit (thin) for body, most headings and UI; Montserrat Black for big titles, menu links and prices. Archivo and Inter removed. Italic accent words removed. DESIGN.md and CLAUDE.md updated.
+7. Starting prices read "From R1 200" (home price list, home rates photo, rates page section headers). Package prices unchanged.
+8. Hero slides and the two photo strips pick at random on each page load from curated pools in `HOME.slides` and `HOME.strips` (`js/content.js`). Strip neighbours never share a category.
+9. About photo crop moved up (`object-position: 50% 10%`) so his whole head shows.
+
+**Open questions:** none from this round. Still open from before: banking details for booking acceptance emails.
+
+**Next steps:** Tshedza checks https://redesign.infint.pages.dev on his phone (especially the photo grids on iPhone) and sends the next round of feedback.
 
 **Brand files (in the repo, use these, don't recreate the logo):**
 - `assets/brand/infint-logo-white-on-black.png`: white INFINT wordmark on dark grey #262626, 1080 px square. Tshedza's preferred version.
@@ -20,13 +40,6 @@
 - `assets/brand/infint-qr.png`: his INFINT QR code.
 - `assets/icons/`: tab icons cut from the white-on-black logo (favicon.ico, icon-16/32/48/180/192/512.png). Linked in index.html, plus `site.webmanifest` (192 and 512, theme #0E1115).
 - In page titles the brand is written "Infint" (his request); the logo itself stays uppercase.
-
-**Pending prompts from Tshedza (from the chat, 27 Oct):**
-1. Tab title "Infint" and link the icons in `assets/icons`.
-2. Contact details: phone and WhatsApp both 073 296 5528 (+27 73 296 5528, wa.me/27732965528), remove 066 332 4581 everywhere. Site email becomes info@infint.co.za (main) and tshedza@infint.co.za (direct); booking fallback bookings@. Gmail stays only as NOTIFY_EMAIL.
-3. Booking flow with Accept and Decline: client acknowledgement email, signed (HMAC, BOOKING_SECRET) accept/decline links that open a confirm page, confirmation or decline email to the client from bookings@.
-
-**Open questions:** none.
 
 ---
 

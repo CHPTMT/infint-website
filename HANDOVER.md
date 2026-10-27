@@ -5,7 +5,7 @@
 **From:** Claude chat (browser and PC automation)  **To:** Claude Code
 **Date:** 27 October 2026
 
-**State:** Everything is live and working. Nothing is pending on `main`. The `preview` branch exists and matches `main`.
+**State:** Everything is live and working. Nothing is pending on `main`. The `preview` branch exists and matches `main`. Latest change: new addresses tshedza@, bookings@ and info@infint.co.za (all forward to infintco@gmail.com) and form emails sent as "INFINT Bookings" and "INFINT Info".
 
 **What Tshedza wants next:** to make changes to the website and see them before they go live. Work on `preview`, push it, send him https://preview.infint.pages.dev to check, and only merge to `main` when he says so.
 
@@ -24,7 +24,7 @@
 | HostAfrica | Registrar for infint.co.za | R49 first year (paid 27 Oct 2026). Auto-renew ON, renews 27 Oct 2027 at about R208, which looks like the domain (about R109) plus the optional R99 "Domain Warranty & Privacy" add-on. Tshedza decides on the add-on |
 | Cloudflare | DNS, hosting (Pages project `infint`), SSL, email forwarding | Free |
 | GitHub | Code, repo `CHPTMT/infint-website` (public) | Free |
-| Resend | Sends form enquiries from bookings@infint.co.za | Free, 3,000 emails a month, 100 a day |
+| Resend | Sends form enquiries from bookings@ and info@infint.co.za | Free, 3,000 emails a month, 100 a day |
 
 Total running cost: about R208 a year, or about R109 without the add-on.
 
@@ -33,9 +33,9 @@ Total running cost: about R208 a year, or about R109 without the add-on.
 - **Domain:** infint.co.za, registered at HostAfrica, nameservers `bella.ns.cloudflare.com` and `guy.ns.cloudflare.com`.
 - **Hosting:** Cloudflare Pages project `infint`, connected to GitHub `main`. Domains: infint.co.za, www.infint.co.za, infint.pages.dev. Build: framework None, no build command, output `/`.
 - **SSL:** Cloudflare Universal SSL, issued by Google Trust Services, renews automatically. http redirects to https.
-- **Form email:** `functions/api/enquiry.js` posts to Resend. Cloudflare variables (production): `RESEND_API_KEY` (secret), `NOTIFY_EMAIL=infintco@gmail.com`, `FROM_EMAIL=INFINT Website <bookings@infint.co.za>`. Reply-to is the visitor's email. Hidden "company" field drops bots.
+- **Form email:** `functions/api/enquiry.js` posts to Resend. Booking enquiries arrive from "INFINT Bookings <bookings@infint.co.za>", contact messages from "INFINT Info <info@infint.co.za>" (set in the code; optional overrides `FROM_BOOKINGS` and `FROM_INFO`). Cloudflare variables (production): `RESEND_API_KEY` (secret), `NOTIFY_EMAIL=infintco@gmail.com`. The old `FROM_EMAIL` variable is no longer read. Reply-to is the visitor's email. Hidden "company" field drops bots.
 - **Resend domain:** infint.co.za verified (DKIM TXT `resend._domainkey`, CNAMEs `rsend` and `send`, DMARC `_dmarc` `v=DMARC1; p=none;`, all DNS only in Cloudflare).
-- **Inbox:** Cloudflare Email Routing forwards hello@infint.co.za to infintco@gmail.com. Tshedza must click Cloudflare's verification email in infintco@gmail.com once for this to start working. Optional later: Gmail "Send mail as" hello@infint.co.za through smtp.resend.com port 465, user `resend`, password a Resend API key.
+- **Inbox:** Cloudflare Email Routing forwards tshedza@, bookings@, info@ and hello@infint.co.za to infintco@gmail.com. Tshedza must click Cloudflare's verification email in infintco@gmail.com once for this to start working. Optional later: Gmail "Send mail as" for any of these through smtp.resend.com port 465, user `resend`, password a Resend API key.
 - **DNS records in Cloudflare:** CNAME `@` and `www` to infint.pages.dev (proxied), the Resend records above, and the Email Routing MX/TXT records Cloudflare added.
 
 ## History (how it got here)
@@ -64,3 +64,4 @@ Total running cost: about R208 a year, or about R109 without the add-on.
 ## Handover log
 
 - 27 Oct 2026, chat to Claude Code: initial handover (this document).
+- 27 Oct 2026, chat: added tshedza@, bookings@ and info@infint.co.za forwarding; form emails now sent as "INFINT Bookings" and "INFINT Info".

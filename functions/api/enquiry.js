@@ -5,10 +5,15 @@
   Set these in Cloudflare: Workers & Pages > your project > Settings > Variables and secrets
     RESEND_API_KEY  (secret)  from resend.com > API Keys
     NOTIFY_EMAIL    where enquiries go, e.g. infintco@gmail.com
-    FROM_EMAIL      optional. Until a domain is verified in Resend, leave it unset
-                    and the default onboarding@resend.dev sender is used (Resend only
-                    delivers that to the email address your Resend account uses).
+    FROM_BOOKINGS   optional, sender for the booking form (default INFINT Bookings <bookings@infint.co.za>)
+    FROM_INFO       optional, sender for the contact form (default INFINT Info <info@infint.co.za>)
+  infint.co.za is verified in Resend, so both senders work. Replies go to the visitor.
 */
+
+const SENDERS = {
+  booking: "INFINT Bookings <bookings@infint.co.za>",
+  contact: "INFINT Info <info@infint.co.za>"
+};
 
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
@@ -33,7 +38,7 @@ export async function onRequestPost({ request, env }) {
   const text = message + "\n\n" + "Sent from the INFINT website" + (phone ? "\nPhone: " + phone : "") + (email ? "\nEmail: " + email : "");
 
   const payload = {
-    from: env.FROM_EMAIL || "INFINT Website <onboarding@resend.dev>",
+    from: data.kind === "booking" ? (env.FROM_BOOKINGS || SENDERS.booking) : (env.FROM_INFO || SENDERS.contact),
     to: [env.NOTIFY_EMAIL || "infintco@gmail.com"],
     subject,
     text

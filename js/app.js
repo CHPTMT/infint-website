@@ -8,6 +8,7 @@
 
 const S = { filter:"all", lb:{list:[],i:0,label:""}, booking:{}, timers:[], booted:false };
 document.documentElement.classList.add("js");
+if("scrollRestoration" in history) history.scrollRestoration="manual";
 
 /* Helpers */
 const $  = (s,r=document)=>r.querySelector(s);
@@ -499,9 +500,11 @@ function paint(opts={}){
   observeReveal();
   onScroll();
 }
+/* A skipped transition (a second click before the first finishes) is harmless, so its promise rejections are ignored. */
+function viewTransition(fn){ const vt=document.startViewTransition(fn); [vt.ready,vt.finished,vt.updateCallbackDone].forEach(p=>p&&p.catch(()=>{})); }
 function render(opts={}){
   /* Route changes cross-fade with the View Transitions API where the browser has it. */
-  if(S.booted && document.startViewTransition && !RM.matches){ document.startViewTransition(()=>paint(opts)); }
+  if(S.booted && document.startViewTransition && !RM.matches){ viewTransition(()=>paint(opts)); }
   else { paint(opts); if(S.booted && !RM.matches){const app=$("#app");app.classList.remove("page-in");void app.offsetWidth;app.classList.add("page-in");} }
   S.booted=true;
 }
@@ -589,7 +592,7 @@ function setFilter(f){
   history.pushState(null,"","#/work"+(f==="all"?"":"?f="+f));
   $$(".chip").forEach(c=>{const on=c.dataset.filter===f;c.classList.toggle("on",on);c.setAttribute("aria-pressed",on);});
   const swap=()=>{$("#work-grid").innerHTML=workGrid(f);wireTiles("work");observeReveal();};
-  if(document.startViewTransition&&!RM.matches) document.startViewTransition(swap); else swap();
+  if(document.startViewTransition&&!RM.matches) viewTransition(swap); else swap();
   const bar=$(".filterbar"), top=bar.getBoundingClientRect().top+scrollY-parseFloat(getComputedStyle(bar).top);
   if(scrollY>top) window.scrollTo({top,behavior:RM.matches?"auto":"smooth"});
 }

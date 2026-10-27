@@ -9,7 +9,7 @@
   --r:14px;--r-in:10px;--r-lg:24px;
   --ease:cubic-bezier(.23,1,.32,1);--ease-io:cubic-bezier(.77,0,.175,1);
   --display:'Archivo',system-ui,sans-serif;--body:'Inter',system-ui,-apple-system,sans-serif;
-  --glow:0 0 0 1px rgba(255,160,0,.55),0 0 42px -6px rgba(255,160,0,.5),0 34px 60px -24px rgba(0,0,0,.9);
+  --glow:0 0 0 1.5px rgba(255,160,0,.85),0 0 48px -4px rgba(255,160,0,.55),0 34px 60px -24px rgba(0,0,0,.9);
 }
 *,*::before,*::after{box-sizing:border-box}
 html{color-scheme:dark;-webkit-text-size-adjust:100%;scrollbar-color:#2A3038 var(--ink-2);scrollbar-width:thin}
@@ -64,7 +64,7 @@ p{margin:0 0 1em}
 .gridlines{position:absolute;inset:0;z-index:-1;pointer-events:none;
   background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:80px 80px;
   -webkit-mask-image:radial-gradient(ellipse 70% 60% at var(--gx,70%) var(--gy,30%),#000 0%,transparent 75%);mask-image:radial-gradient(ellipse 70% 60% at var(--gx,70%) var(--gy,30%),#000 0%,transparent 75%)}
-.mesh{position:absolute;inset:-20%;z-index:-1;pointer-events:none;filter:blur(60px);opacity:.9}
+.mesh{position:absolute;inset:-20%;z-index:-1;pointer-events:none;opacity:.9}
 .mesh i{position:absolute;border-radius:50%;display:block}
 .mesh i:nth-child(1){width:48%;aspect-ratio:1;left:40%;top:6%;background:radial-gradient(closest-side,rgba(255,160,0,.42),transparent);animation:drift1 24s var(--ease-io) infinite alternate}
 .mesh i:nth-child(2){width:40%;aspect-ratio:1;left:10%;top:48%;background:radial-gradient(closest-side,rgba(255,122,0,.3),transparent);animation:drift2 28s var(--ease-io) infinite alternate}
@@ -204,7 +204,7 @@ nav.main .nav-book{display:none}
 .cat .n{font-family:var(--display);font-stretch:62%;font-weight:700;font-size:1.05rem;color:var(--accent);white-space:nowrap;font-variant-numeric:tabular-nums}
 .cat:not(:first-child) p{display:none}
 @media(hover:hover) and (pointer:fine){
-  .cats:has(.cat:hover) .cat:not(:hover) img{opacity:.5}
+  .cats:has(.cat:hover) .cat:not(:hover) img{opacity:.6}
   .cat:hover{transform:translateY(-6px);box-shadow:var(--glow);z-index:2}
   .cat:hover img{transform:scale(1.06)}
 }
@@ -220,12 +220,14 @@ nav.main .nav-book{display:none}
 @media(max-width:700px){.masonry{column-count:2}}
 .tile{position:relative;overflow:hidden;background:var(--ink-3);border-radius:var(--r);cursor:zoom-in;margin:0;transform:translateZ(0);
   transition:transform .4s var(--ease),box-shadow .4s var(--ease)}
-.tile img{width:100%;height:auto;transition:opacity .35s ease,transform .6s var(--ease)}
+.tile img{width:100%;height:auto;transition:opacity .35s ease .12s,transform .6s var(--ease)}
 .tile .cap{position:absolute;left:14px;bottom:12px;z-index:2;font-family:var(--display);font-size:.66rem;font-weight:700;letter-spacing:.16em;
   text-transform:uppercase;color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.8);opacity:0;transform:translateY(6px);transition:opacity .3s ease,transform .3s var(--ease)}
 .tile:focus-visible{outline-offset:4px}
 @media(hover:hover) and (pointer:fine){
-  .masonry:has(.tile:hover) .tile:not(:hover) img{opacity:.5}
+  /* Dimming starts at once; un-dimming waits a beat so crossing the gap between photos does not flicker */
+  .masonry:has(.tile:hover) .tile:not(:hover) img,.tile:hover img{transition-delay:0s}
+  .masonry:has(.tile:hover) .tile:not(:hover) img{opacity:.6}
   .tile:hover{transform:translateY(-6px) scale(1.035);box-shadow:var(--glow);z-index:3}
   .tile:hover .cap{opacity:1;transform:none}
 }
@@ -500,6 +502,7 @@ textarea.input{min-height:140px;resize:vertical;line-height:1.5}
 /* Reveal on scroll and route transitions */
 .js .rv{opacity:0;transform:translateY(28px);filter:blur(6px);transition:opacity .9s var(--ease),transform .9s var(--ease),filter .9s var(--ease);transition-delay:var(--d,0s)}
 .js .rv.in{opacity:1;transform:none;filter:none}
+.js .tile.rv{filter:none;transition-duration:.7s}
 .js .rv-img{clip-path:inset(12% 0 0 0 round var(--r));transition:clip-path 1.2s var(--ease) var(--d,0s)}
 .js .rv-img.in{clip-path:inset(0 0 0 0 round var(--r))}
 #app.page-in{animation:pageIn .5s var(--ease)}

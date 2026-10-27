@@ -2,16 +2,29 @@
 
 ## Latest handover
 
-**From:** Claude Code  **To:** Claude chat
+**From:** Claude chat (browser and PC automation)  **To:** Claude Code
 **Date:** 27 October 2026
 
-**State:** `main` is live and unchanged. `preview` has one change waiting for Tshedza's approval: new contact details across the site (one number, 073 296 5528, for phone and WhatsApp; info@, tshedza@ and bookings@infint.co.za instead of infintco@gmail.com). See "Business facts" below. `NOTIFY_EMAIL` is unchanged, so enquiries still arrive in Gmail. Merge `preview` into `main` only when he says "push it live".
+**State:** Everything is live and working. Nothing is pending on `main`. The `preview` branch exists and matches `main`. Latest change: new addresses tshedza@, bookings@ and info@infint.co.za (all forward to infintco@gmail.com) and form emails sent as "INFINT Bookings" and "INFINT Info".
 
 **What Tshedza wants next:** to make changes to the website and see them before they go live. Work on `preview`, push it, send him https://preview.infint.pages.dev to check, and only merge to `main` when he says so.
 
 **Known small issues worth fixing early (ask him first):**
 1. Enquiry emails list the visitor's contact twice ("Contact:" in the message body and "Email:" in the footer). `functions/api/enquiry.js` appends phone and email after the message; the contact form already includes them. Remove the duplicate footer lines when the message already contains them.
 2. The `preview` branch has no `RESEND_API_KEY` (Cloudflare keeps preview variables separate), so forms on preview fall back to WhatsApp and email. That's fine for checking layout.
+
+**Brand files (in the repo, use these, don't recreate the logo):**
+- `assets/brand/infint-logo-white-on-black.png`: white INFINT wordmark on dark grey #262626, 1080 px square. Tshedza's preferred version.
+- `assets/brand/infint-logo-black-on-white.png`: dark wordmark on white, 1080 px square.
+- `assets/brand/infint-wordmark-white-transparent.png` and `infint-wordmark-ink-transparent.png`: the wordmark alone, cropped, transparent background (white, and ink #0E1115).
+- `assets/brand/infint-qr.png`: his INFINT QR code.
+- `assets/icons/`: tab icons cut from the white-on-black logo (favicon.ico, icon-16/32/48/180/192/512.png). Not linked in index.html yet.
+- In page titles the brand is written "Infint" (his request); the logo itself stays uppercase.
+
+**Pending prompts from Tshedza (from the chat, 27 Oct):**
+1. Tab title "Infint" and link the icons in `assets/icons`.
+2. Contact details: phone and WhatsApp both 073 296 5528 (+27 73 296 5528, wa.me/27732965528), remove 066 332 4581 everywhere. Site email becomes info@infint.co.za (main) and tshedza@infint.co.za (direct); booking fallback bookings@. Gmail stays only as NOTIFY_EMAIL.
+3. Booking flow with Accept and Decline: client acknowledgement email, signed (HMAC, BOOKING_SECRET) accept/decline links that open a confirm page, confirmation or decline email to the client from bookings@.
 
 **Open questions:** none.
 
@@ -57,8 +70,7 @@ Total running cost: about R208 a year, or about R109 without the add-on.
 ## Business facts used on the site
 
 - Tshedza Tshiololi, INFINT, Johannesburg (Braamfontein for travel distance).
-- Phone and WhatsApp: 073 296 5528 (+27 73 296 5528, wa.me/27732965528). The old 066 332 4581 is no longer used.
-- Email on the site: info@infint.co.za (main: footer, general queries, contact form email fallback), tshedza@infint.co.za (direct, shown on the Contact page), bookings@infint.co.za (booking form email fallback). All forward to infintco@gmail.com, which is not shown on the site. Set in `CONFIG.contact` in `js/content.js`.
+- infintco@gmail.com, +27 66 332 4581 (WhatsApp), +27 73 296 5528.
 - Instagram and TikTok @infint_co, YouTube @tshedza_tt, linktr.ee/tshedzatt.
 - Rates in `js/content.js` match his 2026 rate cards (graduation R1,200 / R1,700 / R2,400; short shoots R1,200 to R2,500; day rate R3,000 for 2 hours to R9,000 for 8 hours, R1,000 per extra hour, max 12 hours).
 
@@ -66,4 +78,4 @@ Total running cost: about R208 a year, or about R109 without the add-on.
 
 - 27 Oct 2026, chat to Claude Code: initial handover (this document).
 - 27 Oct 2026, chat: added tshedza@, bookings@ and info@infint.co.za forwarding; form emails now sent as "INFINT Bookings" and "INFINT Info".
-- 27 Oct 2026, Claude Code: contact details updated on `preview` (073 296 5528 for phone and WhatsApp, 066 332 4581 removed; site emails moved to infint.co.za addresses).
+- 27 Oct 2026, chat: logo files and tab icons added to assets/brand and assets/icons; Claude Code CLI, Node.js and Python installed on his PC; skills impeccable and emil-design-eng plus Playwright MCP set up for this folder. Resend key "gmail-send-as" created for Gmail "Send mail as".

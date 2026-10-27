@@ -7,7 +7,7 @@ The visual system for the redesigned site. If code and this file disagree, fix o
 A darkroom at night. Near-black ink surfaces, photographs as the only full colour, one warm amber light source (from the logo) that glows, never shouts. Three ideas from Tshedza's references, combined:
 
 1. **Split screen** (ref-1): a full-height photo on one side, an ink panel with crisp 1 px line details on the other. Huge condensed numbers and titles sit over the photo.
-2. **Editorial type** (ref-2): heavy sans headlines with one light italic word, and large flat colour-block panels (amber, bone) with lots of space.
+2. **Editorial type** (ref-2): heavy sans titles set against thin ones, and large flat colour-block panels (amber, bone) with lots of space.
 3. **Premium dark** (ref-3, ref-4): ink background, a slow amber radial glow, faint grid lines behind heroes, rounded cards.
 
 The photos are the star. Interface chrome stays quiet and thin so colour in the pictures carries the page.
@@ -43,21 +43,22 @@ Rules:
 
 ## Type
 
-Fonts: **Archivo** (variable, with width axis 62 to 125) for display and UI labels, **Inter** for body, **Montserrat Bold** for About text only.
+Fonts, both self-hosted in `assets/fonts` (Latin subset): **Outfit** (variable 200 to 600), a thin modern sans for body text, most headings and all UI; **Montserrat** (variable 700 to 900) for heavy display text: big page titles, the hero line, menu links, category and social card names, and every price or big number. About text stays Montserrat Bold. Tokens: `--display` and `--body` are Outfit, `--heavy` is Montserrat.
 
-| Role | Font | Size | Weight / width | Tracking |
+| Role | Font | Size | Weight | Tracking |
 |---|---|---|---|---|
-| Mega number | Archivo | `clamp(5rem, 13vw, 14rem)` | 800, width 62 (condensed) | -0.02em, line-height .82 |
-| Display (page titles) | Archivo | `clamp(3rem, 8vw, 7.5rem)` | 800, width 75 | -0.03em, line-height .9 |
-| H2 | Archivo | `clamp(2.2rem, 4.6vw, 4.4rem)` | 800, width 85 | -0.03em |
-| H3 | Archivo | `clamp(1.2rem, 1.6vw, 1.6rem)` | 700, width 100 | -0.02em |
-| Italic accent word | Archivo italic | inherits | 300, width 100 | -0.01em |
-| Body | Inter | 1rem to 1.0625rem | 400 | 0 |
-| Lede | Inter | `clamp(1.05rem, 1.3vw, 1.25rem)` | 400 | 0 |
-| Label | Archivo | .72rem | 700, uppercase | .14em |
+| Mega number (prices, steps, hero word) | Montserrat | per component, e.g. `clamp(3.2rem, 5.2vw, 6rem)` on rate cards | 900 | -0.03em, line-height .9 |
+| Display (page titles, hero, CTA) | Montserrat | `clamp(2.6rem, 6.4vw, 6rem)` | 900 | -0.035em, line-height .92 |
+| H2 (section headings) | Outfit | `clamp(2.2rem, 4.4vw, 4.4rem)` | 300 | -0.035em |
+| H3 | Outfit | `clamp(1.2rem, 1.6vw, 1.5rem)` | 500 | -0.015em |
+| Body | Outfit | 1rem | 400 | 0 |
+| Lede | Outfit | `clamp(1.05rem, 1.3vw, 1.22rem)` | 300 | 0 |
+| Label, button | Outfit | .72rem to .82rem | 600, uppercase | .12em to .16em |
 
-- Every page title gets at most one light italic word (`<em class="it">`).
-- Numbers (prices, counts, steps) use the condensed mega style with `font-variant-numeric: tabular-nums`.
+- No italic accent words (removed with the move away from Archivo). Emphasis comes from the heavy and thin contrast.
+- Numbers use the mega style with `font-variant-numeric: tabular-nums`. Starting prices read "From R1 200".
+- Montserrat is wide, so heavy sizes are smaller than the old condensed ones; check long words ("PORTRAITS", "Book a shoot") at 390 px.
+- `font-synthesis: none`: never fake a weight the files do not have.
 - No eyebrow labels above headings. Headings carry themselves.
 - Body measure 60 to 70 characters.
 

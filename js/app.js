@@ -88,7 +88,7 @@ let masonryT;
 addEventListener("resize",()=>{clearTimeout(masonryT);masonryT=setTimeout(layoutMasonry,120);});
 function ctaBlock(){
   return `<section class="section pt0"><div class="wrap"><div class="cta rv">
-    <h2>Let's put your date in the <span class="it">diary</span>.</h2>
+    <h2>Let's put your date in the diary.</h2>
     <div><p>Tell me what you are shooting and when. You will get a written quote and a hold on the date within 24 hours.</p>
     <div class="actions">
       <a class="btn inky magnetic" href="#/book">Start a booking ${ARR}</a>
@@ -143,7 +143,7 @@ V.home = () => {
       <div class="gridlines" aria-hidden="true"></div>
       <div class="hero-meta label"><span>Photography</span><span>${esc(CONFIG.brand.city)}, ZA</span></div>
       <div>
-        <h1>Your day, shot <span class="it">properly</span>.</h1>
+        <h1>Your day, shot properly.</h1>
         <p class="lede">${esc(CONFIG.brand.intro)}</p>
         <div class="actions">
           <a class="btn magnetic" href="#/book">Book a shoot ${ARR}</a>
@@ -151,7 +151,7 @@ V.home = () => {
         </div>
       </div>
       <div class="specs">
-        <div><span class="mega">JHB</span><span class="label">Based here, shooting Gauteng and beyond</span></div>
+        <div><span class="mega">JHB</span><span class="label">Home base</span></div>
         <div><span class="mega">${CATEGORIES.length}</span><span class="label">Kinds of work</span></div>
         <div><span class="mega">24<sup>H</sup></span><span class="label">To a written quote</span></div>
       </div>
@@ -166,7 +166,7 @@ V.home = () => {
 
   <section class="section"><div class="wrap wide">
     <div class="head-row">
-      <h2 class="h2 rv">Seven kinds of <span class="it">work</span>.</h2>
+      <h2 class="h2 rv">Seven kinds of work.</h2>
       <p class="lede rv" style="--d:.08s">Done the same way every time: a shot list ahead of time, a fast-moving shoot, and delivery on the day I said I would.</p>
     </div>
     <div class="cats">
@@ -179,7 +179,7 @@ V.home = () => {
 
   <section class="section pt0"><div class="wrap wide">
     <div class="head-row">
-      <h2 class="h2 rv">Recent <span class="it">frames</span>.</h2>
+      <h2 class="h2 rv">Recent frames.</h2>
       <a class="link rv" href="#/work">Full portfolio ${ICON.go}</a>
     </div>
     ${tileGrid(HOME.featured)}
@@ -192,7 +192,7 @@ V.home = () => {
     </div>
     <div class="feature-body glow">
       <div class="gridlines" aria-hidden="true"></div>
-      <h2 class="h2 rv">Clear prices, <span class="it">before</span> you book.</h2>
+      <h2 class="h2 rv">Clear prices, before you book.</h2>
       <p class="lede rv">Every price includes editing and delivery by download link. Prices hold for the ${esc(r.updated)} season.</p>
       <div class="pricelist rv">
         <a href="#/rates?s=grads"><span><strong>Graduation packages</strong><small>${r.grads.items.length} packages, ${esc(r.grads.items[0].dur)} to ${esc(r.grads.items[r.grads.items.length-1].dur)}</small></span><span class="mega">${money(minOf(r.grads.items))}</span><span class="go">${ICON.go}</span></a>
@@ -204,7 +204,7 @@ V.home = () => {
   </section>
 
   <section class="section"><div class="wrap">
-    <div class="head-row"><h2 class="h2 rv">How a booking <span class="it">works</span>.</h2></div>
+    <div class="head-row"><h2 class="h2 rv">How a booking works.</h2></div>
     <ol class="steps-row" style="list-style:none;margin:0;padding:0">
       ${CONFIG.howItWorks.map(([t,d],i)=>`<li class="step rv" style="--d:${i*.08}s">
         <span class="mega" aria-hidden="true">${pad2(i+1)}</span><h3 class="h3">${esc(t)}</h3><p>${esc(d)}</p></li>`).join("")}
@@ -213,7 +213,7 @@ V.home = () => {
 
   <section class="section pt0"><div class="wrap">
     <div class="head-row">
-      <h2 class="h2 rv">Follow <span class="it">along</span>.</h2>
+      <h2 class="h2 rv">Follow along.</h2>
       <a class="link rv" href="#/socials">All socials ${ICON.go}</a>
     </div>
     ${socialCards()}
@@ -241,7 +241,7 @@ V.rates = () => {
   const travel=r.addons.find(a=>/travel/i.test(a.name));
   const price = n => `<span class="cur">${esc(r.currency)}</span>${num(n)}`;
   return `
-  ${pageHead(`Rates for <span class="it">${esc(r.updated)}</span>.`,"Everything below includes editing and delivery by download link. Prices hold for the "+r.updated+" season.")}
+  ${pageHead(`Rates for ${esc(r.updated)}.`,"Everything below includes editing and delivery by download link. Prices hold for the "+r.updated+" season.")}
 
   <section class="section pt0" id="grads"><div class="wrap">
     <div class="head-row">
@@ -276,7 +276,7 @@ V.rates = () => {
   </div></section>
 
   <section class="section pt0" id="addons"><div class="wrap">
-    <div class="head-row"><h2 class="h2 rv">Add-<span class="it">ons</span>.</h2></div>
+    <div class="head-row"><h2 class="h2 rv">Add-ons.</h2></div>
     <div class="addons">
       ${r.addons.map((a,i)=>`<div class="addon rv" style="--d:${(i%3)*.06}s">
         <span><strong>${esc(a.name)}</strong><p>${esc(a.note)}</p></span>
@@ -289,7 +289,7 @@ V.rates = () => {
     <div class="estimator glow rv">
       <div class="gridlines" aria-hidden="true"></div>
       <div>
-        <h2>Estimate a <span class="it">day rate</span>.</h2>
+        <h2>Estimate a day rate.</h2>
         <p class="lede" style="margin-top:14px;font-size:1rem">Rough working figure for events, weddings and corporate days. The written quote is what counts.</p>
         <div class="fields">
           <div class="field" style="margin:0"><label for="q-hours">Hours of coverage</label>
@@ -330,7 +330,7 @@ V.book = (q,o={}) => {
       </div>
     </div>
     <div class="split-body glow"><div class="gridlines" aria-hidden="true"></div><div class="inner">
-      <h1>Book a <span class="it">shoot</span>.</h1>
+      <h1>Book a shoot.</h1>
       <p class="lede">No payment here. Send the details, get a quote, then confirm the date.</p>
       <div class="stepper" id="stepper">
         ${BOOK_STEPS.map((t,i)=>`<div class="${step===i+1?"on":step>i+1?"done":""}"><b>${pad2(i+1)}</b>${esc(t)}</div>`).join("")}
@@ -411,7 +411,7 @@ V.contact = () => {
       <div class="over" aria-hidden="true"><span class="mega">Say hi.</span></div>
     </div>
     <div class="split-body glow"><div class="gridlines" aria-hidden="true"></div><div class="inner">
-      <h1>Get in <span class="it">touch</span>.</h1>
+      <h1>Get in touch.</h1>
       <p class="lede">Message, call or email. For a booking, the booking form gets you a quote fastest because it has everything I need.</p>
       <div class="contact-list">
         ${row("whatsapp","WhatsApp",c.phone,waLink("Hi Tshedza,"),1)}
@@ -429,7 +429,7 @@ V.contact = () => {
         <a class="btn ghost" href="${waLink("Hi Tshedza,")}" target="_blank" rel="noopener">WhatsApp</a>
       </div>
       <div class="form-card">
-        <h2>Send a <span class="it">message</span>.</h2>
+        <h2>Send a message.</h2>
         <form id="contactform">
           <div class="grid g2">
             <div class="field"><label for="cf-name">Name <span class="req">*</span></label><input class="input" id="cf-name" name="name" autocomplete="name" required></div>
@@ -449,7 +449,7 @@ V.contact = () => {
 };
 
 V.about = () => `
-  ${pageHead(`Behind the <span class="it">camera</span>.`,"")}
+  ${pageHead(`Behind the camera.`,"")}
   <section class="section pt0"><div class="wrap">
     <div class="about-block rv">
       <div class="about-copy">
@@ -463,7 +463,7 @@ V.about = () => `
   </div></section>
 
   <section class="section pt0"><div class="wrap">
-    <div class="head-row"><h2 class="h2 rv">Before your <span class="it">shoot</span>.</h2></div>
+    <div class="head-row"><h2 class="h2 rv">Before your shoot.</h2></div>
     <div class="prep">
       ${CONFIG.prep.map((p,i)=>`<div class="rv" style="--d:${i*.07}s"><h3 class="h3">${esc(p.t)}</h3><p>${esc(p.d)}</p></div>`).join("")}
     </div>
@@ -482,7 +482,7 @@ V.about = () => `
   ${ctaBlock()}`;
 
 V.socials = () => `
-  ${pageHead(`Follow the <span class="it">work</span>.`,"Find INFINT on Instagram and TikTok, and Tshedza on YouTube.")}
+  ${pageHead(`Follow the work.`,"Find INFINT on Instagram and TikTok, and Tshedza on YouTube.")}
   <section class="section pt0"><div class="wrap">
     ${socialCards()}
     <div class="linkrow rv"><p><strong>Everything in one place.</strong> All of the links above, plus anything new, on Linktree.</p>

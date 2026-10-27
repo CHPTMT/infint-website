@@ -17,6 +17,9 @@ const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">
 const photo = id => PHOTOS.find(p=>p.id===id);
 const money = n => CONFIG.rates.currency + Number(n).toLocaleString("en-ZA");
 const num = n => Number(n).toLocaleString("en-ZA");
+/* A starting price: "From R1 200" (en-ZA groups thousands with a space) */
+const fromPrice = n => `<span class="from">From </span>${money(n)}`;
+const minOf = list => Math.min(...list.map(i=>i.price));
 const pad2 = n => String(n).padStart(2,"0");
 const pad3 = n => String(n).padStart(3,"0");
 const thumbPath = id => "assets/thumbs/"+id+".jpg";
@@ -124,7 +127,6 @@ const V = {};
 
 V.home = () => {
   const r=CONFIG.rates, sl=HOME.slides.filter(s=>photo(s.id));
-  const minOf = list => Math.min(...list.map(i=>i.price));
   return `
   <section class="hero" style="--slide:6.5s">
     <div class="hero-photo" id="hero-photo">
@@ -188,16 +190,16 @@ V.home = () => {
   <section class="feature">
     <div class="feature-photo">
       ${pic(HOME.ratesPhoto,{sizes:"(max-width:900px) 100vw, 50vw",cls:"px",alt:""})}
-      <div class="over"><span class="label">Graduation shoots from</span><span class="mega">${money(minOf(r.grads.items))}</span></div>
+      <div class="over"><span class="label">Graduation shoots</span><span class="mega">${fromPrice(minOf(r.grads.items))}</span></div>
     </div>
     <div class="feature-body glow">
       <div class="gridlines" aria-hidden="true"></div>
       <h2 class="h2 rv">Clear prices, before you book.</h2>
       <p class="lede rv">Every price includes editing and delivery by download link. Prices hold for the ${esc(r.updated)} season.</p>
       <div class="pricelist rv">
-        <a href="#/rates?s=grads"><span><strong>Graduation packages</strong><small>${r.grads.items.length} packages, ${esc(r.grads.items[0].dur)} to ${esc(r.grads.items[r.grads.items.length-1].dur)}</small></span><span class="mega">${money(minOf(r.grads.items))}</span><span class="go">${ICON.go}</span></a>
-        <a href="#/rates?s=short"><span><strong>Short shoots</strong><small>Portraits, headshots, prom</small></span><span class="mega">${money(minOf(r.short.items))}</span><span class="go">${ICON.go}</span></a>
-        <a href="#/rates?s=day"><span><strong>Events and day rates</strong><small>From ${esc(r.day.items[0].hours)} of coverage</small></span><span class="mega">${money(minOf(r.day.items))}</span><span class="go">${ICON.go}</span></a>
+        <a href="#/rates?s=grads"><span><strong>Graduation packages</strong><small>${r.grads.items.length} packages, ${esc(r.grads.items[0].dur)} to ${esc(r.grads.items[r.grads.items.length-1].dur)}</small></span><span class="mega">${fromPrice(minOf(r.grads.items))}</span><span class="go">${ICON.go}</span></a>
+        <a href="#/rates?s=short"><span><strong>Short shoots</strong><small>Portraits, headshots, prom</small></span><span class="mega">${fromPrice(minOf(r.short.items))}</span><span class="go">${ICON.go}</span></a>
+        <a href="#/rates?s=day"><span><strong>Events and day rates</strong><small>${parseInt(r.day.items[0].hours)} to ${esc(r.day.items[r.day.items.length-1].hours)} of coverage</small></span><span class="mega">${fromPrice(minOf(r.day.items))}</span><span class="go">${ICON.go}</span></a>
       </div>
       <div class="rv"><a class="btn ghost" href="#/rates">See all rates ${ARR}</a></div>
     </div>
@@ -245,7 +247,7 @@ V.rates = () => {
 
   <section class="section pt0" id="grads"><div class="wrap">
     <div class="head-row">
-      <h2 class="h2 rv">${esc(r.grads.title)}</h2>
+      <div class="rv"><h2 class="h2">${esc(r.grads.title)}</h2><p class="mega startp">${fromPrice(minOf(r.grads.items))}</p></div>
       <p class="lede rv" style="--d:.08s">${esc(r.grads.note)}</p>
     </div>
     <div class="pkgs">
@@ -262,12 +264,14 @@ V.rates = () => {
   <section class="section pt0"><div class="wrap grid g2" style="align-items:start">
     <div class="panel rv" id="short">
       <h2>${esc(r.short.title)}</h2>
+      <p class="mega startp">${fromPrice(minOf(r.short.items))}</p>
       <p class="lede">${esc(r.short.note)}</p>
       <div class="ratelist">${r.short.items.map(i=>`<div class="row"><span class="k">${esc(i.dur)}</span><span class="d">${esc(i.images)}</span><span class="mega">${money(i.price)}</span></div>`).join("")}</div>
       <div class="form-actions"><a class="btn ghost" href="#/book?service=portrait">Book a short shoot ${ARR}</a></div>
     </div>
     <div class="panel rv" id="day" style="--d:.08s">
       <h2>${esc(r.day.title)}</h2>
+      <p class="mega startp">${fromPrice(minOf(r.day.items))}</p>
       <p class="lede">${esc(r.day.note)}</p>
       <div class="ratelist">${r.day.items.map(i=>`<div class="row one"><span class="k">${esc(i.hours)}</span><span class="mega">${money(i.price)}</span></div>`).join("")}
         <div class="row"><span class="k">Each additional hour</span><span class="d">Maximum ${r.day.overtimeMax} hours on any single day</span><span class="mega">${money(r.day.overtime)}</span></div></div>

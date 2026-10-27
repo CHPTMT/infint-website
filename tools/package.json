@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "description": "Tools for the INFINT site. Only make-webp.js needs a package: run `npm --prefix tools install` once.",
+  "dependencies": {
+    "sharp": "0.33.5"
+  }
+}

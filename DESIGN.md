@@ -22,8 +22,8 @@ The photos are the star. Interface chrome stays quiet and thin so colour in the 
 | `--line` | `rgba(255,255,255,.09)` | 1 px hairlines, card borders, grid lines |
 | `--line-2` | `rgba(255,255,255,.16)` | Hover borders, input borders |
 | `--white` | `#FFFFFF` | Headings |
-| `--text` | `#E9E7E3` | Body copy on ink (warm white) |
-| `--mute` | `#9BA1A9` | Secondary text on ink (passes 4.5:1 on `--ink`) |
+| `--text` | `#FFFFFF` | Body copy on ink (white) |
+| `--mute` | `#F5F5F3` | Secondary text on ink (bone). No grey text anywhere: Tshedza asked for white or bone only, at regular or medium weight |
 | `--bone` | `#F5F5F3` | Light colour-block panels (About text, rate notes) |
 | `--accent` | `#FFA000` | Amber: primary buttons, active states, glows, one word per heading at most |
 | `--accent-2` | `#FF7A00` | Deeper orange, only inside gradients |
@@ -43,7 +43,7 @@ Rules:
 
 ## Type
 
-Fonts, both self-hosted in `assets/fonts` (Latin subset): **Outfit** (variable 200 to 600), a thin modern sans for body text, most headings and all UI; **Montserrat** (variable 700 to 900) for heavy display text: big page titles, the hero line, menu links, category and social card names, and every price or big number. About text stays Montserrat Bold. Tokens: `--display` and `--body` are Outfit, `--heavy` is Montserrat.
+Fonts, both self-hosted in `assets/fonts` (Latin subset): **Outfit** (variable 200 to 600), a thin modern sans for body text, most headings and all UI; **Montserrat** (variable 700 to 900) for heavy display text: big page titles, the hero line, menu links, category and social platform names, and every price or big number. About text stays Montserrat Bold. Tokens: `--display` and `--body` are Outfit, `--heavy` is Montserrat.
 
 | Role | Font | Size | Weight | Tracking |
 |---|---|---|---|---|
@@ -55,7 +55,7 @@ Fonts, both self-hosted in `assets/fonts` (Latin subset): **Outfit** (variable 2
 | Lede | Outfit | `clamp(1.05rem, 1.3vw, 1.22rem)` | 300 | 0 |
 | Label, button | Outfit | .72rem to .82rem | 600, uppercase | .12em to .16em |
 
-- No italic accent words (removed with the move away from Archivo). Emphasis comes from the heavy and thin contrast.
+- No italic accent words (removed with the move away from Archivo). Emphasis comes from the heavy and thin contrast in big headings only. Body text, labels, captions and small print are Outfit at 400 or 500, white or bone, never thin and never grey.
 - Numbers use the mega style with `font-variant-numeric: tabular-nums`. Starting prices read "From R1 200".
 - Montserrat is wide, so heavy sizes are smaller than the old condensed ones; check long words ("PORTRAITS", "Book a shoot") at 390 px.
 - `font-synthesis: none`: never fake a weight the files do not have.

@@ -21,6 +21,8 @@ try {
       if ($path -eq "") { $path = "index.html" }
       $file = Join-Path $root $path
       $full = [IO.Path]::GetFullPath($file)
+      # A page path with no file extension (/work, /rates) gets index.html, as on Cloudflare
+      if (-not (Test-Path $full -PathType Leaf) -and -not [IO.Path]::HasExtension($path)) { $full = Join-Path $root "index.html" }
       if ($full.StartsWith($root) -and (Test-Path $full -PathType Leaf)) {
         $bytes = [IO.File]::ReadAllBytes($full)
         $ext = [IO.Path]::GetExtension($full).ToLower()

@@ -1,7 +1,7 @@
 /*
-  INFINT site logic. A small hash router: each page is a function in V
+  INFINT site logic. A small router: each page is a function in V
   that returns HTML, and wireView() attaches the page's event handlers.
-  Routes: #/  #/work  #/rates  #/book  #/contact  #/about  #/socials
+  Routes: /  /work  /rates  /book  /contact  /about  /socials  (old #/ links still work)
   Content (photos, rates, copy) lives in js/content.js, not here.
   Motion rules are in DESIGN.md.
 */
@@ -98,24 +98,27 @@ function ctaBlock(){
     <h2>Let's put your date in the diary.</h2>
     <div><p>Tell me what you are shooting and when. You will get a written quote and a hold on the date within 24 hours.</p>
     <div class="actions">
-      <a class="btn inky magnetic" href="#/book">Start a booking ${ARR}</a>
+      <a class="btn inky magnetic" href="/book">Start a booking ${ARR}</a>
       <a class="btn ghost" href="${waLink("Hi Tshedza, I'd like to book a shoot.")}" target="_blank" rel="noopener">WhatsApp</a>
     </div></div></div></div></section>`;
 }
+/* Profile screenshots live in assets/socials (tools/make-socials.js); w is each file's width at 1000 px tall */
 const SOCIALS = [
-  {key:"instagram",plat:"Instagram",handle:"@infint_co",url:()=>CONFIG.social.instagram,note:"INFINT on Instagram. Photos from shoots."},
-  {key:"tiktok",plat:"TikTok",handle:"@infint_co",url:()=>CONFIG.social.tiktok,note:"INFINT on TikTok. Short videos from shoots."},
-  {key:"youtube",plat:"YouTube",handle:"@tshedza_tt",url:()=>CONFIG.social.youtube,note:"Tshedza on YouTube. Longer videos."}
+  {key:"instagram",plat:"Instagram",handle:"@infint_co",w:541,url:()=>CONFIG.social.instagram},
+  {key:"tiktok",plat:"TikTok",handle:"@infint_co",w:546,url:()=>CONFIG.social.tiktok},
+  {key:"youtube",plat:"YouTube",handle:"@tshedza_tt, Infint Co",w:541,url:()=>CONFIG.social.youtube}
 ];
 function socialCards(){
-  return `<div class="socials">${SOCIALS.map((s,i)=>`<a class="soc rv" style="--d:${i*.08}s" href="${esc(s.url())}" target="_blank" rel="noopener" aria-label="${s.plat} ${s.handle} (opens in a new tab)">
-      ${pic(PAGE_PHOTOS.socials[s.key],{sizes:"(max-width:900px) 100vw, 34vw",alt:""})}
-      <span class="ico" aria-hidden="true">${ICON[s.key]}</span>
-      <span class="plat">${s.plat}</span>
-      <span class="handle">${s.handle}</span>
-      <p>${esc(s.note)}</p>
-      <span class="btn light sm">Open ${s.plat} ${ARR}</span>
-    </a>`).join("")}</div>`;
+  return `<div class="phones">${SOCIALS.map((s,i)=>{const go=`href="${esc(s.url())}" target="_blank" rel="noopener"`;
+    return `<div class="phone-card rv" style="--d:${i*.08}s">
+      <a class="phone" ${go} aria-label="${s.plat} profile, ${esc(s.handle)} (opens in a new tab)"><span class="screen"><picture>
+        <source type="image/webp" srcset="assets/socials/${s.key}.webp">
+        <img src="assets/socials/${s.key}.png" width="${s.w}" height="1000" loading="lazy" decoding="async" alt="The ${s.plat} profile ${esc(s.handle)}">
+      </picture></span></a>
+      <span class="plat"><span aria-hidden="true" style="display:inline-flex">${ICON[s.key]}</span>${s.plat}</span>
+      <span class="handle">${esc(s.handle)}</span>
+      <a class="btn ghost sm" ${go}>Open ${s.plat} ${ARR}</a>
+    </div>`;}).join("")}</div>`;
 }
 
 /* "Everything" view: take one photo from each category in turn so the wall reads as a mix. */
@@ -166,8 +169,8 @@ V.home = () => {
         <h1>Your day, shot properly.</h1>
         <p class="lede">${esc(CONFIG.brand.intro)}</p>
         <div class="actions">
-          <a class="btn magnetic" href="#/book">Book a shoot ${ARR}</a>
-          <a class="btn ghost" href="#/work">See the work</a>
+          <a class="btn magnetic" href="/book">Book a shoot ${ARR}</a>
+          <a class="btn ghost" href="/work">See the work</a>
         </div>
       </div>
       <div class="specs">
@@ -180,7 +183,7 @@ V.home = () => {
 
   <section class="marquee" aria-label="A moving strip of recent photos">
     ${PICK.strips.map((row,ri)=>{const ok=row;
-      const cell=(id,dup)=>`<a href="#/work?f=${photo(id).cat}" ${dup?'tabindex="-1" aria-hidden="true"':""}>${pic(id,{sizes:Math.round(280*photo(id).r)+"px",alt:dup?"":undefined})}</a>`;
+      const cell=(id,dup)=>`<a href="/work?f=${photo(id).cat}" ${dup?'tabindex="-1" aria-hidden="true"':""}>${pic(id,{sizes:Math.round(280*photo(id).r)+"px",alt:dup?"":undefined})}</a>`;
       return `<div class="mq-track ${ri%2?"rev":""}">${ok.map(id=>cell(id,0)).join("")}${ok.map(id=>cell(id,1)).join("")}</div>`;}).join("")}
   </section>
 
@@ -190,7 +193,7 @@ V.home = () => {
       <p class="lede rv" style="--d:.08s">Done the same way every time: a shot list ahead of time, a fast-moving shoot, and delivery on the day I said I would.</p>
     </div>
     <div class="cats">
-      ${CATEGORIES.map((c,i)=>`<a class="cat rv" style="--d:${(i%5)*.06}s" href="#/work?f=${c.key}">
+      ${CATEGORIES.map((c,i)=>`<a class="cat rv" style="--d:${(i%5)*.06}s" href="/work?f=${c.key}">
         ${pic(c.cover,{alt:"",sizes:i===0?(photo(c.cover).r>1?"(max-width:1200px) 100vw, 65vw":"(max-width:1200px) 100vw, 40vw")
         :(photo(c.cover).r>1?"(max-width:700px) 80vw, (max-width:1200px) 55vw, 36vw":"(max-width:700px) 50vw, (max-width:1200px) 34vw, 22vw")})}
         <span class="meta"><span><h3>${esc(c.name)}</h3><p>${esc(c.blurb)}</p></span></span>
@@ -201,7 +204,7 @@ V.home = () => {
   <section class="section pt0"><div class="wrap wide">
     <div class="head-row">
       <h2 class="h2 rv">Recent frames.</h2>
-      <a class="link rv" href="#/work">Full portfolio ${ICON.go}</a>
+      <a class="link rv" href="/work">Full portfolio ${ICON.go}</a>
     </div>
     ${tileGrid(HOME.featured)}
   </div></section>
@@ -216,11 +219,11 @@ V.home = () => {
       <h2 class="h2 rv">Clear prices, before you book.</h2>
       <p class="lede rv">Every price includes editing and delivery by download link. Prices hold for the ${esc(r.updated)} season.</p>
       <div class="pricelist rv">
-        <a href="#/rates?s=grads"><span><strong>Graduation packages</strong><small>${r.grads.items.length} packages, ${esc(r.grads.items[0].dur)} to ${esc(r.grads.items[r.grads.items.length-1].dur)}</small></span><span class="mega">${fromPrice(minOf(r.grads.items))}</span><span class="go">${ICON.go}</span></a>
-        <a href="#/rates?s=short"><span><strong>Short shoots</strong><small>Portraits, headshots, prom</small></span><span class="mega">${fromPrice(minOf(r.short.items))}</span><span class="go">${ICON.go}</span></a>
-        <a href="#/rates?s=day"><span><strong>Events and day rates</strong><small>${parseInt(r.day.items[0].hours)} to ${esc(r.day.items[r.day.items.length-1].hours)} of coverage</small></span><span class="mega">${fromPrice(minOf(r.day.items))}</span><span class="go">${ICON.go}</span></a>
+        <a href="/rates?s=grads"><span><strong>Graduation packages</strong><small>${r.grads.items.length} packages, ${esc(r.grads.items[0].dur)} to ${esc(r.grads.items[r.grads.items.length-1].dur)}</small></span><span class="mega">${fromPrice(minOf(r.grads.items))}</span><span class="go">${ICON.go}</span></a>
+        <a href="/rates?s=short"><span><strong>Short shoots</strong><small>Portraits, headshots, prom</small></span><span class="mega">${fromPrice(minOf(r.short.items))}</span><span class="go">${ICON.go}</span></a>
+        <a href="/rates?s=day"><span><strong>Events and day rates</strong><small>${parseInt(r.day.items[0].hours)} to ${esc(r.day.items[r.day.items.length-1].hours)} of coverage</small></span><span class="mega">${fromPrice(minOf(r.day.items))}</span><span class="go">${ICON.go}</span></a>
       </div>
-      <div class="rv"><a class="btn ghost" href="#/rates">See all rates ${ARR}</a></div>
+      <div class="rv"><a class="btn ghost" href="/rates">See all rates ${ARR}</a></div>
     </div>
   </section>
 
@@ -235,7 +238,7 @@ V.home = () => {
   <section class="section pt0"><div class="wrap">
     <div class="head-row">
       <h2 class="h2 rv">Follow along.</h2>
-      <a class="link rv" href="#/socials">All socials ${ICON.go}</a>
+      <a class="link rv" href="/socials">All socials ${ICON.go}</a>
     </div>
     ${socialCards()}
   </div></section>
@@ -275,7 +278,7 @@ V.rates = () => {
         <div class="mega">${price(p.price)}</div>
         <div class="sub">${p.feature?esc(p.dur)+", ":""}${esc(p.images)}</div>
         <ul>${p.includes.map(i=>`<li><span>${esc(i)}</span></li>`).join("")}</ul>
-        <a class="btn ${p.feature?"magnetic":"ghost"}" href="#/book?service=graduation&pkg=${encodeURIComponent(p.name)}">Book ${esc(p.name)} ${ARR}</a>
+        <a class="btn ${p.feature?"magnetic":"ghost"}" href="/book?service=graduation&pkg=${encodeURIComponent(p.name)}">Book ${esc(p.name)} ${ARR}</a>
       </div>`).join("")}
     </div>
   </div></section>
@@ -286,7 +289,7 @@ V.rates = () => {
       <p class="mega startp">${fromPrice(minOf(r.short.items))}</p>
       <p class="lede">${esc(r.short.note)}</p>
       <div class="ratelist">${r.short.items.map(i=>`<div class="row"><span class="k">${esc(i.dur)}</span><span class="d">${esc(i.images)}</span><span class="mega">${money(i.price)}</span></div>`).join("")}</div>
-      <div class="form-actions"><a class="btn ghost" href="#/book?service=portrait">Book a short shoot ${ARR}</a></div>
+      <div class="form-actions"><a class="btn ghost" href="/book?service=portrait">Book a short shoot ${ARR}</a></div>
     </div>
     <div class="panel rv" id="day" style="--d:.08s">
       <h2>${esc(r.day.title)}</h2>
@@ -294,7 +297,7 @@ V.rates = () => {
       <p class="lede">${esc(r.day.note)}</p>
       <div class="ratelist">${r.day.items.map(i=>`<div class="row one"><span class="k">${esc(i.hours)}</span><span class="mega">${money(i.price)}</span></div>`).join("")}
         <div class="row"><span class="k">Each additional hour</span><span class="d">Maximum ${r.day.overtimeMax} hours on any single day</span><span class="mega">${money(r.day.overtime)}</span></div></div>
-      <div class="form-actions"><a class="btn ghost" href="#/book?service=event">Book a day ${ARR}</a></div>
+      <div class="form-actions"><a class="btn ghost" href="/book?service=event">Book a day ${ARR}</a></div>
     </div>
   </div></section>
 
@@ -329,7 +332,7 @@ V.rates = () => {
         <span class="label">Working estimate</span>
         <span class="mega" id="q-out"></span>
         <p class="hint">Travel is free within 15 km of Braamfontein, then ${money(travel?travel.price:0)} per kilometre.</p>
-        <a class="btn magnetic" style="margin-top:20px" href="#/book?service=event">Book this day ${ARR}</a>
+        <a class="btn magnetic" style="margin-top:20px" href="/book?service=event">Book this day ${ARR}</a>
       </div>
     </div>
   </div></section>
@@ -339,7 +342,7 @@ V.rates = () => {
 const BOOK_STEPS = ["The shoot","Your details","Review and send"];
 V.book = (q,o={}) => {
   const b=S.booking;
-  /* A link like #/book?service=event picks the shoot type on arrival; later step changes keep what the visitor chose. */
+  /* A link like /book?service=event picks the shoot type on arrival; later step changes keep what the visitor chose. */
   if(!o.keepScroll && q.service){ if(b.service!==q.service){b.service=q.service;b.step=1;} if(q.pkg)b.pkg=q.pkg; }
   const step=b.step||1;
   const opts=(list,cur)=>list.map(h=>`<option ${cur===h?"selected":""}>${h}</option>`).join("");
@@ -448,7 +451,7 @@ V.contact = () => {
         <div class="static"><span class="k">${ICON.pin}Based in</span><span class="v">${esc(CONFIG.brand.city)}, shooting Gauteng and beyond</span><span></span></div>
       </div>
       <div class="form-actions">
-        <a class="btn magnetic" href="#/book">Booking enquiry ${ARR}</a>
+        <a class="btn magnetic" href="/book">Booking enquiry ${ARR}</a>
         <a class="btn ghost" href="${waLink("Hi Tshedza,")}" target="_blank" rel="noopener">WhatsApp</a>
       </div>
       <div class="form-card">
@@ -477,11 +480,18 @@ V.about = () => `
     <div class="about-block rv">
       <div class="about-copy">
         <div class="who"><img src="assets/brand/infint-wordmark-ink-transparent.png" width="867" height="165" alt="INFINT"></div>
-        <p>${esc(CONFIG.brand.intro)}</p>
-        <p>INFINT is run by ${esc(CONFIG.brand.owner)} out of ${esc(CONFIG.brand.city)}. What started with graduation shoots grew into events, sport, fashion and brand work, same approach every time: show up prepared, move at a good pace, and get the photos back before the day is old news.</p>
+        <p>${esc(CONFIG.brand.intro.replace(/INFINT/g,"Infint"))}</p>
+        <p>Infint is run by ${esc(CONFIG.brand.owner)} out of ${esc(CONFIG.brand.city)}. What started with graduation shoots grew into events, sport, fashion and brand work, same approach every time: show up prepared, move at a good pace, and get the photos back before the day is old news.</p>
         <div class="tagcloud">${CONFIG.aboutTags.map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>
       </div>
-      <div class="about-photo"><img src="assets/photos/about-tshedza.jpg" width="1333" height="2000" alt="Tshedza Tshiololi, INFINT" loading="lazy"></div>
+      <div class="about-photo"><img src="assets/photos/about-tshedza.jpg" width="1333" height="2000" alt="Tshedza Tshiololi, Infint" loading="lazy"></div>
+    </div>
+  </div></section>
+
+  <section class="section pt0"><div class="wrap">
+    <div class="about-me">
+      <h2 class="h2 rv">People first.</h2>
+      <div class="rv" style="--d:.08s">${CONFIG.aboutMe.map(p=>`<p>${esc(p)}</p>`).join("")}</div>
     </div>
   </div></section>
 
@@ -515,26 +525,33 @@ V.socials = () => `
 
 /* Router */
 const TITLES = {work:"Work",rates:"Rates",book:"Book a shoot",contact:"Contact",about:"About",socials:"Socials"};
-function parseHash(){
-  const h=(location.hash||"#/").slice(1);
-  const [path,qs]=h.split("?");
-  const parts=path.split("/").filter(Boolean);
-  const q={}; new URLSearchParams(qs||"").forEach((v,k)=>q[k]=v);
+/* Old links (#/work?f=event) are swapped for the path (/work?f=event) without a reload */
+function fromHash(){
+  if(!location.hash.startsWith("#/")) return false;
+  history.replaceState(null,"",location.hash.slice(1)); return true;
+}
+function parseRoute(){
+  const parts=location.pathname.split("/").filter(Boolean);
+  const q={}; new URLSearchParams(location.search).forEach((v,k)=>q[k]=v);
   return {route:parts[0]||"home",q};
 }
 function paint(opts={}){
-  const {route,q}=parseHash();
+  const {route,q}=parseRoute();
   const page = V[route] ? route : "home";
+  /* An unknown path or a trailing slash shows the right page under its proper address */
+  const path = page==="home" ? "/" : "/"+page;
+  if(location.pathname!==path) history.replaceState(null,"",path+location.search);
   S.timers.forEach(t=>clearInterval(t)); S.timers=[];
   const app=$("#app");
   app.innerHTML=V[page](q,opts);
   const token=S.paintId=(S.paintId||0)+1;
   document.title = TITLES[page] ? TITLES[page]+" · Infint" : "Infint";
+  $("#canon").href = "https://infint.co.za"+path+(page==="work"&&q.f?"?f="+encodeURIComponent(q.f):"");
   markNav(page);
   setMenu(false);
   if(opts.keepScroll){ const st=$("#stepper"); if(st) window.scrollTo(0,Math.max(0,st.getBoundingClientRect().top+scrollY-120)); }
   else if(q.s && document.getElementById(q.s)){
-    /* Jump to a section (#/rates?s=day). Checked again shortly after, in case the page transition moved the scroll. */
+    /* Jump to a section (/rates?s=day). Checked again shortly after, in case the page transition moved the scroll. */
     const go=()=>{ if(token!==S.paintId) return; const el=document.getElementById(q.s); if(!el) return;
       const y=Math.max(0,Math.round(el.getBoundingClientRect().top+scrollY-90)); if(Math.abs(scrollY-y)>4) window.scrollTo(0,y); };
     go(); requestAnimationFrame(go); setTimeout(go,400);
@@ -552,7 +569,20 @@ function render(opts={}){
   else { paint(opts); if(S.booted && !RM.matches){const app=$("#app");app.classList.remove("page-in");void app.offsetWidth;app.classList.add("page-in");} }
   S.booted=true;
 }
-window.addEventListener("hashchange",()=>render());
+/* Links to pages on this site change the page without a reload. New tabs, modified clicks, files and /api links are left alone. */
+document.addEventListener("click",e=>{
+  const a=e.target.closest&&e.target.closest("a[href]");
+  if(!a||e.defaultPrevented||a.target||a.hasAttribute("download")||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey) return;
+  const url=new URL(a.href,location.href);
+  if(url.origin!==location.origin||url.pathname.startsWith("/api/")||/\.[a-z0-9]+$/i.test(url.pathname)) return;
+  e.preventDefault();
+  /* Picking the page you are already on just closes the menu */
+  if(url.pathname+url.search===location.pathname+location.search){ setMenu(false); return; }
+  history.pushState(null,"",url.pathname+url.search);
+  render();
+});
+window.addEventListener("popstate",()=>render());
+window.addEventListener("hashchange",()=>{ if(fromHash()) render(); });
 
 /* Reveal on scroll. Items that enter together are staggered; classes are removed afterwards so hover transitions stay quick. */
 let revealIO;
@@ -775,7 +805,7 @@ async function sendBooking(){
       ${reply.acknowledged?`A copy of your details is on its way to <strong>${esc(b.email)}</strong>. If it isn't in your inbox in a few minutes, check spam.`:""}</p>
       <div class="review">${bookingLines().filter(([,v])=>v!=="-").map(([k,v])=>`<div class="r"><span>${esc(k)}</span><span>${esc(v)}</span></div>`).join("")}</div>
       <div class="notice" style="margin:24px 0 0">Nothing to pay yet. I'll send payment details only once I've confirmed I'm available.</div>
-      <div class="form-actions"><a class="btn magnetic" href="#/work">See my work ${ARR}</a><a class="btn ghost" href="#/">Back to home</a></div>`;
+      <div class="form-actions"><a class="btn magnetic" href="/work">See my work ${ARR}</a><a class="btn ghost" href="/">Back to home</a></div>`;
     S.booking={}; window.scrollTo(0,0);
   }else if(reply.fields&&reply.fields.length){
     const first=reply.fields.map(k=>Object.keys(STEP_FIELDS).find(s=>STEP_FIELDS[s].includes(k))).filter(Boolean).sort()[0];
@@ -813,12 +843,12 @@ function wireContactForm(){
 /* Menu: Work, then every category, then the other pages */
 function paintNav(){
   const link=(href,name)=>`<li><a href="${href}">${esc(name)}</a></li>`;
-  $("#nav-cats").innerHTML=`<li class="nav-h label" aria-hidden="true">Work</li>`+link("#/work","Everything")+CATEGORIES.map(c=>link("#/work?f="+c.key,c.name)).join("");
+  $("#nav-cats").innerHTML=`<li class="nav-h label" aria-hidden="true">Work</li>`+link("/work","Everything")+CATEGORIES.map(c=>link("/work?f="+c.key,c.name)).join("");
 }
 function markNav(page){
   const set=(a,on)=>{a.classList.toggle("active",on); on?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current");};
-  $$(".nav-l").forEach(a=>set(a,a.getAttribute("href")==="#/"+page));
-  $$("#nav-cats a").forEach(a=>set(a,page==="work"&&a.getAttribute("href")===(S.filter==="all"?"#/work":"#/work?f="+S.filter)));
+  $$(".nav-l").forEach(a=>set(a,a.getAttribute("href")==="/"+page));
+  $$("#nav-cats a").forEach(a=>set(a,page==="work"&&a.getAttribute("href")===(S.filter==="all"?"/work":"/work?f="+S.filter)));
 }
 function setMenu(open){
   $("#nav").classList.toggle("open",open);
@@ -827,7 +857,6 @@ function setMenu(open){
 }
 $("#burger").addEventListener("click",()=>setMenu(!$("#nav").classList.contains("open")));
 /* Picking the page you are already on just closes the menu */
-$("#nav").addEventListener("click",e=>{ const a=e.target.closest("a"); if(a&&a.getAttribute("href")===(location.hash||"#/")) setMenu(false); });
 /* "Skip to content" moves focus to the page without the router treating #app as a page */
 $(".skip").addEventListener("click",e=>{e.preventDefault();$("#app").focus();});
 $("#totop").addEventListener("click",()=>window.scrollTo({top:0,behavior:RM.matches?"auto":"smooth"}));
@@ -862,4 +891,5 @@ function paintFooter(){
 
 paintNav();
 paintFooter();
+fromHash();
 render();

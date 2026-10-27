@@ -3,8 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Pages have real paths (/work, /rates); files load from the site root on every one of them -->
+<base href="/">
 <title>Infint</title>
 <meta name="description" content="INFINT is a Johannesburg photographer, Tshedza Tshiololi. Portrait, event, sports, fashion, graduation, prom, wedding and corporate photography.">
+<link rel="canonical" id="canon" href="https://infint.co.za/">
 <meta name="theme-color" content="#0E1115">
 <meta name="color-scheme" content="dark">
 <link rel="icon" href="assets/icons/favicon.ico" sizes="any">
@@ -14,7 +17,9 @@
 <link rel="manifest" href="site.webmanifest">
 <meta property="og:title" content="Infint, Photography in Johannesburg">
 <meta property="og:description" content="Portrait, event, sports, fashion and graduation photography by Tshedza Tshiololi.">
-<meta property="og:image" content="assets/photos/fashion-01.jpg">
+<meta property="og:url" content="https://infint.co.za/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://infint.co.za/assets/photos/fashion-01.jpg">
 <link rel="preload" as="image" imagesrcset="assets/thumbs/fashion-16.jpg 480w, assets/photos/fashion-16.jpg 1332w, assets/hero/fashion-16.jpg 1732w" imagesizes="(max-width:960px) 100vw, 56vw" fetchpriority="high">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/montserrat-latin.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/outfit-latin.woff2" crossorigin>
@@ -24,18 +29,18 @@
 <a class="skip" href="#app">Skip to content</a>
 <header class="site" id="hdr">
   <div class="bar">
-    <a href="#/" class="logo" aria-label="INFINT home"><img src="assets/brand/infint-wordmark-white-transparent.png" width="867" height="165" alt="INFINT"></a>
-    <a href="#/book" class="btn sm hdr-cta magnetic">Book a shoot</a>
+    <a href="/" class="logo" aria-label="INFINT home"><img src="assets/brand/infint-wordmark-white-transparent.png" width="867" height="165" alt="INFINT"></a>
+    <a href="/book" class="btn sm hdr-cta magnetic">Book a shoot</a>
     <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="nav"><span></span><span></span></button>
     <nav class="main" id="nav" aria-label="Main">
       <div class="nav-inner">
-        <a href="#/work" class="nav-l" style="--i:0">Work</a>
+        <a href="/work" class="nav-l" style="--i:0">Work</a>
         <ul class="nav-cats" id="nav-cats" style="--i:1" aria-label="Work by category"></ul>
-        <a href="#/rates" class="nav-l" style="--i:2">Rates</a>
-        <a href="#/about" class="nav-l" style="--i:3">About</a>
-        <a href="#/socials" class="nav-l" style="--i:4">Socials</a>
-        <a href="#/contact" class="nav-l" style="--i:5">Contact</a>
-        <a href="#/book" class="nav-l nav-book" style="--i:6">Book a shoot</a>
+        <a href="/rates" class="nav-l" style="--i:2">Rates</a>
+        <a href="/about" class="nav-l" style="--i:3">About</a>
+        <a href="/socials" class="nav-l" style="--i:4">Socials</a>
+        <a href="/contact" class="nav-l" style="--i:5">Contact</a>
+        <a href="/book" class="nav-l nav-book" style="--i:6">Book a shoot</a>
       </div>
     </nav>
   </div>
@@ -48,17 +53,17 @@
     <div class="cols">
       <div class="f-intro">
         <p class="f-big">Photography for portraits, events, sport, fashion and graduations. Based in Johannesburg, shooting anywhere in Gauteng and beyond.</p>
-        <a class="btn magnetic" href="#/book">Book a shoot <span class="arr" aria-hidden="true"></span></a>
+        <a class="btn magnetic" href="/book">Book a shoot <span class="arr" aria-hidden="true"></span></a>
       </div>
       <div>
         <h4>Site</h4>
         <ul>
-          <li><a href="#/work">Work</a></li>
-          <li><a href="#/rates">Rates</a></li>
-          <li><a href="#/book">Book a shoot</a></li>
-          <li><a href="#/about">About &amp; FAQ</a></li>
-          <li><a href="#/socials">Socials</a></li>
-          <li><a href="#/contact">Contact</a></li>
+          <li><a href="/work">Work</a></li>
+          <li><a href="/rates">Rates</a></li>
+          <li><a href="/book">Book a shoot</a></li>
+          <li><a href="/about">About &amp; FAQ</a></li>
+          <li><a href="/socials">Socials</a></li>
+          <li><a href="/contact">Contact</a></li>
         </ul>
       </div>
       <div>

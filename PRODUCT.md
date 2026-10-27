@@ -18,13 +18,13 @@ Product truth for the INFINT site. Visual decisions live in DESIGN.md.
 
 | Route | Mode | Job |
 |---|---|---|
-| Home `#/` | Persuade / Experience | First impression, the work up front, path to Work, Rates and Book |
-| Work `#/work` | Experience | Browse photos by category (from the menu), open the viewer |
-| Rates `#/rates` | Persuade | Packages, hourly rates, add-ons, day-rate estimator |
-| Book `#/book` | Operate | 3-step enquiry form, WhatsApp and email fallback |
-| Contact `#/contact` | Operate | Details plus a short message form |
-| About `#/about` | Read | Who he is, how to prepare, FAQ |
-| Socials `#/socials` | Persuade | Instagram, TikTok and YouTube profiles |
+| Home `/` | Persuade / Experience | First impression, the work up front, path to Work, Rates and Book |
+| Work `/work` | Experience | Browse photos by category (from the menu), open the viewer |
+| Rates `/rates` | Persuade | Packages, hourly rates, add-ons, day-rate estimator |
+| Book `/book` | Operate | 3-step enquiry form, WhatsApp and email fallback |
+| Contact `/contact` | Operate | Details plus a short message form |
+| About `/about` | Read | Who he is, how to prepare, FAQ |
+| Socials `/socials` | Persuade | Instagram, TikTok and YouTube profiles |
 
 ## Truths and limits
 

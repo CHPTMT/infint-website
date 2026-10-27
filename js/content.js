@@ -266,11 +266,11 @@ const HOME = {
   ratesPhoto: "portrait-27"
 };
 
-/* Photos used on other pages: one per booking step, the Contact page and the three social cards */
+/* Photos used on other pages: one per booking step and the Contact page.
+   The social profiles show screenshots instead (assets/socials, see tools/make-socials.js). */
 const PAGE_PHOTOS = {
   book: ["portrait-31","event-22","matric-14"],
-  contact: "street-09",
-  socials: {instagram:"fashion-17", tiktok:"event-11", youtube:"active-12"}
+  contact: "street-09"
 };
 
 /* Work page filters, in display order. Also used for the category cards on the homepage (cover = the photo on its card). */
@@ -360,6 +360,12 @@ const CONFIG = {
     {t:"Say what you want to see",d:"Send me three reference images before the day. It saves ten minutes of guessing."}
   ],
 
+  /* "People first." section on the About page, in Tshedza's voice */
+  aboutMe:[
+    "I'm a creative, and a people person first. What I really offer is communication.",
+    "Before I pick up a camera, I want to know who you are, what the day means to you and what you need from the photos. I talk with every client before the shoot, then plan it around what I've learned, so no two shoots look the same.",
+    "You'll hear from me before the shoot, on the day and after it, until the photos are in your hands."
+  ],
   aboutTags:["Event","Detail","Wedding","Portrait","Headshots","Corporate","Graduation","Prom","Fashion","Sport"]
 };
 

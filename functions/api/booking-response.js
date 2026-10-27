@@ -115,7 +115,7 @@ function declineBlocks(b, message) {
   ];
   if (message) blocks.push(message);
   blocks.push(
-    "If another date works for you, reply to this email or send a new enquiry at https://infint.co.za/#/book and I'll check it for you.",
+    "If another date works for you, reply to this email or send a new enquiry at https://infint.co.za/book and I'll check it for you.",
     SIGN_OFF
   );
   return blocks;

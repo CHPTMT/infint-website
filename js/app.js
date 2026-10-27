@@ -349,6 +349,7 @@ V.about = () => `
   ${ctaStrip()}`;
 
 /* Router */
+const TITLES = {work:"Work",rates:"Rates",book:"Book a shoot",contact:"Contact",about:"About"};
 function parseHash(){
   const h=(location.hash||"#/").slice(1);
   const [path,qs]=h.split("?");
@@ -361,6 +362,7 @@ function render(){
   const page = V[route] ? route : "home";
   const app=$("#app");
   app.innerHTML=V[page](q);
+  document.title = TITLES[page] ? TITLES[page]+" · Infint" : "Infint";
   app.classList.remove("page-in"); void app.offsetWidth; app.classList.add("page-in");
   $$("nav.main a").forEach(a=>a.classList.toggle("active",a.getAttribute("href")==="#/"+page));
   $("#nav").classList.remove("open"); $("#burger").setAttribute("aria-expanded","false");

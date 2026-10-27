@@ -18,7 +18,7 @@
 - `assets/brand/infint-logo-black-on-white.png`: dark wordmark on white, 1080 px square.
 - `assets/brand/infint-wordmark-white-transparent.png` and `infint-wordmark-ink-transparent.png`: the wordmark alone, cropped, transparent background (white, and ink #0E1115).
 - `assets/brand/infint-qr.png`: his INFINT QR code.
-- `assets/icons/`: tab icons cut from the white-on-black logo (favicon.ico, icon-16/32/48/180/192/512.png). Not linked in index.html yet.
+- `assets/icons/`: tab icons cut from the white-on-black logo (favicon.ico, icon-16/32/48/180/192/512.png). Linked in index.html, plus `site.webmanifest` (192 and 512, theme #0E1115).
 - In page titles the brand is written "Infint" (his request); the logo itself stays uppercase.
 
 **Pending prompts from Tshedza (from the chat, 27 Oct):**
@@ -70,7 +70,8 @@ Total running cost: about R208 a year, or about R109 without the add-on.
 ## Business facts used on the site
 
 - Tshedza Tshiololi, INFINT, Johannesburg (Braamfontein for travel distance).
-- infintco@gmail.com, +27 66 332 4581 (WhatsApp), +27 73 296 5528.
+- Phone and WhatsApp: 073 296 5528 (+27 73 296 5528, wa.me/27732965528). The old 066 332 4581 is no longer used.
+- Email on the site: info@infint.co.za (main: footer, general queries, contact form email fallback), tshedza@infint.co.za (direct, Contact page), bookings@infint.co.za (booking form email fallback). All forward to infintco@gmail.com, which appears only as `NOTIFY_EMAIL`. Set in `CONFIG.contact` in `js/content.js`.
 - Instagram and TikTok @infint_co, YouTube @tshedza_tt, linktr.ee/tshedzatt.
 - Rates in `js/content.js` match his 2026 rate cards (graduation R1,200 / R1,700 / R2,400; short shoots R1,200 to R2,500; day rate R3,000 for 2 hours to R9,000 for 8 hours, R1,000 per extra hour, max 12 hours).
 

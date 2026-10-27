@@ -1,5 +1,5 @@
 /*
-  INFINT site logic. A small router: each page is a function in V
+  Infint site logic. A small router: each page is a function in V
   that returns HTML, and wireView() attaches the page's event handlers.
   Routes: /  /work  /rates  /book  /contact  /about  /socials  (old #/ links still work)
   Content (photos, rates, copy) lives in js/content.js, not here.
@@ -42,7 +42,7 @@ const srcsetOf = (id,xl) => { const p=photo(id)||{r:.667};
 function pic(id,{sizes="(max-width:700px) 50vw, 25vw",eager=false,cls="",alt,xl=false}={}){
   const p=photo(id)||{r:.667,alt:""};
   return `<img ${cls?`class="${cls}"`:""} src="${thumbPath(id)}" srcset="${srcsetOf(id,xl)}" sizes="${sizes}"
-    width="720" height="${Math.round(720/p.r)}" ${eager?'fetchpriority="high"':'loading="lazy"'} decoding="async" alt="${esc(alt??(p.alt||"INFINT photograph"))}">`;
+    width="720" height="${Math.round(720/p.r)}" ${eager?'fetchpriority="high"':'loading="lazy"'} decoding="async" alt="${esc(alt??(p.alt||"Infint photograph"))}">`;
 }
 
 const ICON = {
@@ -74,7 +74,7 @@ function pageHead(title,sub,extra=""){
 function tileGrid(ids){
   return `<div class="masonry">${ids.filter(photo).map((id,i)=>{
     const p=photo(id);
-    return `<figure class="tile rv" data-id="${id}" data-i="${i}" data-r="${p.r}" tabindex="0" role="button" aria-label="Open photo: ${esc(p.alt||"INFINT photograph")}">
+    return `<figure class="tile rv" data-id="${id}" data-i="${i}" data-r="${p.r}" tabindex="0" role="button" aria-label="Open photo: ${esc(p.alt||"Infint photograph")}">
       <div class="tile-in">${pic(id,{sizes:"(max-width:700px) 50vw, (max-width:1100px) 33vw, (max-width:1440px) 25vw, 20vw"})}
       <figcaption class="cap">${esc(catName(p.cat))}</figcaption></div></figure>`;}).join("")}</div>`;
 }
@@ -154,7 +154,7 @@ V.home = () => {
       ${sl.map((s,i)=>{const p=photo(s.id), set=srcsetOf(s.id,true);
         return `<div class="slide ${i===0?"on":""}" data-word="${esc(s.word)}">
           <img ${i===0?`src="${thumbPath(s.id)}" srcset="${set}" fetchpriority="high"`:`data-src="${thumbPath(s.id)}" data-srcset="${set}"`}
-            sizes="(max-width:960px) 100vw, 56vw" width="720" height="${Math.round(720/p.r)}" decoding="async" alt="${esc(p.alt||"INFINT photograph")}"></div>`;}).join("")}
+            sizes="(max-width:960px) 100vw, 56vw" width="720" height="${Math.round(720/p.r)}" decoding="async" alt="${esc(p.alt||"Infint photograph")}"></div>`;}).join("")}
       <div class="hero-dots" role="group" aria-label="Choose a photo">${sl.map((s,i)=>`<button type="button" class="${i===0?"on":""}" data-go="${i}" aria-label="Show ${esc(s.word)} photo"></button>`).join("")}</div>
       <div class="hero-word" aria-hidden="true">
         <span class="mega" id="hero-word"><span>${esc(sl[0].word)}</span></span>
@@ -404,7 +404,7 @@ V.book = (q,o={}) => {
           <div class="field"><label for="b-billing">Billing name for the invoice</label>
             <input class="input" id="b-billing" name="billing" placeholder="Person or company" value="${esc(b.billing||"")}">
             <p class="hint">Only needed if the invoice goes to someone other than you.</p></div>
-          <div class="field"><label for="b-source">How did you hear about INFINT</label>
+          <div class="field"><label for="b-source">How did you hear about Infint</label>
             <select class="input" id="b-source" name="source">${opts(["Instagram","TikTok","A friend","Saw you at a shoot","Google","Other"],b.source)}</select></div>
         </div>
         <div class="hp" aria-hidden="true"><label>Company<input name="company" tabindex="-1" autocomplete="off"></label></div>
@@ -479,8 +479,8 @@ V.about = () => `
   <section class="section pt0"><div class="wrap">
     <div class="about-block rv">
       <div class="about-copy">
-        <div class="who"><img src="assets/brand/infint-wordmark-ink-transparent.png" width="867" height="165" alt="INFINT"></div>
-        <p>${esc(CONFIG.brand.intro.replace(/INFINT/g,"Infint"))}</p>
+        <div class="who"><img src="assets/brand/infint-wordmark-ink-transparent.png" width="867" height="165" alt="Infint"></div>
+        <p>${esc(CONFIG.brand.intro)}</p>
         <p>Infint is run by ${esc(CONFIG.brand.owner)} out of ${esc(CONFIG.brand.city)}. What started with graduation shoots grew into events, sport, fashion and brand work, same approach every time: show up prepared, move at a good pace, and get the photos back before the day is old news.</p>
         <div class="tagcloud">${CONFIG.aboutTags.map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>
       </div>
@@ -515,7 +515,7 @@ V.about = () => `
   ${ctaBlock()}`;
 
 V.socials = () => `
-  ${pageHead(`Follow the work.`,"Find INFINT on Instagram and TikTok, and Tshedza on YouTube.")}
+  ${pageHead(`Follow the work.`,"Find Infint on Instagram and TikTok, and Tshedza on YouTube.")}
   <section class="section pt0"><div class="wrap">
     ${socialCards()}
     <div class="linkrow rv"><p><strong>Everything in one place.</strong> All of the links above, plus anything new, on Linktree.</p>
@@ -692,7 +692,7 @@ function paintLB(){
   const {list,i}=S.lb, id=list[i]; if(!id)return;
   const img=$("#lb-img"); img.classList.remove("ready");
   img.onload=()=>img.classList.add("ready");
-  img.src=fullPath(id); img.alt=(photo(id)||{}).alt||"INFINT photograph";
+  img.src=fullPath(id); img.alt=(photo(id)||{}).alt||"Infint photograph";
   if(img.complete) img.classList.add("ready");
   $("#lb-title").textContent=catName((photo(id)||{}).cat);
   [list[(i+1)%list.length],list[(i-1+list.length)%list.length]].forEach(n=>{const p=new Image();p.src=fullPath(n);});
@@ -741,13 +741,13 @@ function bookingLines(){
   return [
     ["Shoot",svc?svc.name:(b.service||"-")],["Package",b.pkg],["Date",(b.date||"-")+(b.time?" at "+b.time:"")],
     ["Coverage",b.hours],["Location",b.location],["Notes",b.notes],
-    ["Name",b.name],["Phone",b.phone],["Email",b.email],["Handle",b.handle],["Billing name",b.billing],["Heard about INFINT",b.source]
+    ["Name",b.name],["Phone",b.phone],["Email",b.email],["Handle",b.handle],["Billing name",b.billing],["Heard about Infint",b.source]
   ].map(([k,v])=>[k,v||"-"]);
 }
 const bookingText = () => bookingLines().map(([k,v])=>k+": "+v).join("\n");
 function bookingSubject(){
   const svc=CONFIG.services.find(s=>s.slug===S.booking.service);
-  return "Booking enquiry: "+(svc?svc.name:"INFINT")+(S.booking.date?", "+S.booking.date:"");
+  return "Booking enquiry: "+(svc?svc.name:"Infint")+(S.booking.date?", "+S.booking.date:"");
 }
 function wireBooking(){
   const b=S.booking;
@@ -822,13 +822,13 @@ async function sendBooking(){
 function wireContactForm(){
   const form=$("#contactform"), mailBtn=$("#cf-mailto");
   const body=f=>["Hi Tshedza,","","Name: "+(f.name||""),"Contact: "+(f.contact||""),"",(f.message||"")].join("\n");
-  const sync=()=>{mailBtn.href=mailtoLink("General enquiry: INFINT",body(Object.fromEntries(new FormData(form).entries())));};
+  const sync=()=>{mailBtn.href=mailtoLink("General enquiry: Infint",body(Object.fromEntries(new FormData(form).entries())));};
   sync(); form.addEventListener("input",sync);
   form.addEventListener("submit",async e=>{
     e.preventDefault();
     const f=Object.fromEntries(new FormData(form).entries()), btn=form.querySelector("button[type=submit]");
     btn.disabled=true; btn.textContent="Sending…";
-    const {ok:sent}=await postEnquiry({kind:"contact",subject:"New message: INFINT site",name:f.name,email:/@/.test(f.contact)?f.contact:"",phone:/@/.test(f.contact)?"":f.contact,message:body(f),company:f.company||""});
+    const {ok:sent}=await postEnquiry({kind:"contact",subject:"New message: Infint site",name:f.name,email:/@/.test(f.contact)?f.contact:"",phone:/@/.test(f.contact)?"":f.contact,message:body(f),company:f.company||""});
     if(sent){
       form.reset(); form.style.display="none";
       $("#cf-note").textContent="Message sent. I'll get back to you shortly.";

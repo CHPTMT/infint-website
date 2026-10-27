@@ -10,10 +10,10 @@ import "../../js/content.js";
 const CONFIG = globalThis.INFINT_CONFIG;
 
 export const SENDERS = {
-  booking: "INFINT Bookings <bookings@infint.co.za>",
-  contact: "INFINT Info <info@infint.co.za>"
+  booking: "Infint Bookings <bookings@infint.co.za>",
+  contact: "Infint Info <info@infint.co.za>"
 };
-export const SIGN_OFF = "Tshedza, INFINT";
+export const SIGN_OFF = "Tshedza, Infint";
 const TOKEN_DAYS = 30;
 
 export const json = (body, status = 200) =>
@@ -85,7 +85,7 @@ export function summaryRows(b, { withContact = true } = {}) {
   ];
   if (withContact) rows.push(
     ["Name", b.name], ["Phone", b.phone], ["Email", b.email],
-    ["Handle", b.handle], ["Billing name", b.billing], ["Heard about INFINT", b.source]
+    ["Handle", b.handle], ["Billing name", b.billing], ["Heard about Infint", b.source]
   );
   return rows.filter(([, v]) => v);
 }
@@ -110,7 +110,7 @@ export function renderHtml(blocks) {
     if (typeof b === "string") return `<p ${p}>${esc(b).replace(/\n/g, "<br>")}</p>`;
     if (b.heading) return `<p style="margin:24px 0 8px;font:bold 13px/1.4 Arial,Helvetica,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#0E1115">${esc(b.heading)}</p>`;
     if (b.rows) return `<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:0 0 16px;width:100%;max-width:560px">${b.rows.map(([k, v]) =>
-      `<tr><td style="padding:8px 12px 8px 0;border-bottom:1px solid #e4e4e0;font:14px Arial,Helvetica,sans-serif;color:#666;vertical-align:top;width:140px">${esc(k)}</td><td style="padding:8px 0;border-bottom:1px solid #e4e4e0;font:14px/1.5 Arial,Helvetica,sans-serif;color:#0E1115">${esc(v).replace(/\n/g, "<br>")}</td></tr>`).join("")}</table>`;
+      `<tr><td style="padding:8px 12px 8px 0;border-bottom:1px solid #e4e4e0;font:bold 14px Arial,Helvetica,sans-serif;color:#0E1115;vertical-align:top;width:140px">${esc(k)}</td><td style="padding:8px 0;border-bottom:1px solid #e4e4e0;font:14px/1.5 Arial,Helvetica,sans-serif;color:#0E1115">${esc(v).replace(/\n/g, "<br>")}</td></tr>`).join("")}</table>`;
     if (b.list) return `<ol style="margin:0 0 16px;padding-left:22px;font:15px/1.55 Arial,Helvetica,sans-serif;color:#0E1115">${b.list.map(x => `<li style="margin-bottom:6px">${esc(x)}</li>`).join("")}</ol>`;
     if (b.buttons) return `<p style="margin:8px 0 20px">${b.buttons.map(([label, url, bg]) =>
       `<a href="${esc(url)}" style="display:inline-block;margin:0 10px 10px 0;padding:13px 24px;background:${bg || "#FFA000"};color:${bg === "#0E1115" ? "#fff" : "#0E1115"};font:bold 14px Arial,Helvetica,sans-serif;letter-spacing:.04em;text-transform:uppercase;text-decoration:none">${esc(label)}</a>`).join("")}</p>`;

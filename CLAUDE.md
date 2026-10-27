@@ -32,6 +32,7 @@ Plain HTML, CSS and JavaScript with no build step and no framework. Live at http
 - Plain, direct language. No filler or AI-sounding words (delve, intricate, tapestry, pivotal, robust, seamless, elevate, crucial, foster, testament, landscape, enhance, profound, cutting-edge, world-class).
 - No fake testimonials, invented statistics or claims that aren't true.
 - No personal pronoun "we" for INFINT; Tshedza is a one-person business and the site speaks as "I".
+- Write the brand as "Infint" (capital I, rest lowercase) in all text: the site, page titles, image descriptions, emails and sender names. Only the logo image is uppercase.
 - Documents he asks for (Word, PDF): Times New Roman 12 pt, no italics, no comments.
 
 ## Design rules

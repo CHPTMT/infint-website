@@ -57,8 +57,8 @@ export async function onRequestPost({ request, env }) {
     to: b.email,
     bcc: notifyTo(env),
     subject: action === "accept"
-      ? "Your INFINT booking: " + serviceName(b.service) + ", " + niceDate(b)
-      : "Your INFINT booking enquiry for " + niceDate(b),
+      ? "Your Infint booking: " + serviceName(b.service) + ", " + niceDate(b)
+      : "Your Infint booking enquiry for " + niceDate(b),
     blocks: action === "accept" ? acceptBlocks(b, message, env.BANK_DETAILS) : declineBlocks(b, message)
   });
 
@@ -199,7 +199,7 @@ function page(body, status = 200) {
 <style>
   @font-face{font-family:Outfit;font-weight:200 600;font-display:swap;src:url(/assets/fonts/outfit-latin.woff2) format("woff2")}
   @font-face{font-family:Montserrat;font-weight:700 900;font-display:swap;src:url(/assets/fonts/montserrat-latin.woff2) format("woff2")}
-  :root{--ink:#0E1115;--ink-2:#08090B;--ink-3:#151A20;--text:#E9E7E3;--mute:#9BA1A9;--amber:#FFA000;--line:rgba(255,255,255,.09);--line-2:rgba(255,255,255,.16);color-scheme:dark}
+  :root{--ink:#0E1115;--ink-2:#08090B;--ink-3:#151A20;--text:#FFFFFF;--mute:#F5F5F3;--amber:#FFA000;--line:rgba(255,255,255,.09);--line-2:rgba(255,255,255,.16);color-scheme:dark}
   *{box-sizing:border-box}
   body{margin:0;min-height:100vh;color:var(--text);font:16px/1.6 Outfit,system-ui,sans-serif;-webkit-font-smoothing:antialiased;
     background:radial-gradient(70% 40% at 85% 0%,rgba(255,160,0,.14),transparent 70%),var(--ink)}
@@ -210,15 +210,15 @@ function page(body, status = 200) {
   .eyebrow{margin:0 0 14px;font-size:.72rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--amber)}
   h1{margin:0 0 26px;font:900 clamp(2.2rem,8vw,3.6rem)/.95 Montserrat,system-ui,sans-serif;letter-spacing:-.035em;color:#fff}
   h1 span{color:var(--amber)}
-  .lead{font-size:1.1rem;font-weight:300;color:var(--mute);margin:0 0 26px}
+  .lead{font-size:1.18rem;font-weight:400;color:var(--mute);margin:0 0 26px}
   table{width:100%;border-collapse:collapse;margin:0 0 30px;border-top:1px solid var(--line)}
   td{padding:12px 0;border-bottom:1px solid var(--line);vertical-align:top;font-size:.95rem}
   td:first-child{color:var(--mute);width:38%;padding-right:16px}
   td:last-child{color:#fff;overflow-wrap:anywhere}
-  label{display:block;font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:10px}
+  label{display:block;font-size:.8rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:10px}
   textarea{width:100%;padding:14px 16px;border:1px solid var(--line-2);border-radius:10px;background:var(--ink-3);color:#fff;font:inherit;resize:vertical;caret-color:var(--amber)}
   textarea:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 3px rgba(255,160,0,.18)}
-  .hint{color:var(--mute);font-size:.9rem;margin:10px 0}
+  .hint{color:var(--mute);font-size:1rem;margin:10px 0}
   .btn{margin-top:18px;width:100%;min-height:54px;border:1px solid var(--amber);border-radius:999px;padding:0 26px;cursor:pointer;
     font:600 .84rem Outfit,system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;transition:transform .14s ease,box-shadow .25s ease}
   .btn:active{transform:scale(.98)}
@@ -226,11 +226,11 @@ function page(body, status = 200) {
   .btn.decline{background:transparent;color:#fff;border-color:var(--line-2)}
   .btn:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
   .btn:disabled{opacity:.6;cursor:default}
-  .switch{margin-top:26px;font-size:.92rem;color:var(--mute)}
+  .switch{margin-top:26px;font-size:1rem;color:var(--mute)}
   .switch a{color:#fff;text-decoration:underline;text-decoration-color:var(--amber);text-underline-offset:5px}
 </style>
 </head><body>
-<header><a href="/" aria-label="INFINT home"><img src="/assets/brand/infint-wordmark-white-transparent.png" width="867" height="165" alt="INFINT"></a></header>
+<header><a href="/" aria-label="Infint home"><img src="/assets/brand/infint-wordmark-white-transparent.png" width="867" height="165" alt="Infint"></a></header>
 <main>${body}</main>
 <script>document.querySelector("form")?.addEventListener("submit",e=>{const b=e.target.querySelector("button");b.disabled=true;b.textContent="Sending…";});</script>
 </body></html>`;

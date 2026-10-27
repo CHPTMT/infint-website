@@ -28,6 +28,7 @@ function toast(msg,bad){const t=$("#toast");t.textContent=msg;t.classList.toggle
 function waLink(text){return "https://wa.me/"+CONFIG.contact.whatsapp+(text?"?text="+encodeURIComponent(text):"");}
 function mailtoLink(subject,body,to){return "mailto:"+(to||CONFIG.contact.email)+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);}
 const catCount = key => PHOTOS.filter(p=>p.cat===key).length;
+const catName = key => (CATEGORIES.find(c=>c.key===key)||{}).name||"";
 
 /* One photo as an <img>. Thumbs are 720 px wide; full photos are 2000 px on the long side. */
 function pic(id,{sizes="(max-width:700px) 50vw, 25vw",eager=false,cls="",alt,thumb=false}={}){
@@ -62,13 +63,30 @@ function pageHead(title,sub,extra=""){
     ${sub?`<p class="lede rv" style="--d:.08s">${esc(sub)}</p>`:""}${extra}
   </div></section>`;
 }
-function tileGrid(ids,label){
+/* Photo grid. The tiles are sorted into real columns by layoutMasonry() (CSS multi-column made
+   the first photo of a column vanish on iPhones). The lift moves .tile-in, never the observed .tile. */
+function tileGrid(ids){
   return `<div class="masonry">${ids.filter(photo).map((id,i)=>{
     const p=photo(id);
-    return `<figure class="tile rv" data-id="${id}" data-i="${i}" tabindex="0" role="button" aria-label="Open photo ${i+1}: ${esc(p.alt||"INFINT photograph")}">
-      ${pic(id,{sizes:"(max-width:700px) 50vw, (max-width:1100px) 33vw, (max-width:1440px) 25vw, 20vw"})}
-      <figcaption class="cap">${esc(label)} · ${pad3(i+1)}</figcaption></figure>`;}).join("")}</div>`;
+    return `<figure class="tile rv" data-id="${id}" data-i="${i}" data-r="${p.r}" tabindex="0" role="button" aria-label="Open photo: ${esc(p.alt||"INFINT photograph")}">
+      <div class="tile-in">${pic(id,{sizes:"(max-width:700px) 50vw, (max-width:1100px) 33vw, (max-width:1440px) 25vw, 20vw"})}
+      <figcaption class="cap">${esc(catName(p.cat))}</figcaption></div></figure>`;}).join("")}</div>`;
 }
+const MASONRY_COLS = w => w>=1800?6:w>=1280?5:w>1100?4:w>700?3:2;
+function layoutMasonry(){
+  $$(".masonry").forEach(m=>{
+    const n=MASONRY_COLS(innerWidth);
+    if(Number(m.dataset.cols)===n) return;
+    const tiles=$$(".tile",m).sort((a,b)=>a.dataset.i-b.dataset.i);
+    const cols=Array.from({length:n},()=>{const c=document.createElement("div");c.className="mcol";return c;});
+    const h=new Array(n).fill(0);
+    /* Each photo goes to the shortest column, so the order reads left to right */
+    tiles.forEach(t=>{const k=h.indexOf(Math.min(...h)); cols[k].appendChild(t); h[k]+=1/(Number(t.dataset.r)||.667)+.06;});
+    m.replaceChildren(...cols); m.dataset.cols=n;
+  });
+}
+let masonryT;
+addEventListener("resize",()=>{clearTimeout(masonryT);masonryT=setTimeout(layoutMasonry,120);});
 function ctaBlock(){
   return `<section class="section pt0"><div class="wrap"><div class="cta rv">
     <h2>Let's put your date in the <span class="it">diary</span>.</h2>
@@ -165,7 +183,7 @@ V.home = () => {
       <h2 class="h2 rv">Recent <span class="it">frames</span>.</h2>
       <a class="link rv" href="#/work">Full portfolio, ${PHOTOS.length} photos ${ICON.go}</a>
     </div>
-    ${tileGrid(HOME.featured,"Selected")}
+    ${tileGrid(HOME.featured)}
   </div></section>
 
   <section class="feature">
@@ -217,9 +235,7 @@ V.work = (q) => {
   ${ctaBlock()}`;
 };
 function workGrid(f){
-  const ids = f==="all" ? mixed() : PHOTOS.filter(p=>p.cat===f).map(p=>p.id);
-  const label = f==="all" ? "Portfolio" : CATEGORIES.find(c=>c.key===f).name;
-  return tileGrid(ids,label);
+  return tileGrid(f==="all" ? mixed() : PHOTOS.filter(p=>p.cat===f).map(p=>p.id));
 }
 
 V.rates = () => {
@@ -571,12 +587,12 @@ document.addEventListener("pointermove",e=>{
   el.style.setProperty("--mx",(dx*6).toFixed(1)+"px"); el.style.setProperty("--my",(dy*4).toFixed(1)+"px");
 },{passive:true});
 
-function wireTiles(page){
-  const tiles=$$(".tile");
+function wireTiles(){
+  layoutMasonry();
+  const tiles=$$(".tile").sort((a,b)=>a.dataset.i-b.dataset.i);
   const list=tiles.map(t=>t.dataset.id);
-  const label=page==="work"?(S.filter==="all"?"Portfolio":CATEGORIES.find(c=>c.key===S.filter).name):"Selected";
   tiles.forEach(t=>{
-    const open=()=>openLB(list,Number(t.dataset.i),label);
+    const open=()=>openLB(list,Number(t.dataset.i));
     t.addEventListener("click",open);
     t.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();open();}});
   });
@@ -627,19 +643,19 @@ function wireHero(){
 }
 
 /* Lightbox */
-function openLB(list,i,label){
-  S.lb={list,i,label,from:document.activeElement};
+function openLB(list,i){
+  S.lb={list,i,from:document.activeElement};
   const lb=$("#lb"); lb.hidden=false; document.body.style.overflow="hidden";
   requestAnimationFrame(()=>lb.classList.add("open"));
   paintLB(); $("#lb-close").focus();
 }
 function paintLB(){
-  const {list,i,label}=S.lb, id=list[i]; if(!id)return;
+  const {list,i}=S.lb, id=list[i]; if(!id)return;
   const img=$("#lb-img"); img.classList.remove("ready");
   img.onload=()=>img.classList.add("ready");
   img.src=fullPath(id); img.alt=(photo(id)||{}).alt||"INFINT photograph";
   if(img.complete) img.classList.add("ready");
-  $("#lb-title").innerHTML=esc(label)+" &nbsp;<b>"+pad3(i+1)+"</b> / "+pad3(list.length);
+  $("#lb-title").textContent=catName((photo(id)||{}).cat);
   [list[(i+1)%list.length],list[(i-1+list.length)%list.length]].forEach(n=>{const p=new Image();p.src=fullPath(n);});
 }
 function closeLB(){

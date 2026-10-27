@@ -259,7 +259,7 @@ const CATEGORIES = [
 const CONFIG = {
   brand:{name:"INFINT",owner:"Tshedza Tshiololi",city:"Johannesburg",
     intro:"INFINT is built around one idea: the picture you send your family should look as good as the picture you post. Portraits, events, sport, fashion and graduations."},
-  contact:{email:"infintco@gmail.com",phone:"+27 66 332 4581",phone2:"+27 73 296 5528",whatsapp:"27663324581"},
+  contact:{email:"info@infint.co.za",direct:"tshedza@infint.co.za",bookings:"bookings@infint.co.za",phone:"+27 73 296 5528",whatsapp:"27732965528"},
   social:{instagram:"https://www.instagram.com/infint_co/",tiktok:"https://www.tiktok.com/@infint_co",youtube:"https://www.youtube.com/@tshedza_tt",linktree:"https://linktr.ee/tshedzatt"},
 
   /* Where the booking and contact forms send to. On Cloudflare Pages this is

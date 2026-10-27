@@ -19,7 +19,7 @@ const fullPath  = id => "assets/photos/"+id+".jpg";
 function toast(msg,bad){const t=$("#toast");t.textContent=msg;t.classList.toggle("bad",!!bad);
   t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),3600);}
 function waLink(text){return "https://wa.me/"+CONFIG.contact.whatsapp+(text?"?text="+encodeURIComponent(text):"");}
-function mailtoLink(subject,body){return "mailto:"+CONFIG.contact.email+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);}
+function mailtoLink(subject,body,to){return "mailto:"+(to||CONFIG.contact.email)+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);}
 
 const ICON = {
   instagram:'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>',
@@ -287,8 +287,9 @@ V.contact = () => `
     <div>
       <table class="ratetable contact-table"><tbody>
         <tr><td>WhatsApp</td><td>${iconLink("whatsapp",waLink("Hi Tshedza,"),CONFIG.contact.phone,1)}</td></tr>
-        <tr><td>Phone</td><td>${iconLink("phone","tel:"+CONFIG.contact.phone2.replace(/\s/g,""),CONFIG.contact.phone2)}</td></tr>
+        <tr><td>Phone</td><td>${iconLink("phone","tel:"+CONFIG.contact.phone.replace(/\s/g,""),CONFIG.contact.phone)}</td></tr>
         <tr><td>Email</td><td>${iconLink("mail","mailto:"+CONFIG.contact.email,CONFIG.contact.email)}</td></tr>
+        <tr><td>Direct email</td><td>${iconLink("mail","mailto:"+CONFIG.contact.direct,CONFIG.contact.direct)}</td></tr>
         <tr><td>Instagram</td><td>${iconLink("instagram",CONFIG.social.instagram,"@infint_co",1)}</td></tr>
         <tr><td>TikTok</td><td>${iconLink("tiktok",CONFIG.social.tiktok,"@infint_co",1)}</td></tr>
         <tr><td>YouTube</td><td>${iconLink("youtube",CONFIG.social.youtube,"@tshedza_tt",1)}</td></tr>
@@ -453,7 +454,7 @@ function wireBooking(){
   }));
   $("#bookform").addEventListener("submit",e=>{e.preventDefault();sendBooking();});
   const wa=$("#wabtn"); if(wa) wa.href=waLink("Hi Tshedza, I'd like to book a shoot.\n\n"+bookingText());
-  const ma=$("#mailbtn"); if(ma) ma.href=mailtoLink(bookingSubject(),"Hi Tshedza,\n\nI'd like to book a shoot. Details below.\n\n"+bookingText());
+  const ma=$("#mailbtn"); if(ma) ma.href=mailtoLink(bookingSubject(),"Hi Tshedza,\n\nI'd like to book a shoot. Details below.\n\n"+bookingText(),CONFIG.contact.bookings);
   if((b.step||1)===3) $("#review").innerHTML=`<table class="ratetable contact-table"><tbody>${bookingLines().map(([k,v])=>`<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join("")}</tbody></table>`;
 }
 function saveStep(){ for(const [k,v] of new FormData($("#bookform")).entries()) S.booking[k]=v; }

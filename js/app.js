@@ -30,10 +30,11 @@ function mailtoLink(subject,body,to){return "mailto:"+(to||CONFIG.contact.email)
 const catCount = key => PHOTOS.filter(p=>p.cat===key).length;
 
 /* One photo as an <img>. Thumbs are 720 px wide; full photos are 2000 px on the long side. */
-function pic(id,{sizes="(max-width:700px) 50vw, 25vw",eager=false,cls="",alt}={}){
+function pic(id,{sizes="(max-width:700px) 50vw, 25vw",eager=false,cls="",alt,thumb=false}={}){
   const p=photo(id)||{r:.667,alt:""};
   const fw=p.r>=1?2000:Math.round(2000*p.r);
-  return `<img ${cls?`class="${cls}"`:""} src="${thumbPath(id)}" srcset="${thumbPath(id)} 720w, ${fullPath(id)} ${fw}w" sizes="${sizes}"
+  const set=thumb?"":`srcset="${thumbPath(id)} 720w, ${fullPath(id)} ${fw}w" sizes="${sizes}"`; /* thumb: the 720 px file only, for small cards */
+  return `<img ${cls?`class="${cls}"`:""} src="${thumbPath(id)}" ${set}
     width="720" height="${Math.round(720/p.r)}" ${eager?'fetchpriority="high"':'loading="lazy"'} decoding="async" alt="${esc(alt??(p.alt||"INFINT photograph"))}">`;
 }
 
@@ -84,7 +85,7 @@ const SOCIALS = [
 ];
 function socialCards(){
   return `<div class="socials">${SOCIALS.map((s,i)=>`<a class="soc rv" style="--d:${i*.08}s" href="${esc(s.url())}" target="_blank" rel="noopener" aria-label="${s.plat} ${s.handle} (opens in a new tab)">
-      ${pic(PAGE_PHOTOS.socials[s.key],{sizes:"(max-width:900px) 100vw, 33vw",alt:""})}
+      ${pic(PAGE_PHOTOS.socials[s.key],{thumb:true,alt:""})}
       <span class="ico" aria-hidden="true">${ICON[s.key]}</span>
       <span class="plat">${s.plat}</span>
       <span class="handle">${s.handle}</span>
@@ -142,7 +143,7 @@ V.home = () => {
 
   <section class="marquee" aria-label="A moving strip of recent photos">
     ${HOME.marquee.map((row,ri)=>{const ok=row.filter(photo);
-      const cell=(id,dup)=>`<a href="#/work?f=${photo(id).cat}" ${dup?'tabindex="-1" aria-hidden="true"':""}>${pic(id,{sizes:"280px",alt:dup?"":undefined})}</a>`;
+      const cell=(id,dup)=>`<a href="#/work?f=${photo(id).cat}" ${dup?'tabindex="-1" aria-hidden="true"':""}>${pic(id,{thumb:true,alt:dup?"":undefined})}</a>`;
       return `<div class="mq-track ${ri%2?"rev":""}">${ok.map(id=>cell(id,0)).join("")}${ok.map(id=>cell(id,1)).join("")}</div>`;}).join("")}
   </section>
 
@@ -153,7 +154,7 @@ V.home = () => {
     </div>
     <div class="cats">
       ${CATEGORIES.map((c,i)=>`<a class="cat rv" style="--d:${(i%5)*.06}s" href="#/work?f=${c.key}">
-        ${pic(c.cover,{sizes:i===0?"(max-width:1200px) 100vw, 40vw":"(max-width:700px) 50vw, 20vw",alt:""})}
+        ${pic(c.cover,i===0?{sizes:"(max-width:1200px) 360px, 40vw",alt:""}:{thumb:true,alt:""})}
         <span class="meta"><span><h3>${esc(c.name)}</h3><p>${esc(c.blurb)}</p></span><span class="n">${catCount(c.key)}</span></span>
       </a>`).join("")}
     </div>
@@ -619,7 +620,9 @@ function wireHero(){
   };
   const start=()=>{S.timers.forEach(t=>clearInterval(t));S.timers=[setInterval(()=>{if(!document.hidden)show(i+1);},6500)];};
   dots.forEach((d,k)=>d.addEventListener("click",()=>{show(k);start();}));
-  setTimeout(()=>load(slides[1]),1200);
+  /* The next photo downloads after the page has finished loading, so it does not slow the first one */
+  const later=()=>setTimeout(()=>load(slides[1]),1500);
+  document.readyState==="complete"?later():addEventListener("load",later,{once:true});
   if(!RM.matches) start();
 }
 

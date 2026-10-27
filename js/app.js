@@ -299,10 +299,10 @@ V.rates = () => {
 };
 
 const BOOK_STEPS = ["The shoot","Your details","Review and send"];
-V.book = (q) => {
+V.book = (q,o={}) => {
   const b=S.booking;
-  if(q.service&&!b.service)b.service=q.service;
-  if(q.pkg&&!b.pkg)b.pkg=q.pkg;
+  /* A link like #/book?service=event picks the shoot type on arrival; later step changes keep what the visitor chose. */
+  if(!o.keepScroll && q.service){ if(b.service!==q.service){b.service=q.service;b.step=1;} if(q.pkg)b.pkg=q.pkg; }
   const step=b.step||1;
   const opts=(list,cur)=>list.map(h=>`<option ${cur===h?"selected":""}>${h}</option>`).join("");
   return `
@@ -489,12 +489,18 @@ function paint(opts={}){
   const page = V[route] ? route : "home";
   S.timers.forEach(t=>clearInterval(t)); S.timers=[];
   const app=$("#app");
-  app.innerHTML=V[page](q);
+  app.innerHTML=V[page](q,opts);
+  const token=S.paintId=(S.paintId||0)+1;
   document.title = TITLES[page] ? TITLES[page]+" · Infint" : "Infint";
   $$("nav.main a").forEach(a=>{const on=a.getAttribute("href")==="#/"+page; a.classList.toggle("active",on); on?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current");});
   setMenu(false);
   if(opts.keepScroll){ const st=$("#stepper"); if(st) window.scrollTo(0,Math.max(0,st.getBoundingClientRect().top+scrollY-120)); }
-  else if(q.s && document.getElementById(q.s)){ requestAnimationFrame(()=>{const el=document.getElementById(q.s); window.scrollTo(0,el.getBoundingClientRect().top+scrollY-90);}); }
+  else if(q.s && document.getElementById(q.s)){
+    /* Jump to a section (#/rates?s=day). Checked again shortly after, in case the page transition moved the scroll. */
+    const go=()=>{ if(token!==S.paintId) return; const el=document.getElementById(q.s); if(!el) return;
+      const y=Math.max(0,Math.round(el.getBoundingClientRect().top+scrollY-90)); if(Math.abs(scrollY-y)>4) window.scrollTo(0,y); };
+    go(); requestAnimationFrame(go); setTimeout(go,400);
+  }
   else window.scrollTo(0,0);
   wireView(page,q);
   observeReveal();
@@ -762,6 +768,8 @@ function setMenu(open){
 }
 $("#burger").addEventListener("click",()=>setMenu(!$("#nav").classList.contains("open")));
 $$("nav.main a").forEach(a=>a.addEventListener("click",()=>{ if(a.getAttribute("href")===location.hash) setMenu(false); }));
+/* "Skip to content" moves focus to the page without the router treating #app as a page */
+$(".skip").addEventListener("click",e=>{e.preventDefault();$("#app").focus();});
 $("#totop").addEventListener("click",()=>window.scrollTo({top:0,behavior:RM.matches?"auto":"smooth"}));
 $("#lb-close").addEventListener("click",closeLB);
 $("#lb").addEventListener("click",e=>{ if(e.target.id==="lb")closeLB(); });

@@ -77,13 +77,13 @@ function pageHead(title,sub,extra=""){
 }
 /* Photo grid. The tiles are sorted into real columns by layoutMasonry() (CSS multi-column made
    the first photo of a column vanish on iPhones). The lift moves .tile-in, never the observed .tile. */
-/* eager: how many photos at the top load at once (the Work page, where they are the first thing on screen) */
+/* eager: how many photos at the top load at once and show without the fade-in (the Work page, where they are the first thing on screen) */
 function tileGrid(ids,{eager=0}={}){
   return `<div class="masonry">${ids.filter(photo).map((id,i)=>{
     const p=photo(id);
     /* The name starts with the category shown on the photo, so it matches what is on screen */
-    return `<figure class="tile rv" data-id="${id}" data-i="${i}" data-r="${p.r}" tabindex="0" role="button" aria-label="${esc(catName(p.cat))}. Open photo: ${esc(p.alt||"Infint photograph")}">
-      <div class="tile-in"${p.c?` style="background:${p.c}"`:""}>${pic(id,{eager:i<eager,high:i===0&&eager>0,sizes:"(max-width:700px) 50vw, (max-width:1100px) 33vw, (max-width:1279px) 25vw, (max-width:1799px) 20vw, 17vw"})}
+    return `<figure class="tile${i<eager?"":" rv"}" data-id="${id}" data-i="${i}" data-r="${p.r}" tabindex="0" role="button" aria-label="${esc(catName(p.cat))}. Open photo: ${esc(p.alt||"Infint photograph")}">
+      <div class="tile-in"${p.c?` style="background:${p.c}"`:""}>${pic(id,{eager:i<eager,high:i<Math.min(4,eager),sizes:"(max-width:700px) 50vw, (max-width:1100px) 33vw, (max-width:1279px) 25vw, (max-width:1799px) 20vw, 17vw"})}
       <figcaption class="cap">${esc(catName(p.cat))}</figcaption></div></figure>`;}).join("")}</div>`;
 }
 const MASONRY_COLS = w => w>=1800?6:w>=1280?5:w>1100?4:w>700?3:2;

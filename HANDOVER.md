@@ -7,6 +7,8 @@
 
 **Live on https://infint.co.za now:** the redesign (since this morning), plus "Infint" instead of "INFINT" in all text and emails, WebP photos, a faster Work page and version tags on the CSS and JS. `main`, `preview` and `redesign` all point at the same commit. `preview` (https://preview.infint.pages.dev, folder `C:\Users\tshed\Pictures\INF JPG\infint-website`) is the place for small changes; `redesign` and the `infint-redesign` folder are no longer needed.
 
+**Third release (28 October, merge `e4a9c8b`):** when Tshedza presses Accept, he also gets a "Booked: ..." email with an Add to Google Calendar button and an attached calendar file (`infint-shoot-<date>.ics`) with alerts 1 week and 2 days before the shoot; the page after Accept shows the same two buttons (`functions/_shared/calendar.js`). Google's link cannot carry alerts, so the alerts are in the file. The acceptance email now asks for the client's first and last name as the payment reference and for proof of payment by reply or WhatsApp. Bank details stay only in the `BANK_DETAILS` secret (the repo is public); Tshedza updates it himself in Cloudflare (FNB savings account in his name) and redeploys. A test booking "Calendar Test" (12 December 2026, 10:00) was sent for him to Accept. Rollback for this release: `git revert --no-edit -m 1 e4a9c8b && git push origin main` (last good: `77927df`).
+
 **Rollback:** the last good state before this release is `f96a5b0` (the redesign as it went live this morning). If the live site breaks, ask Tshedza first, then:
 `git checkout main && git revert --no-edit -m 1 ea4f8b9 && git revert --no-edit -m 1 381d51f && git push origin main`
 To go all the way back to the old design, the point is `690f813` (revert `9a1efc5` as well).

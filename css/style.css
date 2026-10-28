@@ -24,6 +24,8 @@ body{margin:0;background:var(--ink);color:var(--text);font-family:var(--body);fo
 ::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:var(--ink-2)}
 ::-webkit-scrollbar-thumb{background:#2A3038;border-radius:10px;border:2px solid var(--ink-2)}
 img{max-width:100%;display:block}
+/* <picture> only chooses the file (WebP or JPEG); it adds no box, so image styles work as if the img stood alone */
+picture{display:contents}
 a{color:inherit;text-decoration:none}
 button,input,select,textarea{font:inherit;color:inherit}
 input,textarea{caret-color:var(--accent)}
@@ -533,7 +535,7 @@ footer .cols{display:grid;grid-template-columns:1.8fr 1fr 1.1fr 1.3fr;gap:40px}
 footer .f-big{font-family:var(--display);font-weight:400;font-size:clamp(1.5rem,2.2vw,2.15rem);line-height:1.2;color:#fff;max-width:24ch;letter-spacing:-.02em;margin-bottom:28px}
 footer .f-intro .btn{color:var(--ink)}
 footer .f-intro .btn:hover{color:var(--ink)}
-footer h4{font-family:var(--display);font-size:.8rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);margin-bottom:18px;line-height:1}
+footer .f-h{font-family:var(--display);font-size:.8rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);margin-bottom:18px;line-height:1}
 footer ul{list-style:none;padding:0;margin:0;font-family:var(--body);font-weight:400;font-size:1.14rem}
 footer li{padding:7px 0}
 footer li a{display:inline-flex;align-items:center;gap:10px}

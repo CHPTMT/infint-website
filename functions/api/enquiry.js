@@ -1,14 +1,14 @@
 /*
   Cloudflare Pages Function: POST /api/enquiry
-  Receives the booking and contact forms and emails them to INFINT through Resend.
+  Receives the booking and contact forms and emails them to Infint through Resend.
 
   Set these in Cloudflare: Workers & Pages > your project > Settings > Variables and secrets
     RESEND_API_KEY  (secret)  from resend.com > API Keys
     NOTIFY_EMAIL    where enquiries go, e.g. infintco@gmail.com
     BOOKING_SECRET  (secret)  long random string that signs the Accept and Decline links
     BANK_DETAILS    (secret)  bank details for the acceptance email only (see booking-response.js)
-    FROM_BOOKINGS   optional, sender for the booking form (default INFINT Bookings <bookings@infint.co.za>)
-    FROM_INFO       optional, sender for the contact form (default INFINT Info <info@infint.co.za>)
+    FROM_BOOKINGS   optional, sender for the booking form (default Infint Bookings <bookings@infint.co.za>)
+    FROM_INFO       optional, sender for the contact form (default Infint Info <info@infint.co.za>)
   infint.co.za is verified in Resend, so both senders work. Replies go to the visitor.
 
   Booking: emails Tshedza a summary with Accept and Decline buttons (see booking-response.js),
@@ -41,7 +41,7 @@ async function contact(data, env) {
   const msg = {
     from: env.FROM_INFO || SENDERS.contact,
     to: [notifyTo(env)],
-    subject: clean(data.subject, 150) || "New message: INFINT site",
+    subject: clean(data.subject, 150) || "New message: Infint site",
     text: message
   };
   if (isEmail(email)) msg.reply_to = email;

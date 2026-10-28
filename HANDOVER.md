@@ -7,6 +7,27 @@
 
 **The redesign is live on https://infint.co.za** (merge commit 9a1efc5 on `main`, with booking Accept and Decline included).
 
+### For the Claude chat (Desktop Commander): what Claude Code could not do
+
+Claude Code has no access to Tshedza's Chrome (the Claude in Chrome extension is not connected), no Cloudflare login or CLI (wrangler is not installed), and cannot read his inbox. Please do these in his browser, in this order. Never print, paste or screenshot a secret's value; names only. Tshedza types any secret values himself.
+
+1. **Cloudflare Production variables.** Cloudflare dashboard, Workers & Pages, project `infint`, Settings, Variables and secrets, environment **Production**. Report which of these names exist: `RESEND_API_KEY`, `NOTIFY_EMAIL`, `BOOKING_SECRET`, `BANK_DETAILS`. `RESEND_API_KEY` is already proven to work (the live forms sent email). If any of the other three are missing, help him add them:
+   - `NOTIFY_EMAIL`: plain text, `infintco@gmail.com` (or wherever he wants enquiries). Without it, enquiries still go to infintco@gmail.com.
+   - `BOOKING_SECRET` (secret): any long random string. Without it, the booking email to him has no Accept and Decline buttons.
+   - `BANK_DETAILS` (secret): his bank details as he wants clients to see them, one item per line. Only used in the acceptance email; without it that email leaves them out.
+   - A Turnstile secret is **not** needed: Turnstile (spam check) is not built into the site.
+   After adding or changing a variable, Cloudflare only uses it on the next deployment: Deployments tab, latest Production deployment, "Retry deployment".
+2. **Preview variables (optional).** The forms on https://preview.infint.pages.dev cannot send email because the **Preview** environment has no variables (the API answers "Email not configured" and visitors get the WhatsApp and email buttons instead). If he wants to test forms on preview before going live, add the same four names under the Preview environment.
+3. **Inbox check (infintco@gmail.com).** On 28 October Claude Code sent through the live site: a contact message ("Test from Claude (go-live check)") and a booking ("Test from Claude", Portraits & headshots, Saturday 28 November). Expect three emails: the contact message, the booking enquiry, and the client acknowledgement "I've got your booking enquiry". Check spam too. If the booking email has Accept and Decline buttons, `BOOKING_SECRET` is set. Tshedza presses **Accept** himself; the acceptance email goes to infintco@gmail.com and shows whether `BANK_DETAILS` is set.
+4. **www address (optional).** https://www.infint.co.za shows the site directly instead of forwarding to https://infint.co.za. It works, and search engines are pointed at infint.co.za, but a forward is tidier: Cloudflare, domain infint.co.za, Rules, Redirect Rules, "Redirect from WWW to root" template (301, keep the path and query). Ask him first.
+5. **Google Search Console (optional).** The site now has real page addresses and a sitemap. If he wants Google to pick them up faster: add the property infint.co.za and submit `https://infint.co.za/sitemap.xml`. Ask him first.
+6. **Phone check.** Real iPhone Safari was never tested (only emulation). He should scroll the Work categories and the Socials page on his phone and report anything odd.
+7. **Lighthouse scores** were never run. If he wants them: Chrome DevTools, Lighthouse, mobile and desktop, for https://infint.co.za/ and https://infint.co.za/work.
+
+**Waiting on `preview`, not live yet:** "Infint" (not "INFINT") in all text, as he asked: site text, page description, photo descriptions, footer, booking form, email sender names ("Infint Bookings", "Infint Info"), email subjects ("Your Infint booking ..."), the email sign-off ("Tshedza, Infint") and the Accept and Decline page. Also no grey text in the emails or on the Accept and Decline page. Goes live when Tshedza says "push it live" (Claude Code merges `preview` into `main`).
+
+**Left for Claude Code, not urgent:** the WebP photo copies (`tools/make-webp.js`, output in `infint-redesign\assets\w`) are made but the site does not use them yet; wiring them in would make pages lighter.
+
 **Rollback point:** `690f813` (the old design, `main` before the merge). If the live site breaks, ask Tshedza first, then undo the merge with:
 `git checkout main && git revert -m 1 9a1efc5 && git push origin main`
 
@@ -25,11 +46,9 @@
 **Cloudflare Production variables:** could not be read directly (no browser or CLI access). `RESEND_API_KEY` is confirmed by the live API. Not confirmed: `NOTIFY_EMAIL` (falls back to infintco@gmail.com), `BOOKING_SECRET` (without it the booking email has no Accept and Decline buttons), `BANK_DETAILS` (without it the acceptance email leaves the bank details out). There is no Turnstile in the code, so no Turnstile secret is needed yet.
 
 **Open questions:**
-1. Tshedza to confirm the test emails arrived and to press Accept on the test booking (it shows whether `BOOKING_SECRET` and `BANK_DETAILS` are set).
-2. Turnstile (spam check on the forms) is not built. Add it only if spam becomes a problem.
-3. "INFINT" is still written in capitals in text outside the About page (home intro, footer). Change everywhere if he wants.
+1. Turnstile (spam check on the forms) is not built. Add it only if spam becomes a problem.
 
-**Next steps:** small changes on `preview`; nothing pending.
+**Next steps:** the chat works through the list above; Claude Code puts the "Infint" change live when Tshedza says so.
 
 ---
 

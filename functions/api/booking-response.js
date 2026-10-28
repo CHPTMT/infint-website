@@ -11,6 +11,9 @@
     - Resend's Idempotency-Key stops a second email for the same booking within 24 hours.
     - Cloudflare's cache keeps a note of the decision so reopening the link says it's done.
 
+  After an Accept, Tshedza also gets a "Booked" email with an Add to Google Calendar button and a calendar file
+  (alerts 1 week and 2 days before), made in _shared/calendar.js. The page after Accept has the same two buttons.
+
   Bank details come only from the BANK_DETAILS secret in Cloudflare and only go into the acceptance
   email, so nobody can pay before Tshedza confirms the date. They are never in the repo or on the site.
 */
@@ -19,6 +22,7 @@ import {
   SIGN_OFF, esc, clean, summaryRows, serviceName, niceDate, firstName, sendEmail,
   emailFromBlocks, readToken, notifyTo, bookingFrom, config
 } from "../_shared/booking.js";
+import { googleCalendarUrl, icsFor, icsFileName } from "../_shared/calendar.js";
 
 const ACTIONS = { accept: "Accept", decline: "Decline" };
 const stateKey = id => "https://booking-state.infint.co.za/" + encodeURIComponent(id);
@@ -31,7 +35,7 @@ export async function onRequestGet({ request, env }) {
   if (!t.ok) return page(badLinkBody(t.reason), 400);
 
   const done = await getState(t.id);
-  if (done) return page(doneBody(t.b, done.action, done.at, true));
+  if (done) return page(doneBody(t.b, done.action, done.at, true, t.id));
 
   return page(confirmBody(t.b, token, action));
 }
@@ -49,7 +53,7 @@ export async function onRequestPost({ request, env }) {
   if (!env.RESEND_API_KEY) return page(`<h1>Email is not set up</h1><p>RESEND_API_KEY is missing in Cloudflare for this site, so nothing was sent.</p>`, 500);
 
   const done = await getState(t.id);
-  if (done) return page(doneBody(t.b, done.action, done.at, true));
+  if (done) return page(doneBody(t.b, done.action, done.at, true, t.id));
 
   const b = t.b;
   const msg = emailFromBlocks({
@@ -63,11 +67,31 @@ export async function onRequestPost({ request, env }) {
   });
 
   const res = await sendEmail(env, msg, "booking-" + t.id);
-  if (res.status === 409) return page(doneBody(b, null, null, true));
+  if (res.status === 409) return page(doneBody(b, null, null, true, t.id));
   if (!res.ok) return page(`<h1>That didn't send</h1><p>Resend returned an error (${res.status}). Nothing reached ${esc(b.name)}. Go back and try again, or reply to them from your inbox.</p>`, 502);
 
   await putState(t.id, { action, at: new Date().toISOString() }, t.exp);
-  return page(doneBody(b, action, null, false));
+  // Best effort: if this one fails, the client still has their email and the page below has the same calendar buttons
+  if (action === "accept") await sendEmail(env, calendarEmail(b, t.id, env), "calendar-" + t.id).catch(() => null);
+  return page(doneBody(b, action, null, false, t.id));
+}
+
+/* For Tshedza: the accepted shoot, ready to add to his calendar */
+function calendarEmail(b, id, env) {
+  const msg = emailFromBlocks({
+    from: bookingFrom(env),
+    to: notifyTo(env),
+    subject: "Booked: " + serviceName(b.service) + ", " + niceDate(b) + " (" + b.name + ")",
+    blocks: [
+      "You accepted " + b.name + "'s booking. Add it to your calendar:",
+      { buttons: [["Add to Google Calendar", googleCalendarUrl(b), "#FFA000"]] },
+      "The attached file, " + icsFileName(b) + ", has alerts 1 week and 2 days before the shoot. Open it on your phone or computer to add the shoot with both alerts.",
+      { rows: summaryRows(b) }
+    ]
+  });
+  const bytes = new TextEncoder().encode(icsFor(b, id));
+  msg.attachments = [{ filename: icsFileName(b), content: btoa(String.fromCharCode(...bytes)), content_type: "text/calendar" }];
+  return msg;
 }
 
 export async function onRequest() {
@@ -167,7 +191,7 @@ function confirmBody(b, token, action) {
     <p class="switch">Wrong button? <a href="/api/booking-response?t=${esc(token)}&a=${other}">${ACTIONS[other]} instead</a></p>`;
 }
 
-function doneBody(b, action, at, earlier) {
+function doneBody(b, action, at, earlier, id) {
   const what = action === "accept" ? "accepted" : action === "decline" ? "declined" : "answered";
   const when = at ? " on " + new Date(at).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "Africa/Johannesburg" }) : "";
   return `
@@ -176,8 +200,18 @@ function doneBody(b, action, at, earlier) {
     <p class="lead">${earlier
       ? `This booking was already ${what}${when}. Nothing new was sent.`
       : `The booking is ${what}. The email went to ${esc(b.name)} (${esc(b.email)}) and a copy is on its way to your inbox.`}</p>
+    ${action === "accept" && id ? calendarButtons(b, id) : ""}
     ${bookingTable(b)}
     <p class="switch">To follow up, reply to ${esc(firstName(b))} from your inbox.</p>`;
+}
+
+function calendarButtons(b, id) {
+  const file = "data:text/calendar;charset=utf-8," + encodeURIComponent(icsFor(b, id));
+  return `<div class="cal">
+      <a class="btn accept" href="${esc(googleCalendarUrl(b))}" target="_blank" rel="noopener">Add to Google Calendar</a>
+      <a class="btn decline" href="${file}" download="${esc(icsFileName(b))}">Calendar file with alerts</a>
+      <p class="hint">The calendar file has alerts 1 week and 2 days before the shoot. Google's button can't carry alerts.</p>
+    </div>`;
 }
 
 function badLinkBody(reason) {
@@ -224,6 +258,8 @@ function page(body, status = 200) {
   .btn.decline{background:transparent;color:#fff;border-color:var(--line-2)}
   .btn:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
   .btn:disabled{opacity:.6;cursor:default}
+  a.btn{display:flex;align-items:center;justify-content:center;text-decoration:none}
+  .cal{margin:0 0 30px}
   .switch{margin-top:26px;font-size:1rem;color:var(--mute)}
   .switch a{color:#fff;text-decoration:underline;text-decoration-color:var(--amber);text-underline-offset:5px}
 </style>

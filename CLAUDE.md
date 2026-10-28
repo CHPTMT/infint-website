@@ -46,7 +46,7 @@ Plain HTML, CSS and JavaScript with no build step and no framework. Live at http
 
 ## Adding photos
 
-See ASSETS.md. Originals live on Tshedza's PC in `C:\Users\tshed\Pictures\INF JPG\Website Commits\` (sorted into folders). Add rows to `tools/photos.csv`, run `tools\resize-photos.ps1`, then add entries to `PHOTOS` in `js/content.js` using the sizes in `tools/photos-manifest.csv`, then run `node tools/order-photos.js --write`.
+See ASSETS.md. Originals live on Tshedza's PC in `C:\Users\tshed\Pictures\INF JPG\Website Commits\` (sorted into folders). Add rows to `tools/photos.csv`, run `tools\resize-photos.ps1`, then add entries to `PHOTOS` in `js/content.js` using the sizes in `tools/photos-manifest.csv`, then run `node tools/order-photos.js --write`, then `node tools/make-webp.js` (makes the WebP copies in `assets/w` that the site serves, plus each photo's placeholder colour; run `npm --prefix tools install` once first).
 
 ## Secrets
 

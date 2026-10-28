@@ -20,7 +20,10 @@
 <meta property="og:url" content="https://infint.co.za/">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://infint.co.za/assets/photos/fashion-01.jpg">
-<link rel="preload" as="image" imagesrcset="assets/thumbs/fashion-16.jpg 480w, assets/photos/fashion-16.jpg 1332w, assets/hero/fashion-16.jpg 1732w" imagesizes="(max-width:960px) 100vw, 56vw" fetchpriority="high">
+<script>/* The first hero photo (HOME.slides in js/content.js) starts downloading at once, on the home page only. Keep in step with its WebP srcset in app.js. */
+if(location.pathname==="/"){var l=document.createElement("link");l.rel="preload";l.as="image";l.type="image/webp";l.fetchPriority="high";
+  l.setAttribute("imagesrcset","assets/w/360/fashion-16.webp 240w, assets/w/720/fashion-16.webp 480w, assets/w/1200/fashion-16.webp 799w, assets/w/2000/fashion-16.webp 1332w, assets/w/2600/fashion-16.webp 1732w");
+  l.setAttribute("imagesizes","(max-width:960px) 100vw, 56vw");document.head.appendChild(l);}</script>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/montserrat-latin.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/outfit-latin.woff2" crossorigin>
 <link rel="stylesheet" href="css/style.css">
@@ -56,7 +59,7 @@
         <a class="btn magnetic" href="/book">Book a shoot <span class="arr" aria-hidden="true"></span></a>
       </div>
       <div>
-        <h4>Site</h4>
+        <h2 class="f-h">Site</h2>
         <ul>
           <li><a href="/work">Work</a></li>
           <li><a href="/rates">Rates</a></li>
@@ -67,11 +70,11 @@
         </ul>
       </div>
       <div>
-        <h4>Follow</h4>
+        <h2 class="f-h">Follow</h2>
         <ul id="footer-social"></ul>
       </div>
       <div>
-        <h4>Get in touch</h4>
+        <h2 class="f-h">Get in touch</h2>
         <ul id="footer-contact"></ul>
       </div>
     </div>

@@ -299,7 +299,7 @@ These 16 appear on the homepage in this order (set by `HOME.featured`): `portrai
 
 1. Drop the original JPEG into the matching folder in `Website Commits`.
 2. Add a line to `tools/photos.csv` with the next id in that category (e.g. `event-70`) and its path, e.g. `Event\new-photo.jpg`.
-3. Run `powershell -ExecutionPolicy Bypass -File tools\resize-photos.ps1`. It rebuilds both image folders and writes `tools/photos-manifest.csv` with each photo's size.
+3. Run `powershell -ExecutionPolicy Bypass -File tools\resize-photos.ps1`. It rebuilds both image folders and writes `tools/photos-manifest.csv` with each photo's size. Then run `node tools/make-webp.js` for the WebP copies in `assets/w` (the site shows these; the JPEGs are the fallback).
 4. Add the photo to `PHOTOS` in `js/content.js`: `{"id": "event-70", "cat": "event", "r": 0.667, "alt": "Short description"}`, where `r` is width divided by height. Put it somewhere in the middle of its category rather than next to a frame from the same shoot.
 
 Or ask Claude Code to do steps 2 to 4. A new category needs one line in `CATEGORIES` in `js/content.js` as well.

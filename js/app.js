@@ -39,10 +39,16 @@ const xlPath = id => "assets/hero/"+id+".jpg";
 const widthAt = (p,long) => Math.round(long*Math.min(p.r,1));
 const srcsetOf = (id,xl) => { const p=photo(id)||{r:.667};
   return `${thumbPath(id)} ${widthAt(p,720)}w, ${fullPath(id)} ${widthAt(p,2000)}w${xl?`, ${xlPath(id)} ${widthAt(p,2600)}w`:""}`; };
-function pic(id,{sizes="(max-width:700px) 50vw, 25vw",eager=false,cls="",alt,xl=false}={}){
+/* WebP copies of every photo (tools/make-webp.js), by long side: 360, 720, 1200 and 2000 px, plus 2600 px for the photos in assets/hero.
+   Browsers that can show WebP use them; the JPEGs above stay as the fallback. */
+const webpPath = (id,long) => "assets/w/"+long+"/"+id+".webp";
+const webpSetOf = (id,xl) => { const p=photo(id)||{r:.667};
+  return [360,720,1200,2000,...(xl?[2600]:[])].map(l=>`${webpPath(id,l)} ${widthAt(p,l)}w`).join(", "); };
+/* eager: load at once instead of when scrolled near; high: download before other images (the main photo of a page) */
+function pic(id,{sizes="(max-width:700px) 50vw, 25vw",eager=false,high=false,cls="",alt,xl=false}={}){
   const p=photo(id)||{r:.667,alt:""};
-  return `<img ${cls?`class="${cls}"`:""} src="${thumbPath(id)}" srcset="${srcsetOf(id,xl)}" sizes="${sizes}"
-    width="720" height="${Math.round(720/p.r)}" ${eager?'fetchpriority="high"':'loading="lazy"'} decoding="async" alt="${esc(alt??(p.alt||"Infint photograph"))}">`;
+  return `<picture><source type="image/webp" srcset="${webpSetOf(id,xl)}" sizes="${sizes}"><img ${cls?`class="${cls}"`:""} src="${thumbPath(id)}" srcset="${srcsetOf(id,xl)}" sizes="${sizes}"
+    width="720" height="${Math.round(720/p.r)}" ${eager?"":'loading="lazy"'} ${high?'fetchpriority="high"':""} decoding="async" alt="${esc(alt??(p.alt||"Infint photograph"))}"></picture>`;
 }
 
 const ICON = {
@@ -71,11 +77,13 @@ function pageHead(title,sub,extra=""){
 }
 /* Photo grid. The tiles are sorted into real columns by layoutMasonry() (CSS multi-column made
    the first photo of a column vanish on iPhones). The lift moves .tile-in, never the observed .tile. */
-function tileGrid(ids){
+/* eager: how many photos at the top load at once (the Work page, where they are the first thing on screen) */
+function tileGrid(ids,{eager=0}={}){
   return `<div class="masonry">${ids.filter(photo).map((id,i)=>{
     const p=photo(id);
-    return `<figure class="tile rv" data-id="${id}" data-i="${i}" data-r="${p.r}" tabindex="0" role="button" aria-label="Open photo: ${esc(p.alt||"Infint photograph")}">
-      <div class="tile-in">${pic(id,{sizes:"(max-width:700px) 50vw, (max-width:1100px) 33vw, (max-width:1440px) 25vw, 20vw"})}
+    /* The name starts with the category shown on the photo, so it matches what is on screen */
+    return `<figure class="tile rv" data-id="${id}" data-i="${i}" data-r="${p.r}" tabindex="0" role="button" aria-label="${esc(catName(p.cat))}. Open photo: ${esc(p.alt||"Infint photograph")}">
+      <div class="tile-in"${p.c?` style="background:${p.c}"`:""}>${pic(id,{eager:i<eager,high:i===0&&eager>0,sizes:"(max-width:700px) 50vw, (max-width:1100px) 33vw, (max-width:1279px) 25vw, (max-width:1799px) 20vw, 17vw"})}
       <figcaption class="cap">${esc(catName(p.cat))}</figcaption></div></figure>`;}).join("")}</div>`;
 }
 const MASONRY_COLS = w => w>=1800?6:w>=1280?5:w>1100?4:w>700?3:2;
@@ -151,10 +159,12 @@ V.home = () => {
   return `
   <section class="hero" style="--slide:6.5s">
     <div class="hero-photo" id="hero-photo">
-      ${sl.map((s,i)=>{const p=photo(s.id), set=srcsetOf(s.id,true);
-        return `<div class="slide ${i===0?"on":""}" data-word="${esc(s.word)}">
-          <img ${i===0?`src="${thumbPath(s.id)}" srcset="${set}" fetchpriority="high"`:`data-src="${thumbPath(s.id)}" data-srcset="${set}"`}
-            sizes="(max-width:960px) 100vw, 56vw" width="720" height="${Math.round(720/p.r)}" decoding="async" alt="${esc(p.alt||"Infint photograph")}"></div>`;}).join("")}
+      ${sl.map((s,i)=>{const p=photo(s.id), set=srcsetOf(s.id,true), wset=webpSetOf(s.id,true), on=i===0, sz='sizes="(max-width:960px) 100vw, 56vw"';
+        /* The first photo matches the preload in index.html; the others get their files when their turn comes (wireHero) */
+        return `<div class="slide ${on?"on":""}" data-word="${esc(s.word)}"><picture>
+          <source type="image/webp" ${on?`srcset="${wset}"`:`data-srcset="${wset}"`} ${sz}>
+          <img ${on?`src="${thumbPath(s.id)}" srcset="${set}" fetchpriority="high"`:`data-src="${thumbPath(s.id)}" data-srcset="${set}"`}
+            ${sz} width="720" height="${Math.round(720/p.r)}" decoding="async" alt="${esc(p.alt||"Infint photograph")}"></picture></div>`;}).join("")}
       <div class="hero-dots" role="group" aria-label="Choose a photo">${sl.map((s,i)=>`<button type="button" class="${i===0?"on":""}" data-go="${i}" aria-label="Show ${esc(s.word)} photo"></button>`).join("")}</div>
       <div class="hero-word" aria-hidden="true">
         <span class="mega" id="hero-word"><span>${esc(sl[0].word)}</span></span>
@@ -183,7 +193,9 @@ V.home = () => {
 
   <section class="marquee" aria-label="A moving strip of recent photos">
     ${PICK.strips.map((row,ri)=>{const ok=row;
-      const cell=(id,dup)=>`<a href="/work?f=${photo(id).cat}" ${dup?'tabindex="-1" aria-hidden="true"':""}>${pic(id,{sizes:Math.round(280*photo(id).r)+"px",alt:dup?"":undefined})}</a>`;
+      /* Strip photos are 150 px tall on phones, 17vw in between and 280 px on wide screens */
+      const wide=id=>{const r=photo(id).r; return `(max-width:882px) ${Math.round(150*r)}px, (max-width:1647px) ${Math.round(17*r)}vw, ${Math.round(280*r)}px`;};
+      const cell=(id,dup)=>`<a href="/work?f=${photo(id).cat}" ${dup?'tabindex="-1" aria-hidden="true"':""}>${pic(id,{sizes:wide(id),alt:dup?"":undefined})}</a>`;
       return `<div class="mq-track ${ri%2?"rev":""}">${ok.map(id=>cell(id,0)).join("")}${ok.map(id=>cell(id,1)).join("")}</div>`;}).join("")}
   </section>
 
@@ -257,7 +269,7 @@ V.work = (q) => {
   ${ctaBlock()}`;
 };
 function workGrid(f){
-  return tileGrid(f==="all" ? mixed() : PHOTOS.filter(p=>p.cat===f).map(p=>p.id));
+  return tileGrid(f==="all" ? mixed() : PHOTOS.filter(p=>p.cat===f).map(p=>p.id),{eager:6});
 }
 
 V.rates = () => {
@@ -349,7 +361,7 @@ V.book = (q,o={}) => {
   return `
   <section class="split-page">
     <div class="split-photo">
-      ${pic(PAGE_PHOTOS.book[step-1]||PAGE_PHOTOS.book[0],{sizes:"(max-width:960px) 100vw, 45vw",eager:true,alt:""})}
+      ${pic(PAGE_PHOTOS.book[step-1]||PAGE_PHOTOS.book[0],{sizes:"(max-width:960px) 100vw, 45vw",eager:true,high:true,alt:""})}
       <div class="over" aria-hidden="true">
         <span class="mega">${pad2(step)}<small>/03</small></span>
         <div class="h3">${esc(BOOK_STEPS[step-1])}</div>
@@ -433,7 +445,7 @@ V.contact = () => {
   return `
   <section class="split-page">
     <div class="split-photo">
-      ${pic(PAGE_PHOTOS.contact,{sizes:"(max-width:960px) 100vw, 45vw",eager:true,alt:""})}
+      ${pic(PAGE_PHOTOS.contact,{sizes:"(max-width:960px) 100vw, 45vw",eager:true,high:true,alt:""})}
       <div class="over" aria-hidden="true"><span class="mega">Say hi.</span></div>
     </div>
     <div class="split-body glow"><div class="gridlines" aria-hidden="true"></div><div class="inner">
@@ -664,7 +676,9 @@ function wireHero(){
   const slides=$$("#hero-photo .slide"), dots=$$(".hero-dots button");
   if(slides.length<2) return;
   let i=0;
-  const load=s=>{const img=s.querySelector("img"); if(img.dataset.src){img.srcset=img.dataset.srcset;img.src=img.dataset.src;delete img.dataset.src;delete img.dataset.srcset;}};
+  const load=s=>{const img=s.querySelector("img"), src=s.querySelector("source");
+    if(src&&src.dataset.srcset){src.srcset=src.dataset.srcset;delete src.dataset.srcset;}
+    if(img.dataset.src){img.srcset=img.dataset.srcset;img.src=img.dataset.src;delete img.dataset.src;delete img.dataset.srcset;}};
   const show=n=>{
     i=(n+slides.length)%slides.length;
     load(slides[i]); load(slides[(i+1)%slides.length]);
@@ -692,10 +706,10 @@ function paintLB(){
   const {list,i}=S.lb, id=list[i]; if(!id)return;
   const img=$("#lb-img"); img.classList.remove("ready");
   img.onload=()=>img.classList.add("ready");
-  img.src=fullPath(id); img.alt=(photo(id)||{}).alt||"Infint photograph";
+  img.src=webpPath(id,2000); img.alt=(photo(id)||{}).alt||"Infint photograph";
   if(img.complete) img.classList.add("ready");
   $("#lb-title").textContent=catName((photo(id)||{}).cat);
-  [list[(i+1)%list.length],list[(i-1+list.length)%list.length]].forEach(n=>{const p=new Image();p.src=fullPath(n);});
+  [list[(i+1)%list.length],list[(i-1+list.length)%list.length]].forEach(n=>{const p=new Image();p.src=webpPath(n,2000);});
 }
 function closeLB(){
   const lb=$("#lb"); lb.classList.remove("open"); document.body.style.overflow="";

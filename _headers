@@ -7,3 +7,7 @@
   Cache-Control: public, max-age=604800
 /assets/hero/*
   Cache-Control: public, max-age=604800
+/assets/w/*
+  Cache-Control: public, max-age=604800
+/assets/socials/*
+  Cache-Control: public, max-age=604800

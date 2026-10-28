@@ -5,5 +5,3 @@ tools/resize.done
 .playwright-mcp/
 tools/node_modules/
 tools/package-lock.json
-# WebP copies from tools/make-webp.js; not used by the site yet
-assets/w/

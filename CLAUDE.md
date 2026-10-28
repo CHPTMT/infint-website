@@ -19,6 +19,7 @@ Plain HTML, CSS and JavaScript with no build step and no framework. Live at http
 ## How changes go live
 
 - Pushing to `main` deploys to production (infint.co.za) automatically through Cloudflare Pages, in about a minute.
+- infint.co.za tells browsers to keep CSS and JS for 4 hours (a Cloudflare domain setting; preview.infint.pages.dev does not). So whenever `css/` or `js/` changes, change the `?v=` value on the stylesheet and the two scripts in `index.html` (for example to the date), or returning visitors keep the old files for up to 4 hours.
 - **Never push to `main` without Tshedza's explicit go-ahead.**
 - Work on the `preview` branch. Pushing `preview` publishes it to https://preview.infint.pages.dev for Tshedza to check on any device.
 - When he approves, merge `preview` into `main` and push.

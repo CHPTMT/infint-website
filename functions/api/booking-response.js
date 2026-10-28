@@ -16,7 +16,7 @@
 */
 
 import {
-  SIGN_OFF, esc, clean, isDate, summaryRows, serviceName, niceDate, firstName, sendEmail,
+  SIGN_OFF, esc, clean, summaryRows, serviceName, niceDate, firstName, sendEmail,
   emailFromBlocks, readToken, notifyTo, bookingFrom, config
 } from "../_shared/booking.js";
 
@@ -80,10 +80,8 @@ function acceptBlocks(b, message, bankDetails) {
   const c = config(), pct = c.booking.depositPct || 50;
   const rows = summaryRows(b, { withContact: false }).filter(([k]) => k !== "Notes");
   const bank = String(bankDetails || "").replace(/\r\n?/g, "\n").trim();
-  const shortDate = isDate(b.date)
-    ? new Date(b.date + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" })
-    : b.date;
-  const reference = (b.name || "your name") + " " + shortDate;
+  // Payment reference: the client's first and last name, as they entered it on the booking form
+  const reference = clean(b.name, 120) || "your first and last name";
   const blocks = [
     "Hi " + firstName(b) + ",",
     "Good news, I'm available on " + niceDate(b) + " and I'd be glad to do your shoot. Here's what I have:",
@@ -95,8 +93,8 @@ function acceptBlocks(b, message, bankDetails) {
     { list: [
       "A " + pct + "% deposit (half the quoted price) secures your booking. Your date is held once the deposit reflects.",
       "The balance is due on the day of the shoot.",
-      "Use this payment reference: " + reference,
-      "Reply to this email with your proof of payment.",
+      "Use your first and last name as the payment reference: " + reference,
+      "After paying, send me your proof of payment: reply to this email with it attached, or WhatsApp it to " + c.contact.phone + ".",
       "The day before the shoot, I'll send you a short shot list so we're both clear on timing."
     ] },
     { heading: "Payment details" },

@@ -3,54 +3,56 @@
 ## Latest handover
 
 **From:** Claude Code  **To:** Claude chat
-**Date:** 28 October 2026
+**Date:** 28 October 2026 (second release of the day)
 
-**The redesign is live on https://infint.co.za** (merge commit 9a1efc5 on `main`, with booking Accept and Decline included).
+**Live on https://infint.co.za now:** the redesign (since this morning), plus "Infint" instead of "INFINT" in all text and emails, WebP photos, a faster Work page and version tags on the CSS and JS. `main`, `preview` and `redesign` all point at the same commit. `preview` (https://preview.infint.pages.dev, folder `C:\Users\tshed\Pictures\INF JPG\infint-website`) is the place for small changes; `redesign` and the `infint-redesign` folder are no longer needed.
 
-### For the Claude chat (Desktop Commander): what Claude Code could not do
+**Rollback:** the last good state before this release is `f96a5b0` (the redesign as it went live this morning). If the live site breaks, ask Tshedza first, then:
+`git checkout main && git revert --no-edit -m 1 ea4f8b9 && git revert --no-edit -m 1 381d51f && git push origin main`
+To go all the way back to the old design, the point is `690f813` (revert `9a1efc5` as well).
 
-Claude Code has no access to Tshedza's Chrome (the Claude in Chrome extension is not connected), no Cloudflare login or CLI (wrangler is not installed), and cannot read his inbox. Please do these in his browser, in this order. Never print, paste or screenshot a secret's value; names only. Tshedza types any secret values himself.
+**Cloudflare Production variables: all set.** The chat confirmed `RESEND_API_KEY`, `NOTIFY_EMAIL`, `BOOKING_SECRET` and `BANK_DETAILS` exist (names only) and redeployed at 01:54. Turnstile is not needed for now. The Preview environment still has none, so forms on preview.infint.pages.dev fall back to WhatsApp and email.
 
-1. **Cloudflare Production variables.** Cloudflare dashboard, Workers & Pages, project `infint`, Settings, Variables and secrets, environment **Production**. Report which of these names exist: `RESEND_API_KEY`, `NOTIFY_EMAIL`, `BOOKING_SECRET`, `BANK_DETAILS`. `RESEND_API_KEY` is already proven to work (the live forms sent email). If any of the other three are missing, help him add them:
-   - `NOTIFY_EMAIL`: plain text, `infintco@gmail.com` (or wherever he wants enquiries). Without it, enquiries still go to infintco@gmail.com.
-   - `BOOKING_SECRET` (secret): any long random string. Without it, the booking email to him has no Accept and Decline buttons.
-   - `BANK_DETAILS` (secret): his bank details as he wants clients to see them, one item per line. Only used in the acceptance email; without it that email leaves them out.
-   - A Turnstile secret is **not** needed: Turnstile (spam check) is not built into the site.
-   After adding or changing a variable, Cloudflare only uses it on the next deployment: Deployments tab, latest Production deployment, "Retry deployment".
-2. **Preview variables (optional).** The forms on https://preview.infint.pages.dev cannot send email because the **Preview** environment has no variables (the API answers "Email not configured" and visitors get the WhatsApp and email buttons instead). If he wants to test forms on preview before going live, add the same four names under the Preview environment.
-3. **Inbox check (infintco@gmail.com).** On 28 October Claude Code sent through the live site: a contact message ("Test from Claude (go-live check)") and a booking ("Test from Claude", Portraits & headshots, Saturday 28 November). Expect three emails: the contact message, the booking enquiry, and the client acknowledgement "I've got your booking enquiry". Check spam too. If the booking email has Accept and Decline buttons, `BOOKING_SECRET` is set. Tshedza presses **Accept** himself; the acceptance email goes to infintco@gmail.com and shows whether `BANK_DETAILS` is set.
-4. **www address (optional).** https://www.infint.co.za shows the site directly instead of forwarding to https://infint.co.za. It works, and search engines are pointed at infint.co.za, but a forward is tidier: Cloudflare, domain infint.co.za, Rules, Redirect Rules, "Redirect from WWW to root" template (301, keep the path and query). Ask him first.
-5. **Google Search Console (optional).** The site now has real page addresses and a sitemap. If he wants Google to pick them up faster: add the property infint.co.za and submit `https://infint.co.za/sitemap.xml`. Ask him first.
-6. **Phone check.** Real iPhone Safari was never tested (only emulation). He should scroll the Work categories and the Socials page on his phone and report anything odd.
-7. **Lighthouse scores** were never run. If he wants them: Chrome DevTools, Lighthouse, mobile and desktop, for https://infint.co.za/ and https://infint.co.za/work.
+**What changed in this release:**
+1. "Infint" (capital I, rest lowercase) in all text: site copy, page description, photo descriptions, footer, booking form, email sender names ("Infint Bookings", "Infint Info"), subjects, the sign-off "Tshedza, Infint" and the Accept and Decline page. The logo images stay uppercase. Rule added to CLAUDE.md.
+2. No grey text in the emails (detail labels are ink and bold) or on the Accept and Decline page.
+3. WebP photos: every photo has WebP copies in `assets/w/360`, `720`, `1200`, `2000` (and `2600` for the hero photos), made by `node tools/make-webp.js`, which also writes each photo's placeholder colour (`"c"`) into `PHOTOS`. Pages use `<picture>` with the WebP first and the JPEG as fallback; the photo viewer uses the 2000 px WebP. `sizes` now match how big each photo is drawn (grid columns, photo strips). Run `make-webp.js` after adding photos (CLAUDE.md, ASSETS.md).
+4. Work page: the first six photos load at once and show without the fade-in; the first four download first. The hero photo is preloaded on the home page only (it used to download on every page).
+5. Footer column titles are `h2` (heading order), and each photo tile's accessible name starts with the category shown on it.
+6. Version tags: infint.co.za tells browsers to keep CSS and JS for 4 hours (a Cloudflare domain setting), so returning visitors got the new page with old scripts for a while after a deploy. `index.html` now loads `css/style.css?v=20261028`, `js/content.js?v=...` and `js/app.js?v=...`. **Change the `?v=` value whenever `css/` or `js/` changes** (CLAUDE.md).
 
-**Waiting on `preview`, not live yet:** "Infint" (not "INFINT") in all text, as he asked: site text, page description, photo descriptions, footer, booking form, email sender names ("Infint Bookings", "Infint Info"), email subjects ("Your Infint booking ..."), the email sign-off ("Tshedza, Infint") and the Accept and Decline page. Also no grey text in the emails or on the Accept and Decline page. Goes live when Tshedza says "push it live" (Claude Code merges `preview` into `main`).
+**Lighthouse (npx lighthouse@12, on preview, warm cache):**
 
-**Left for Claude Code, not urgent:** the WebP photo copies (`tools/make-webp.js`, output in `infint-redesign\assets\w`) are made but the site does not use them yet; wiring them in would make pages lighter.
+| Page | Before | After |
+|---|---|---|
+| Home, mobile | 83 (LCP 4.0 s, 2,253 KiB) | 96 (LCP 2.7 s, 798 KiB) |
+| Work, mobile | 70 (LCP 7.0 s, 1,771 KiB) | 93 (LCP 3.1 s, 992 KiB) |
+| Home, desktop | 100 | 100 |
+| Work, desktop | 96 | 98 |
 
-**Rollback point:** `690f813` (the old design, `main` before the merge). If the live site breaks, ask Tshedza first, then undo the merge with:
-`git checkout main && git revert -m 1 9a1efc5 && git push origin main`
+Accessibility went from 98 to 100. SEO shows 69 on preview only because Cloudflare marks preview sites "noindex"; the live site does not have that. The first run straight after a deploy is slower (cold CDN cache): home mobile measured 74 once, then 95 and 96.
 
-**Branches now:** `main`, `preview` and `redesign` all point at the same commit. `preview` (https://preview.infint.pages.dev, folder `C:\Users\tshed\Pictures\INF JPG\infint-website`) is again the place for small changes: work there, Tshedza checks it, then merge into `main` when he says "push it live". `redesign` and its folder `infint-redesign` are no longer needed for new work.
+**Checked live after deploy:** every page (home, /work, a category, /rates, /about, /socials, /book, /contact, old `#/` links) loads with no console errors and no missing files, in a fresh browser and in one that had the old files cached. No "INFINT" left in any page. All photos load as WebP.
 
-**Final round before going live (28 October):**
-1. No grey text: body and supporting text is white (`--text`) or bone (`--mute` is now `#F5F5F3`), Outfit at 400 or 500, a size up everywhere (home intro, rates descriptions, package details and notes, labels, captions, form hints, footer). Checked at 390, 1440 and 1920 px.
-2. Footer links bigger, in the body font, weight and colour.
-3. About: "Infint" instead of "INFINT" in the text (the logo image is unchanged), and a new "People first." section in his voice (`CONFIG.aboutMe` in `js/content.js`).
-4. Socials page and home "Follow along": real profile screenshots (Instagram @infint_co, TikTok @infint_co, YouTube @tshedza_tt "Infint Co") in phone frames, each with an Open button; the phone opens the profile too. Files in `assets/socials` (PNG and WebP, 1000 px tall), made by `node tools/make-socials.js` from `Website Commits\socials`. The Instagram "Followed by" row is blurred (other people). **Refresh these screenshots every few months** (steps in ASSETS.md).
-5. Real page paths: `/work`, `/work?f=fashion`, `/rates`, `/about`, `/book`, `/contact`, `/socials`. Old `#/` links are swapped for the path in the browser. Cloudflare serves `index.html` for any path without a file (there is no `404.html`; keep it that way). New `robots.txt` and `sitemap.xml`. `tools/serve.ps1` does the same locally.
-6. Unfinished WebP work (`tools/make-webp.js`) is committed, but its output `assets/w/` is not used by the site and is kept out of git.
+**Email test on the live site (28 October, to infintco@gmail.com):** contact form "Test from Claude Code, contact" returned `{"ok":true}`; booking form "Test from Claude Code, booking" (Portraits & headshots, Sunday 29 November 2026 at 11:00) returned `{"ok":true,"acknowledged":true}`. Expected in the inbox:
+- From "Infint Info": "New message: Infint site".
+- From "Infint Bookings": "Booking enquiry: Portraits & headshots, Sunday 29 November 2026 at 11:00 (Test from Claude Code, booking)", with Accept and Decline buttons.
+- From "Infint Bookings": "I've got your booking enquiry: Portraits & headshots, Sunday 29 November 2026 at 11:00" (the client acknowledgement).
+Tshedza presses Accept himself; the acceptance email ("Your Infint booking: ...") should show his bank details. If a sender still says "INFINT", the optional `FROM_BOOKINGS` or `FROM_INFO` variables in Cloudflare override the default and need the new spelling.
 
-**Checked after going live:** every page loads on infint.co.za and www.infint.co.za (www serves the site directly; the canonical link points search engines at infint.co.za), old `#/` links redirect, menu categories work, tab titles and icons show, robots.txt and sitemap.xml are real files, no console errors or broken files. A test contact message and a test booking (to infintco@gmail.com) returned success, and the booking acknowledgement went out.
+**Still open (optional, for the chat, ask him first):**
+1. www.infint.co.za shows the site directly; a Cloudflare redirect rule to infint.co.za would be tidier.
+2. Submit `https://infint.co.za/sitemap.xml` in Google Search Console.
+3. Check the Work grid and Socials page on his real iPhone (only emulation was tested).
+4. Turnstile only if spam becomes a problem.
 
-**Cloudflare Production variables:** could not be read directly (no browser or CLI access). `RESEND_API_KEY` is confirmed by the live API. Not confirmed: `NOTIFY_EMAIL` (falls back to infintco@gmail.com), `BOOKING_SECRET` (without it the booking email has no Accept and Decline buttons), `BANK_DETAILS` (without it the acceptance email leaves the bank details out). There is no Turnstile in the code, so no Turnstile secret is needed yet.
-
-**Open questions:**
-1. Turnstile (spam check on the forms) is not built. Add it only if spam becomes a problem.
-
-**Next steps:** the chat works through the list above; Claude Code puts the "Infint" change live when Tshedza says so.
+**Next steps:** Tshedza checks the inbox and presses Accept. Small changes on `preview` from now on.
 
 ---
+
+### Earlier today: the redesign went live (merge 9a1efc5)
+
+Final round before it went live: no grey text (white or bone, Outfit 400 or 500, a size up), bigger footer links, About gets "People first." (`CONFIG.aboutMe`), Socials and home "Follow along" show real profile screenshots in phone frames (`assets/socials`, `node tools/make-socials.js`, Instagram follower row blurred; **refresh every few months**, steps in ASSETS.md), real page paths (`/work`, `/rates` etc.; old `#/` links swapped in the browser; Cloudflare serves `index.html` for any path without a file, so never add a `404.html`), `robots.txt` and `sitemap.xml`.
 
 ### Earlier: redesign rounds 1 and 2 (now live)
 

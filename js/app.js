@@ -180,6 +180,7 @@ V.home = () => {
         <p class="lede">${esc(CONFIG.brand.intro)}</p>
         <div class="actions">
           <a class="btn magnetic" href="/book">Book a shoot ${ARR}</a>
+          <a class="btn ghost" href="/contact">General enquiry</a>
           <a class="btn ghost" href="/work">See the work</a>
         </div>
       </div>

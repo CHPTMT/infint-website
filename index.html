@@ -27,13 +27,14 @@ if(location.pathname==="/"){var l=document.createElement("link");l.rel="preload"
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/montserrat-latin.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/outfit-latin.woff2" crossorigin>
 <!-- ?v= forces fresh copies after a change: infint.co.za tells browsers to keep CSS and JS for 4 hours. Change it whenever css/ or js/ changes. -->
-<link rel="stylesheet" href="css/style.css?v=20261028">
+<link rel="stylesheet" href="css/style.css?v=20261029">
 </head>
 <body>
 <a class="skip" href="#app">Skip to content</a>
 <header class="site" id="hdr">
   <div class="bar">
     <a href="/" class="logo" aria-label="Infint home"><img src="assets/brand/infint-wordmark-white-transparent.png" width="867" height="165" alt="Infint"></a>
+    <a href="/contact" class="btn sm ghost hdr-cta">General enquiry</a>
     <a href="/book" class="btn sm hdr-cta magnetic">Book a shoot</a>
     <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="nav"><span></span><span></span></button>
     <nav class="main" id="nav" aria-label="Main">
@@ -57,7 +58,10 @@ if(location.pathname==="/"){var l=document.createElement("link");l.rel="preload"
     <div class="cols">
       <div class="f-intro">
         <p class="f-big">Photography for portraits, events, sport, fashion and graduations. Based in Johannesburg, shooting anywhere in Gauteng and beyond.</p>
-        <a class="btn magnetic" href="/book">Book a shoot <span class="arr" aria-hidden="true"></span></a>
+        <div class="f-actions">
+          <a class="btn magnetic" href="/book">Book a shoot <span class="arr" aria-hidden="true"></span></a>
+          <a class="btn ghost" href="/contact">General enquiry</a>
+        </div>
       </div>
       <div>
         <h2 class="f-h">Site</h2>
@@ -98,7 +102,7 @@ if(location.pathname==="/"){var l=document.createElement("link");l.rel="preload"
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="js/content.js?v=20261028"></script>
-<script src="js/app.js?v=20261028"></script>
+<script src="js/content.js?v=20261029"></script>
+<script src="js/app.js?v=20261029"></script>
 </body>
 </html>

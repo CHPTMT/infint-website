@@ -4,7 +4,9 @@
 
   Set these in Cloudflare: Workers & Pages > your project > Settings > Variables and secrets
     RESEND_API_KEY  (secret)  from resend.com > API Keys
-    NOTIFY_EMAIL    where enquiries go, e.g. infintco@gmail.com
+    NOTIFY_EMAIL    optional backup copy of every enquiry, e.g. infintco@gmail.com
+    NOTIFY_CONTACT  optional, where contact messages go (default info@infint.co.za)
+    NOTIFY_BOOKINGS optional, where booking enquiries go (default bookings@infint.co.za)
     BOOKING_SECRET  (secret)  long random string that signs the Accept and Decline links
     BANK_DETAILS    (secret)  bank details for the acceptance email only (see booking-response.js)
     FROM_BOOKINGS   optional, sender for the booking form (default Infint Bookings <bookings@infint.co.za>)
@@ -41,7 +43,7 @@ async function contact(data, env) {
   // The message already holds the name and contact details, so nothing is appended.
   const msg = {
     from: env.FROM_INFO || SENDERS.contact,
-    to: notifyTo(env),
+    to: notifyTo(env, "contact"),
     subject: clean(data.subject, 150) || "New message: Infint site",
     text: message
   };

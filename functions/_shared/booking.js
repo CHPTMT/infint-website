@@ -25,8 +25,13 @@ export const isPhone = v => /^\+?[\d\s()]{9,20}$/.test(v) && v.replace(/\D/g, ""
 export const isDate = v => /^\d{4}-\d{2}-\d{2}$/.test(v) && !isNaN(Date.parse(v + "T00:00:00Z"));
 export const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
-// NOTIFY_EMAIL can hold several addresses separated by commas; every one gets the enquiries.
-export const notifyTo = env => (env.NOTIFY_EMAIL || "infintco@gmail.com").split(",").map(s => s.trim()).filter(Boolean);
+// Contact messages go to info@, bookings to bookings@ (Cloudflare Email Routing forwards both to Tshedza).
+// NOTIFY_CONTACT and NOTIFY_BOOKINGS override those; NOTIFY_EMAIL adds a backup copy. Each can list several addresses with commas.
+const list = v => String(v || "").split(",").map(s => s.trim()).filter(Boolean);
+export const notifyTo = (env, kind = "booking") => [...new Set([
+  ...list(kind === "contact" ? env.NOTIFY_CONTACT || CONFIG.contact.email : env.NOTIFY_BOOKINGS || CONFIG.contact.bookings),
+  ...list(env.NOTIFY_EMAIL)
+].map(s => s.toLowerCase()))];
 export const bookingFrom = env => env.FROM_BOOKINGS || SENDERS.booking;
 export const config = () => CONFIG;
 

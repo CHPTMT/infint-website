@@ -536,7 +536,6 @@ footer .f-big{font-family:var(--display);font-weight:400;font-size:clamp(1.5rem,
 footer .f-intro .btn{color:var(--ink)}
 footer .f-intro .btn:hover{color:var(--ink)}
 footer .f-actions{display:flex;flex-wrap:wrap;gap:12px}
-footer .f-intro .btn.ghost,footer .f-intro .btn.ghost:hover{color:var(--white)}
 footer .f-h{font-family:var(--display);font-size:.8rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);margin-bottom:18px;line-height:1}
 footer ul{list-style:none;padding:0;margin:0;font-family:var(--body);font-weight:400;font-size:1.14rem}
 footer li{padding:7px 0}

@@ -4,13 +4,16 @@
 
   Set these in Cloudflare: Workers & Pages > your project > Settings > Variables and secrets
     RESEND_API_KEY  (secret)  from resend.com > API Keys
-    NOTIFY_EMAIL    where enquiries go, e.g. infintco@gmail.com
+    NOTIFY_EMAIL    optional backup copy of every enquiry, e.g. infintco@gmail.com
+    NOTIFY_CONTACT  optional, where contact messages go (default info@infint.co.za)
+    NOTIFY_BOOKINGS optional, where booking enquiries go (default bookings@infint.co.za)
     BOOKING_SECRET  (secret)  long random string that signs the Accept and Decline links
     BANK_DETAILS    (secret)  bank details for the acceptance email only (see booking-response.js)
     FROM_BOOKINGS   optional, sender for the booking form (default Infint Bookings <bookings@infint.co.za>)
     FROM_INFO       optional, sender for the contact form (default Infint Info <info@infint.co.za>)
   infint.co.za is verified in Resend, so both senders work. Replies go to the visitor.
 
+  Contact: emails Tshedza the message, then sends the visitor a copy if they gave an email.
   Booking: emails Tshedza a summary with Accept and Decline buttons (see booking-response.js),
   then sends the client an acknowledgement.
 */
@@ -40,14 +43,32 @@ async function contact(data, env) {
   // The message already holds the name and contact details, so nothing is appended.
   const msg = {
     from: env.FROM_INFO || SENDERS.contact,
-    to: [notifyTo(env)],
+    to: notifyTo(env, "contact"),
     subject: clean(data.subject, 150) || "New message: Infint site",
     text: message
   };
   if (isEmail(email)) msg.reply_to = email;
   const res = await sendEmail(env, msg);
   if (!res.ok) return json({ ok: false, error: "Email provider error" }, 502);
-  return json({ ok: true });
+
+  // Copy to the visitor so they know it arrived. If this one fails the message still reached Tshedza.
+  if (!isEmail(email)) return json({ ok: true, acknowledged: false });
+  const hours = config().booking.replyHours || 24;
+  const ack = emailFromBlocks({
+    from: env.FROM_INFO || SENDERS.contact,
+    to: email,
+    subject: "I've got your message: Infint",
+    blocks: [
+      "Hi " + firstName({ name }) + ",",
+      "Thanks for your message. I'll reply within " + hours + " hours.",
+      { heading: "What you sent" },
+      message,
+      "If you want to add anything, just reply to this email.",
+      SIGN_OFF + "\n" + config().contact.phone
+    ]
+  });
+  const ackRes = await sendEmail(env, ack).catch(() => null);
+  return json({ ok: true, acknowledged: !!(ackRes && ackRes.ok) });
 }
 
 async function booking(data, request, env) {

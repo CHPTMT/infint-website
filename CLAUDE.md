@@ -39,7 +39,7 @@ Plain HTML, CSS and JavaScript with no build step and no framework. Live at http
 ## Design rules
 
 - Colours: ink `#0E1115`, white, bone `#F5F5F3`, amber accent `#FFA000` (from his logo). Keep these.
-- Fonts: Outfit (modern sans: body, most headings, labels, buttons; body and small text at 400 or 500, white or bone, never thin or grey) and Montserrat Bold or Black (big titles, menu links, prices and big numbers, About text). Both self-hosted in `assets/fonts`. No italic accent words.
+- Fonts: Work Sans for body and small text (paragraphs, labels, buttons, rate card names, FAQ, menu category list; 400 or 500, white or bone, never thin or grey), Outfit for the large light section headings, and Montserrat Bold or Black (big titles, menu links, prices and big numbers, About text). All self-hosted in `assets/fonts`; the CSS tokens are `--body`, `--display` and `--heavy`. No italic accent words.
 - About photo is black and white with extra contrast; keep it that height.
 - No thin decorative lines beside headings. No client gallery, admin page or database (removed on purpose).
 - Within each Work category, photos are ordered so frames from the same shoot never sit next to each other. `node tools/order-photos.js --write` does this: it works out shoots from the original file names and checks the real grid at 2 to 6 columns. Run it after adding photos.

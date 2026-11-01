@@ -37,3 +37,33 @@ Left out: `_CHP2991` (near copy of 2973), `_CHP3143` (same pose as 3140, flare b
 7. `?v=` tags in `index.html` set to `20261101`.
 
 **Keep the `Website Imports` folder:** `tools/photos.csv` points at it for these 12, so a full rebuild needs it.
+
+## Branch `preview-ideas` (separate from `preview`, not merged anywhere)
+
+**Date:** 1 November 2026. Made from `main` at `df10f41`. Preview link: https://preview-ideas.infint.pages.dev
+
+Builds three of the B4 proposals (on `preview` in this log): the phone booking bar, the phone hero, and the link preview image.
+
+**a. Booking bar on phones** (`index.html`, `css/style.css`, `updateBar()` in `js/app.js`)
+- Shown at 960 px wide and below, where the header hides its Book a shoot button. Desktop unchanged.
+- "Book a shoot" in amber and a WhatsApp button (same number and opening message as the Contact page).
+- Home page: appears once the Book button on the hero photo has scrolled off screen, so there are never two at once. Other pages: there from the start.
+- Not shown on Book and Contact (both already are the booking and contact pages).
+- Slides away while the footer is on screen, so it never covers it. Sits under the photo viewer and the menu, and hides while the menu is open.
+- Leaves room for the iPhone home bar. No slide animation for people who turn motion off.
+
+**d. Hero on phones** (`js/app.js` home view, `css/style.css`)
+- At 640 px and below, the headline "Your day, shot properly." and the Book a shoot button sit on the lower part of the hero photo, over a darker fade, with the slide word and counter just above them (smaller). The timeline bars moved to the top of the photo.
+- Checked on 390 x 844 (iPhone 14 size) and 375 x 667 (iPhone SE size): headline and button fully on the first screen on both.
+- The panel under the photo keeps the intro text, General enquiry, See the work and the three facts. Its h1 is still there for screen readers and search (hidden on screen on phones only), and its Book button is hidden on phones because the one on the photo replaces it.
+- Desktop: the slide word, headline and buttons measured at exactly the same positions as on infint.co.za.
+
+**b. Link preview image** (`assets/og/infint-home.jpg`, `index.html`, `tools/og-image.html`)
+- 1200 x 630, 65 KB: the `fashion-01` photo (the one used for previews before), the white wordmark and "Photography · Johannesburg" in Outfit, with the dot in amber. Wordmark kept in the middle so WhatsApp's small square preview still shows it.
+- Tags: `og:image` with width, height, type and alt text, `og:site_name`, and the X card tags (`summary_large_image`).
+- To remake it (new photo, or later one per page): open `tools/og-image.html` on the local preview server, `?p=<photo id>` swaps the photo; steps are in the file.
+- **The tags point at infint.co.za**, the address that stays once this goes live. Until then that file only exists on the preview link, so a WhatsApp preview of the preview link shows no image. To see the image now: https://preview-ideas.infint.pages.dev/assets/og/infint-home.jpg. WhatsApp also remembers old previews for a while; once live, test with a fresh link such as `https://infint.co.za/?v=1`.
+
+**Version tags:** `?v=20261101b`.
+
+**Lighthouse mobile, home page (3 runs each, preview-ideas against preview.infint.pages.dev, which has the same site as live):** performance 84, 87, 99 against 86, 90, 91; LCP 2.1 to 2.9 s against 2.7 to 2.8 s; layout shift 0 on both; accessibility 100 on both. The spread is run to run noise (blocking time moves between 70 and 340 ms on the same page); the largest element is the same hero photo on both. No drop.

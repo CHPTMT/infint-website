@@ -36,7 +36,7 @@ infint.co.za is on `main` at `df10f41`: the October redesign and email work, plu
 
 ### 4. On a preview and not yet live
 
-- `preview`: nothing for the site, only this log.
+- `preview`: body text in the system font on Apple devices and Work Sans elsewhere (see "Body font" below). Not live.
 - `preview-ideas`: bottom bar on phones with Book a shoot and WhatsApp.
 - `preview-ideas`: headline and Book a shoot button on the first phone screen, over the hero photo.
 - `preview-ideas`: new 1200 x 630 link preview image with the matching tags, and `tools/og-image.html` to remake it.
@@ -137,3 +137,28 @@ Already on the site, so not proposed again: "Book a shoot" and "General enquiry"
 7. **Opening statement and a mixed photo block.** Source: land-book.com (photographer sites: a first-person line under the hero, then a loose cluster of photos of different sizes). Page: Home. After the strips, one large line in your own words (you write it), then 5 or 6 photos of different sizes from different categories instead of only the uniform grid. Work: medium.
 
 **For later (8 to 10):** posts.design for Instagram post layouts, deck.gallery for a client or sponsor deck, adfolio.design for ads. Not reviewed in depth yet.
+
+## Body font (preview only)
+
+**Date:** 1 November 2026. Commits `6931012` (temporary test page), `1e2543e` (the change), `30c2e25` (preload). Preview: https://preview.infint.pages.dev
+
+**What changed**
+- Small text now uses `-apple-system, BlinkMacSystemFont, 'Work Sans', system-ui, sans-serif` instead of Outfit: paragraphs, labels, buttons, rate card names, the FAQ, the small category list in the menu, form labels, the booking steps, contact rows, tags, footer links. iPhones, iPads and Macs show Apple's system font (SF) and never download Work Sans. Windows and Android show Work Sans.
+- Work Sans is self-hosted: `assets/fonts/worksans-latin-400.woff2`, `-500`, `-600` (about 20 KB each, Latin only, `font-display: swap`, not preloaded).
+- Unchanged: Montserrat Black titles, prices and numbers, the big menu links, the About intro text, and Outfit for the large light section headings, the word "From" in prices, the hero slide counter, the large footer sentence and the big text on the Book and Contact photos.
+- Outfit is no longer preloaded, because it now only shows in headings. Montserrat is still preloaded.
+- The temporary `/fonts-test` page and the Inter, DM Sans, Manrope and Hanken Grotesk files are deleted.
+- Not changed: the Accept and Decline page that only Tshedza sees (`functions/api/booking-response.js`) still uses Outfit.
+- `?v=` tags set to `20261101f`.
+
+**Line breaks (Work Sans, measured against the old font on Home, Rates, About, Book, Contact and Socials)**
+No button wraps. Buttons are 2 to 8 px wider; the widest phone button is 290 px. Work Sans is wider, so these now take one more line:
+- Phone, menu: "Fashion & editorial" breaks onto two lines.
+- Phone, Rates: "Each additional hour" leaves "hour" alone on the second line; "Printed album (20 spreads)" takes two lines.
+- Phone, Book: step label "02 Your details" takes two lines, like "03 Review and send" already did.
+- Phone, About: three FAQ questions take two lines.
+- Desktop, Book: the option "Portraits & headshots" takes two lines. Desktop, Contact: "Johannesburg, shooting Gauteng and beyond" takes two lines.
+- Paragraphs on every page run about one line longer in places.
+On Apple devices the system font is narrower than Work Sans, so fewer of these happen there. That could not be measured here (no Apple device).
+
+**Lighthouse mobile, home page.** 5 runs each, taken in turns so both had the same conditions: live (old font) against preview (new font). Median performance 95 against 94; first paint 1.54 s against 1.76 s; LCP 2.79 s against 2.94 s; accessibility 100 on both. A small drop: Lighthouse acts as an Android phone, which downloads the three Work Sans files (62 KB). iPhones do not download them.

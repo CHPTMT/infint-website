@@ -2,6 +2,73 @@
 
 A running log of work in two tracks. Track A goes live on `main`. Track B stays on `preview` until Tshedza says to merge.
 
+## Status, 1 November 2026
+
+The same status section is at the top of this file on `main`, `preview` and `preview-ideas`.
+
+### 1. Links
+
+| Name | URL | What it is for |
+|---|---|---|
+| Live site | https://infint.co.za | The real site. Updates when `main` is pushed. |
+| Live site, www | https://www.infint.co.za | Same site. Shows it directly instead of redirecting to infint.co.za. |
+| Preview (small changes) | https://preview.infint.pages.dev | The `preview` branch. Small changes are checked here before they go live. |
+| Preview (ideas) | https://preview-ideas.infint.pages.dev | The `preview-ideas` branch: booking bar, phone hero, link preview image. |
+| Old redesign preview | https://redesign.infint.pages.dev | The `redesign` branch. Old; everything in it is already live. |
+| Pages project address | https://infint.pages.dev | Cloudflare's own address for the live site. |
+| Link preview image | https://preview-ideas.infint.pages.dev/assets/og/infint-home.jpg | The new image for links shared on WhatsApp (ideas preview only). |
+| Cloudflare Pages project | https://dash.cloudflare.com, then Workers & Pages, then `infint` | Deploys, and the secrets (Settings, Variables and secrets). |
+| GitHub repo | https://github.com/CHPTMT/infint-website | All code. Public, so no keys in it. |
+| Resend dashboard | https://resend.com/emails | Sent form emails and delivery status. |
+
+### 2. Branches and commits
+
+| Branch | Latest commit | Compared with `main` |
+|---|---|---|
+| `main` | `df10f41` | The live site. |
+| `preview` | `c870ccf` | 2 commits ahead, both only this log file (Track A live check, B4 proposals). No site changes. |
+| `preview-ideas` | `866b92d` | 2 commits ahead: the booking bar, phone hero and link preview image (`1d99eec`), plus this log. |
+| `redesign` | `faba37b` | Nothing new. 5 commits behind `main`; everything in it is already on `main`. |
+
+### 3. Live now
+
+infint.co.za is on `main` at `df10f41`: the October redesign and email work, plus the 12 new photos (6 portraits, 6 corporate event photos) added on 1 November 2026.
+
+### 4. On a preview and not yet live
+
+- `preview`: nothing for the site, only this log.
+- `preview-ideas`: bottom bar on phones with Book a shoot and WhatsApp.
+- `preview-ideas`: headline and Book a shoot button on the first phone screen, over the hero photo.
+- `preview-ideas`: new 1200 x 630 link preview image with the matching tags, and `tools/og-image.html` to remake it.
+
+### 5. Pending work
+
+- Wording changes (B1): waiting for your list of line IDs.
+- Gradient motion (B2): waiting for the skills and repo links (B3), to be read first.
+- Proposal c, booking emails laid out like a ticket: not built.
+- Proposal e, real proof (recent jobs list, Google reviews): not built.
+- Proposal f, easier package comparison on phones: not built.
+- Proposal g, opening statement and mixed photo block: not built.
+- Separate link preview images for each page: later, after b goes live.
+- References 8 to 10 (posts.design, deck.gallery, adfolio.design): for later, not reviewed in depth.
+- From the last handover, still open: redirect www.infint.co.za to infint.co.za, submit the sitemap in Google Search Console, Turnstile only if spam starts.
+
+### 6. Unfinished or risky
+
+- `preview-ideas` is not merged. It goes live only when you say so; then merge into `main` (and `preview`).
+- The link preview image tags point at infint.co.za, so WhatsApp shows no image for it until `preview-ideas` is live.
+- 12 photos depend on `C:\Users\tshed\Pictures\INF JPG\Website Imports` (`event-70` to `event-75`, `portrait-34` to `portrait-39`). The site does not need it, but a full rebuild with `tools\resize-photos.ps1` does. Keep the folder.
+- Cloudflare variables: Production has `RESEND_API_KEY`, `NOTIFY_EMAIL`, `BOOKING_SECRET` and `BANK_DETAILS` (confirmed 28 October). The Preview environment has none, so forms on any preview fall back to WhatsApp and email. That is expected; nothing to set unless you want forms to send from previews. Confirm `BANK_DETAILS` holds your current FNB details.
+- `skills-lock.json` in the project folder is not saved in git. It was there before this work; leave it or tell me what it is for.
+- Phone checks still to do: the new photos in Work (Portraits and Events) and the home strips on infint.co.za; on the ideas preview, the hero, the bottom bar, WhatsApp from the bar, the photo viewer and menu covering the bar, and the bar clearing the iPhone home bar; the Work grid and Socials page on your real iPhone (open since October).
+
+### 7. Branches you can delete
+
+- `redesign`: yes. Everything in it is live. It is still open in the `infint-redesign` folder, so that folder can go too. Ask me and I will remove both.
+- Keep `main`, `preview` and `preview-ideas`.
+
+---
+
 ## Track A: new photos (live on main)
 
 **Date:** 1 November 2026

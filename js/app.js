@@ -166,9 +166,14 @@ V.home = () => {
           <img ${on?`src="${thumbPath(s.id)}" srcset="${set}" fetchpriority="high"`:`data-src="${thumbPath(s.id)}" data-srcset="${set}"`}
             ${sz} width="720" height="${Math.round(720/p.r)}" decoding="async" alt="${esc(p.alt||"Infint photograph")}"></picture></div>`;}).join("")}
       <div class="hero-dots" role="group" aria-label="Choose a photo">${sl.map((s,i)=>`<button type="button" class="${i===0?"on":""}" data-go="${i}" aria-label="Show ${esc(s.word)} photo"></button>`).join("")}</div>
-      <div class="hero-word" aria-hidden="true">
-        <span class="mega" id="hero-word"><span>${esc(sl[0].word)}</span></span>
-        <span class="hero-count" id="hero-count"><b>01</b> / ${pad2(sl.length)}</span>
+      <div class="hero-over">
+        <div class="hero-word" aria-hidden="true">
+          <span class="mega" id="hero-word"><span>${esc(sl[0].word)}</span></span>
+          <span class="hero-count" id="hero-count"><b>01</b> / ${pad2(sl.length)}</span>
+        </div>
+        <!-- Phones only: the headline and Book button sit on the photo so they show on the first screen (the h1 below stays for screen readers) -->
+        <p class="hero-h" aria-hidden="true">Your day, shot properly.</p>
+        <a class="btn magnetic hero-book" href="/book">Book a shoot ${ARR}</a>
       </div>
     </div>
     <div class="hero-panel">
@@ -179,7 +184,7 @@ V.home = () => {
         <h1>Your day, shot properly.</h1>
         <p class="lede">${esc(CONFIG.brand.intro)}</p>
         <div class="actions">
-          <a class="btn magnetic" href="/book">Book a shoot ${ARR}</a>
+          <a class="btn magnetic panel-book" href="/book">Book a shoot ${ARR}</a>
           <a class="btn magnetic" href="/contact">General enquiry</a>
           <a class="btn ghost" href="/work">See the work</a>
         </div>
@@ -628,6 +633,7 @@ function observeLift(){
 let ticking=false;
 function onScroll(){
   $("#hdr").classList.toggle("solid",scrollY>30);
+  updateBar();
   if(RM.matches||!FINE.matches||innerWidth<900) return;
   const vh=innerHeight;
   $$(".px").forEach(img=>{
@@ -637,6 +643,20 @@ function onScroll(){
     img.style.transform=`translate3d(0,${(p*box.height*.06).toFixed(1)}px,0)`;
   });
 }
+/* Phone booking bar (#mbar, shown at 960 px and below in CSS). Not on Book or Contact; on the home page only once the
+   hero's own Book button has scrolled away; it slides off while the footer is on screen so it never covers it. */
+function updateBar(){
+  const bar=$("#mbar"); if(!bar) return;
+  const page=parseRoute().route;
+  let show = page!=="book" && page!=="contact";
+  const heroBook=$(".hero-book");
+  if(show && heroBook && heroBook.offsetParent) show = heroBook.getBoundingClientRect().bottom < 0;
+  const foot=$("footer.site");
+  if(show && foot) show = foot.getBoundingClientRect().top > innerHeight;
+  if(bar.classList.contains("show")!==show){ bar.classList.toggle("show",show); bar.inert=!show; }
+}
+$("#mbar-wa").href=waLink("Hi Tshedza,");
+addEventListener("resize",updateBar,{passive:true});
 addEventListener("scroll",()=>{ if(!ticking){ticking=true;requestAnimationFrame(()=>{onScroll();ticking=false;});} },{passive:true});
 
 /* Magnetic buttons: the button leans toward the pointer by a few pixels. */

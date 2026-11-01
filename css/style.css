@@ -194,6 +194,23 @@ body.menu-open{overflow:hidden}
   .hero-panel h1{max-width:11ch}
   .hero-dots{top:auto;bottom:clamp(100px,24vw,180px)}
 }
+/* The overlay box only exists on phones; on larger screens the slide word sits where it always has */
+.hero-over{display:contents}
+.hero-h,.hero-book{display:none}
+/* Phones: headline and Book button on the photo, so both show on the first screen. The h1 in the panel stays for screen readers. */
+@media(max-width:640px){
+  .hero-photo{height:min(86svh,720px);min-height:520px}
+  .hero-photo::after{background:linear-gradient(180deg,rgba(8,9,11,.55) 0%,transparent 20%,transparent 38%,rgba(8,9,11,.6) 62%,rgba(8,9,11,.94) 100%)}
+  .hero-dots{top:calc(var(--hdr) + 14px);bottom:auto}
+  .hero-over{display:flex;flex-direction:column;align-items:flex-start;gap:14px;position:absolute;z-index:3;left:var(--gut);right:var(--gut);bottom:28px}
+  .hero-over .hero-word{position:static;width:100%;align-items:center}
+  .hero-word .mega{font-size:clamp(1.5rem,7vw,2rem)}
+  .hero-count{font-size:1.05rem;padding-bottom:0}
+  .hero-h{display:block;margin:0;font-family:var(--heavy);font-weight:900;font-size:clamp(2.4rem,11.5vw,3.1rem);letter-spacing:-.035em;line-height:.95;max-width:11ch;color:var(--white)}
+  .hero-book{display:inline-flex;margin-top:6px}
+  .hero-panel h1{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .hero-panel .panel-book{display:none}
+}
 @media(max-width:420px){.specs .label{letter-spacing:.06em;font-size:.66rem}.specs>div+div{padding-left:12px}}
 
 /* Marquee */
@@ -510,6 +527,19 @@ textarea.input{min-height:140px;resize:vertical;line-height:1.5}
   transition:transform .4s var(--ease),opacity .3s ease;box-shadow:0 20px 50px -20px rgba(0,0,0,.9)}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto}
 .toast.bad{border-color:rgba(255,107,91,.6)}
+
+/* Phone booking bar: sits under the header menu (z 80) and the photo viewer (z 200); js/app.js updateBar() shows it */
+.mbar{display:none}
+@media(max-width:960px){
+  .mbar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;position:fixed;left:0;right:0;bottom:0;z-index:70;
+    padding:10px var(--gut) calc(10px + env(safe-area-inset-bottom));background:rgba(14,17,21,.9);border-top:1px solid var(--line);
+    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);transform:translateY(110%);transition:transform .4s var(--ease)}
+  .mbar.show{transform:none}
+  .mbar .btn{min-height:48px;padding:0 20px}
+  .mbar-wa svg{flex:none}
+  body.menu-open .mbar{transform:translateY(110%)}
+}
+@media(prefers-reduced-motion:reduce){.mbar{transition:none}}
 
 /* Reveal on scroll and route transitions */
 .js .rv{opacity:0;transform:translateY(28px);filter:blur(6px);transition:opacity .9s var(--ease),transform .9s var(--ease),filter .9s var(--ease);transition-delay:var(--d,0s)}

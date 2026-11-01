@@ -1,0 +1,41 @@
+<!doctype html>
+<!--
+  Link preview image (what WhatsApp, Instagram DMs, X and Facebook show when someone shares infint.co.za).
+  Not part of the site. To rebuild assets/og/infint-home.jpg:
+    1. Start the preview server (tools\serve.ps1) and open http://localhost:8000/tools/og-image.html
+    2. Screenshot the 1200 x 630 box (browser at 1200 x 630, or a headless screenshot of #og)
+    3. Save it as a JPEG under 300 KB at assets/og/infint-home.jpg (quality 82 with sharp in tools/node_modules)
+  Change the photo with ?p=<photo id>, for example og-image.html?p=event-07
+  WhatsApp shows a square crop of this image in small previews, so keep the wordmark in the middle third.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Link preview image</title>
+<style>
+@font-face{font-family:'Outfit';font-weight:200 600;src:url(../assets/fonts/outfit-latin.woff2) format('woff2')}
+html,body{margin:0;background:#0E1115}
+#og{position:relative;width:1200px;height:630px;overflow:hidden;background:#0E1115}
+#og img.photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 28%}
+#og .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,9,11,0) 30%,rgba(8,9,11,.55) 62%,rgba(8,9,11,.92) 100%)}
+#og .brand{position:absolute;left:0;right:0;bottom:58px;display:flex;flex-direction:column;align-items:center;gap:22px}
+#og .brand img{width:420px;height:auto;display:block}
+#og .brand p{margin:0;font-family:'Outfit',sans-serif;font-weight:500;font-size:30px;letter-spacing:.2em;text-transform:uppercase;color:#FFFFFF}
+#og .brand p b{font-weight:500;color:#FFA000}
+</style>
+</head>
+<body>
+<div id="og">
+  <img class="photo" id="photo" src="../assets/photos/fashion-01.jpg" alt="">
+  <div class="shade"></div>
+  <div class="brand">
+    <img src="../assets/brand/infint-wordmark-white-transparent.png" alt="Infint">
+    <p>Photography <b>&middot;</b> Johannesburg</p>
+  </div>
+</div>
+<script>
+const p=new URLSearchParams(location.search).get("p");
+if(p&&/^[a-z]+-\d+$/.test(p)) document.getElementById("photo").src="../assets/photos/"+p+".jpg";
+</script>
+</body>
+</html>

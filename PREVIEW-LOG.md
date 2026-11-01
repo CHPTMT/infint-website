@@ -37,3 +37,18 @@ Left out: `_CHP2991` (near copy of 2973), `_CHP3143` (same pose as 3140, flare b
 7. `?v=` tags in `index.html` set to `20261101`.
 
 **Keep the `Website Imports` folder:** `tools/photos.csv` points at it for these 12, so a full rebuild needs it.
+
+**Shipped:** commit `df10f41` pushed to `main` and `preview` on 1 November 2026 (both branches on the same commit afterwards, so no merge was needed). Live about 20 seconds later.
+
+**Checked live on infint.co.za (phone size, 390 px):**
+- Work page: all 239 photos load, including the 12 new ones. Events shows 75, Portraits 39.
+- Home photo strips: new photos appear (strips pick at random per visit).
+- Home, Work, Events, Portraits, Rates, About, Socials, Book, Contact: no broken images, no script errors.
+- Old photos unchanged: git shows no existing image file modified or deleted, and 8 sample files downloaded from the live site match the previous commit byte for byte.
+- Grid order: within Events and Portraits, no two frames from the same setup touch at 2 to 6 columns. Other categories keep their exact order.
+
+**Rollback if needed:** `git revert --no-edit df10f41 && git push origin HEAD:main` (last good: `1abc148`).
+
+## Track B (preview only)
+
+Waiting on Tshedza: B1 wording list; B3 skills and repo links (read before starting B2). B4 notes below.

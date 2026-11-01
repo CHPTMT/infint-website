@@ -36,7 +36,7 @@ infint.co.za is on `main` at `df10f41`: the October redesign and email work, plu
 
 ### 4. On a preview and not yet live
 
-- `preview`: body text in the system font on Apple devices and Work Sans elsewhere (see "Body font" below). Not live.
+- Body text in Work Sans on every device: live on `main` since 1 November 2026 (see "Body font" below).
 - `preview-ideas`: bottom bar on phones with Book a shoot and WhatsApp.
 - `preview-ideas`: headline and Book a shoot button on the first phone screen, over the hero photo.
 - `preview-ideas`: new 1200 x 630 link preview image with the matching tags, and `tools/og-image.html` to remake it.
@@ -138,7 +138,7 @@ Already on the site, so not proposed again: "Book a shoot" and "General enquiry"
 
 **For later (8 to 10):** posts.design for Instagram post layouts, deck.gallery for a client or sponsor deck, adfolio.design for ads. Not reviewed in depth yet.
 
-## Body font (preview only)
+## Body font (live)
 
 **Date:** 1 November 2026. Commits `6931012` (temporary test page), `1e2543e` (the change), `30c2e25` (preload). Preview: https://preview.infint.pages.dev
 
@@ -160,5 +160,7 @@ No button wraps. Buttons are 2 to 8 px wider; the widest phone button is 290 px.
 - Desktop, Book: the option "Portraits & headshots" takes two lines. Desktop, Contact: "Johannesburg, shooting Gauteng and beyond" takes two lines.
 - Paragraphs on every page run about one line longer in places.
 On Apple devices the system font is narrower than Work Sans, so fewer of these happen there. That could not be measured here (no Apple device).
+
+**Update, 1 November 2026: Work Sans for everyone, now live.** Tshedza asked for Work Sans on all devices, including Apple. The stack is now `'Work Sans', system-ui, sans-serif`, so iPhones download the same three files and show the same line breaks as listed above. Still not preloaded. `?v=` tags set to `20261101g`. Merged into `main` on his go-ahead.
 
 **Lighthouse mobile, home page.** 5 runs each, taken in turns so both had the same conditions: live (old font) against preview (new font). Median performance 95 against 94; first paint 1.54 s against 1.76 s; LCP 2.79 s against 2.94 s; accessibility 100 on both. A small drop: Lighthouse acts as an Android phone, which downloads the three Work Sans files (62 KB). iPhones do not download them.

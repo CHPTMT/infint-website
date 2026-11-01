@@ -15,6 +15,8 @@ Each portfolio photo has the same file name in both folders, for example `assets
 
 All originals live in `C:\Users\tshed\Pictures\INF JPG\Website Commits\`, in the folders Tshedza sorted them into. The 40 photos that only existed in the 2026 portfolio PDF were pulled out at full resolution into `Website Commits\From Portfolio 2026\`. Photos that appear in both the PDF and the folders are only used once. `tools/photos.csv` maps every id to its original.
 
+The November 2026 additions (`event-70` to `event-75`, one corporate event; `portrait-34` to `portrait-39`, one portrait shoot) came from `C:\Users\tshed\Pictures\INF JPG\Website Imports\`, so their paths in `tools/photos.csv` start with `..\Website Imports\`. Keep that folder, or a full rebuild with `tools\resize-photos.ps1` cannot find them. Their camera frame numbers overlap older shoots (`_CHP3281` is both `portrait-08` and `portrait-39`, two different photos), so `tools/order-photos.js` treats `Website Imports` as its own series.
+
 ## Display order
 
 The order of `PHOTOS` in `js/content.js` is the order on the site. Within each category it is shuffled so that frames from the same shoot, or that look alike, never sit next to each other. The "Everything" view then takes one photo from each category in turn.
@@ -30,10 +32,10 @@ The order of `PHOTOS` in `js/content.js` is the order on the site. Within each c
 
 These 16 appear on the homepage in this order (set by `HOME.featured`): `portrait-01`, `event-01`, `active-01`, `fashion-02`, `matric-01`, `street-01`, `event-02`, `detail-01`, `matric-02`, `active-02`, `event-04`, `fashion-03`, `portrait-27`, `event-07`, `active-03`, `street-03`.
 
-## Portfolio photos (227)
+## Portfolio photos (239)
 
 
-### Events (`event`), 69 photos
+### Events (`event`), 75 photos
 
 | Id | Original file | Shape | Homepage |
 |---|---|---|---|
@@ -106,8 +108,14 @@ These 16 appear on the homepage in this order (set by `HOME.featured`): `portrai
 | `event-67` | `From Portfolio 2026\portfolio-2026-010-041.jpg` | Portrait |  |
 | `event-68` | `From Portfolio 2026\portfolio-2026-010-042.jpg` | Portrait |  |
 | `event-69` | `From Portfolio 2026\portfolio-2026-010-043.jpg` | Portrait |  |
+| `event-70` | `..\Website Imports\Events\_CHP3612.jpg` | Landscape | Photo strip |
+| `event-71` | `..\Website Imports\Events\_CHP3606.jpg` | Portrait |  |
+| `event-72` | `..\Website Imports\Events\_CHP3701.jpg` | Portrait | Photo strip |
+| `event-73` | `..\Website Imports\Events\_CHP3812.jpg` | Portrait |  |
+| `event-74` | `..\Website Imports\Events\_CHP4491.jpg` | Portrait | Photo strip |
+| `event-75` | `..\Website Imports\Events\_CHP4641.jpg` | Portrait | Photo strip |
 
-### Portraits (`portrait`), 33 photos
+### Portraits (`portrait`), 39 photos
 
 | Id | Original file | Shape | Homepage |
 |---|---|---|---|
@@ -144,6 +152,12 @@ These 16 appear on the homepage in this order (set by `HOME.featured`): `portrai
 | `portrait-31` | `From Portfolio 2026\portfolio-2026-005-021.jpg` | Portrait |  |
 | `portrait-32` | `From Portfolio 2026\portfolio-2026-005-022.jpg` | Portrait |  |
 | `portrait-33` | `From Portfolio 2026\portfolio-2026-001-006.jpg` | Portrait |  |
+| `portrait-34` | `..\Website Imports\Portraits\_CHP2875.jpg` | Portrait |  |
+| `portrait-35` | `..\Website Imports\Portraits\_CHP2891.jpg` | Portrait | Photo strip |
+| `portrait-36` | `..\Website Imports\Portraits\_CHP2894.jpg` | Portrait |  |
+| `portrait-37` | `..\Website Imports\Portraits\_CHP2973.jpg` | Portrait | Photo strip |
+| `portrait-38` | `..\Website Imports\Portraits\_CHP3140.jpg` | Portrait | Photo strip |
+| `portrait-39` | `..\Website Imports\Portraits\_CHP3281.jpg` | Portrait | Photo strip |
 
 ### Matric dance (`matric`), 16 photos
 

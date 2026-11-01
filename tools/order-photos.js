@@ -17,7 +17,7 @@ function key(id){
   m=f.match(/^(\d{3})-Silk&Cotton/);
   if(m) return {series:"silk",n:+m[1],shootGap:1e9,setupGap:3,twinGap:1};   // one fashion shoot; frames within 3 = same look
   m=f.match(/^(.*?)(\d{3,})/);
-  if(m) return {series:m[1],n:+m[2],shootGap:150,setupGap:30,twinGap:6};     // camera frame numbers
+  if(m) return {series:(src[id].includes("Website Imports")?"imports:":"")+m[1],n:+m[2],shootGap:150,setupGap:30,twinGap:6};     // camera frame numbers (Website Imports is its own series: its frame numbers restart and overlap older shoots)
   m=f.match(/^(.*?)-(\d+)$/);
   return {series:m?m[1]:f,n:m?+m[2]:0,shootGap:1e9,setupGap:1e9,twinGap:1e9}; // e.g. Homba-2, SaiHle-1: same name = same shoot
 }

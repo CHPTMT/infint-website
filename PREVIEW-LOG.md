@@ -165,7 +165,7 @@ On Apple devices the system font is narrower than Work Sans, so fewer of these h
 
 **Lighthouse mobile, home page.** 5 runs each, taken in turns so both had the same conditions: live (old font) against preview (new font). Median performance 95 against 94; first paint 1.54 s against 1.76 s; LCP 2.79 s against 2.94 s; accessibility 100 on both. A small drop: Lighthouse acts as an Android phone, which downloads the three Work Sans files (62 KB). iPhones do not download them.
 
-## Portfolio link (preview only)
+## Portfolio link (live)
 
 **Date:** 12 November 2026. Preview: https://preview.infint.pages.dev/work
 
@@ -180,4 +180,4 @@ On Apple devices the system font is narrower than Work Sans, so fewer of these h
 - The Drive link opens in a signed-out browser with no access request: "Infint Portfolio 2026.pdf", 17 pages, viewable and downloadable.
 - Phone (390 px): the button is 223 px wide, one line, no sideways scroll. Desktop (1440 px): button and footer link in place. No console errors.
 
-Not merged to `main`.
+Merged to `main` and live on 12 November 2026 (`31f1d79`).

@@ -164,3 +164,20 @@ On Apple devices the system font is narrower than Work Sans, so fewer of these h
 **Update, 1 November 2026: Work Sans for everyone, now live.** Tshedza asked for Work Sans on all devices, including Apple. The stack is now `'Work Sans', system-ui, sans-serif`, so iPhones download the same three files and show the same line breaks as listed above. Still not preloaded. `?v=` tags set to `20261101g`. Merged into `main` on his go-ahead.
 
 **Lighthouse mobile, home page.** 5 runs each, taken in turns so both had the same conditions: live (old font) against preview (new font). Median performance 95 against 94; first paint 1.54 s against 1.76 s; LCP 2.79 s against 2.94 s; accessibility 100 on both. A small drop: Lighthouse acts as an Android phone, which downloads the three Work Sans files (62 KB). iPhones do not download them.
+
+## Portfolio link (preview only)
+
+**Date:** 12 November 2026. Preview: https://preview.infint.pages.dev/work
+
+**What changed**
+- New setting `CONFIG.portfolioUrl` in `js/content.js` holds the Google Drive link to the portfolio PDF. Change the link there and both places update.
+- Work page: a ghost button "Infint Portfolio" under the heading and intro, above "Choose a category". It also shows on each category page.
+- Footer, Site list: "Infint Portfolio" under Work.
+- Both open in a new tab with `rel="noopener"`. Visitors only see the words, never the address.
+- `?v=` tags set to `20261112`.
+
+**Checks**
+- The Drive link opens in a signed-out browser with no access request: "Infint Portfolio 2026.pdf", 17 pages, viewable and downloadable.
+- Phone (390 px): the button is 223 px wide, one line, no sideways scroll. Desktop (1440 px): button and footer link in place. No console errors.
+
+Not merged to `main`.

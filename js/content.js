@@ -300,6 +300,8 @@ const CONFIG = {
   brand:{name:"Infint",owner:"Tshedza Tshiololi",city:"Johannesburg",
     intro:"Infint is built around one idea: the picture you send your family should look as good as the picture you post. Portraits, events, sport, fashion and graduations."},
   contact:{email:"info@infint.co.za",direct:"tshedza@infint.co.za",bookings:"bookings@infint.co.za",phone:"+27 73 296 5528",whatsapp:"27732965528"},
+  /* The portfolio PDF on Google Drive. Visitors only see the words "Infint Portfolio" (Work page button and footer). */
+  portfolioUrl:"https://drive.google.com/file/d/13MYttoTkKH1CaZccmEyhCNbMfmt54cOJ/view?usp=drive_link",
   social:{instagram:"https://www.instagram.com/infint_co/",tiktok:"https://www.tiktok.com/@infint_co",youtube:"https://www.youtube.com/@tshedza_tt",linktree:"https://linktr.ee/tshedzatt"},
 
   /* Where the booking and contact forms send to. On Cloudflare Pages this is

@@ -262,7 +262,8 @@ V.work = (q) => {
   const cat = CATEGORIES.find(c=>c.key===q.f);
   S.filter = cat ? cat.key : "all";
   /* Categories are chosen from the menu; this button opens it */
-  const pick = `<p class="rv" style="--d:.14s;margin:22px 0 0"><button type="button" class="link" data-open-menu>${cat?"Other categories":"Choose a category"} ${ICON.go}</button></p>`;
+  const folio = `<p class="rv" style="--d:.12s;margin:26px 0 0"><a class="btn ghost" href="${esc(CONFIG.portfolioUrl)}" target="_blank" rel="noopener">Infint Portfolio ${ARR}</a></p>`;
+  const pick = folio+`<p class="rv" style="--d:.14s;margin:22px 0 0"><button type="button" class="link" data-open-menu>${cat?"Other categories":"Choose a category"} ${ICON.go}</button></p>`;
   return `
   ${cat ? pageHead(esc(cat.name)+".",cat.blurb,pick)
         : pageHead("The work.","Events, portraits, proms, match days, fashion and the small details in between. All from real shoots.",pick)}
@@ -892,6 +893,7 @@ document.addEventListener("keydown",e=>{
 
 function paintFooter(){
   $("#yr").textContent=new Date().getFullYear();
+  $("#footer-folio").href=CONFIG.portfolioUrl;
   $("#footer-social").innerHTML=`
     <li>${iconLink("instagram",CONFIG.social.instagram,"Instagram (@infint_co)",1)}</li>
     <li>${iconLink("tiktok",CONFIG.social.tiktok,"TikTok (@infint_co)",1)}</li>

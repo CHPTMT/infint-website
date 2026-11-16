@@ -354,6 +354,24 @@ V.rates = () => {
 };
 
 const BOOK_STEPS = ["The shoot","Your details","Review and send"];
+/* Start times every 15 minutes, 05:00 to 23:00, in the same "HH:MM" form the time box used to send */
+/* Package field: a list of the graduation packages with the price under it, or free text for other shoots */
+const gradPkg = name => CONFIG.rates.grads.items.find(p=>p.name===name);
+const pkgPrice = p => p ? `${money(p.price)} for ${p.dur}, ${p.images}.` : "";
+function pkgField(b){
+  const label=`<label for="b-pkg">Package (if you know it)</label>`;
+  if(b.service!=="graduation") return `${label}
+            <input class="input" id="b-pkg" name="pkg" placeholder="e.g. The Signature" value="${esc(b.pkg||"")}">`;
+  const cur=gradPkg(b.pkg);
+  return `${label}
+            <select class="input" id="b-pkg" name="pkg" aria-describedby="b-pkg-price"><option value="">Not sure yet</option>${CONFIG.rates.grads.items.map(p=>`<option value="${esc(p.name)}" ${cur===p?"selected":""}>${esc(p.name)}</option>`).join("")}</select>
+            <p class="hint" id="b-pkg-price" ${cur?"":"hidden"}>${esc(pkgPrice(cur))}</p>`;
+}
+function wirePkg(){
+  const s=$("#b-pkg"); if(s.tagName!=="SELECT") return;
+  s.addEventListener("change",()=>{const p=gradPkg(s.value), h=$("#b-pkg-price"); h.textContent=pkgPrice(p); h.hidden=!p; S.booking.pkg=s.value;});
+}
+const START_TIMES =Array.from({length:73},(_,i)=>{const m=300+i*15;return String(m/60|0).padStart(2,"0")+":"+String(m%60).padStart(2,"0");});
 V.book = (q,o={}) => {
   const b=S.booking;
   /* A link like /book?service=event picks the shoot type on arrival; later step changes keep what the visitor chose. */
@@ -388,13 +406,12 @@ V.book = (q,o={}) => {
           <div class="field"><label for="b-date">Date <span class="req">*</span></label>
             <input class="input" id="b-date" type="date" name="date" min="${new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10)}" value="${esc(b.date||"")}"><div class="err" id="e-date">Pick a date from today onwards.</div></div>
           <div class="field"><label for="b-time">Start time</label>
-            <input class="input" id="b-time" type="time" name="time" value="${esc(b.time||"")}"></div>
+            <select class="input" id="b-time" name="time"><option value="">Not sure yet</option>${START_TIMES.map(t=>`<option ${b.time===t?"selected":""}>${t}</option>`).join("")}</select></div>
         </div>
         <div class="grid g2">
           <div class="field"><label for="b-hours">Hours of coverage</label>
             <select class="input" id="b-hours" name="hours">${opts(["Under 1 hour","1 to 2 hours","3 hours","4 hours","5 hours","6 hours","7 hours","8 hours","More than 8 hours","Not sure yet"],b.hours)}</select></div>
-          <div class="field"><label for="b-pkg">Package (if you know it)</label>
-            <input class="input" id="b-pkg" name="pkg" placeholder="e.g. The Signature" value="${esc(b.pkg||"")}"></div>
+          <div class="field" id="f-pkg">${pkgField(b)}</div>
         </div>
         <div class="field"><label for="b-location">Location or venue <span class="req">*</span></label>
           <input class="input" id="b-location" name="location" placeholder="Campus, venue name, suburb" value="${esc(b.location||"")}">
@@ -775,7 +792,10 @@ function wireBooking(){
     const svc=CONFIG.services.find(s=>s.slug===b.service), blurb=$("#b-service-blurb");
     blurb.textContent=svc?svc.blurb:""; blurb.hidden=!svc;
     $("#e-service").classList.remove("show");
+    const wasGrad=$("#b-pkg").tagName==="SELECT";
+    if(wasGrad!==(b.service==="graduation")){ b.pkg=wasGrad?"":$("#b-pkg").value; $("#f-pkg").innerHTML=pkgField(b); wirePkg(); }
   });
+  wirePkg();
   $$("#bookform [data-go]").forEach(btn=>btn.addEventListener("click",()=>{
     const step=b.step||1; saveStep();
     const target=Number(btn.dataset.go);

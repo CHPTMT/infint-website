@@ -360,6 +360,7 @@ V.book = (q,o={}) => {
   if(!o.keepScroll && q.service){ if(b.service!==q.service){b.service=q.service;b.step=1;} if(q.pkg)b.pkg=q.pkg; }
   const step=b.step||1;
   const opts=(list,cur)=>list.map(h=>`<option ${cur===h?"selected":""}>${h}</option>`).join("");
+  const svc=CONFIG.services.find(s=>s.slug===b.service);
   return `
   <section class="split-page">
     <div class="split-photo">
@@ -377,9 +378,11 @@ V.book = (q,o={}) => {
       </div>
       <form id="bookform" novalidate>
       <div data-step="1" style="${step===1?"":"display:none"}">
-        <div class="field"><span class="lbl" id="l-service">What are we shooting <span class="req">*</span></span>
-          <div class="optrow" role="group" aria-labelledby="l-service">${CONFIG.services.map(s=>`<button type="button" class="opt ${b.service===s.slug?"on":""}" data-set="service" data-val="${s.slug}" aria-pressed="${b.service===s.slug}">
-            <strong>${esc(s.name)}</strong><span>${esc(s.blurb)}</span></button>`).join("")}</div>
+        <div class="field"><label for="b-service">What are we shooting <span class="req">*</span></label>
+          <select class="input" id="b-service" name="service" required aria-describedby="b-service-blurb e-service">
+            <option value="" disabled ${svc?"":"selected"}>Choose the type of shoot</option>
+            ${CONFIG.services.map(s=>`<option value="${s.slug}" ${svc===s?"selected":""}>${esc(s.name)}</option>`).join("")}</select>
+          <p class="hint" id="b-service-blurb" ${svc?"":"hidden"}>${svc?esc(svc.blurb):""}</p>
           <div class="err" id="e-service">Choose the type of shoot.</div></div>
         <div class="grid g2">
           <div class="field"><label for="b-date">Date <span class="req">*</span></label>
@@ -767,11 +770,12 @@ function bookingSubject(){
 }
 function wireBooking(){
   const b=S.booking;
-  $$("#bookform .opt[data-set]").forEach(o=>o.addEventListener("click",()=>{
-    b.service=o.dataset.val;
-    $$("#bookform .opt[data-set]").forEach(x=>{const on=x===o;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on);});
+  $("#b-service").addEventListener("change",e=>{
+    b.service=e.target.value;
+    const svc=CONFIG.services.find(s=>s.slug===b.service), blurb=$("#b-service-blurb");
+    blurb.textContent=svc?svc.blurb:""; blurb.hidden=!svc;
     $("#e-service").classList.remove("show");
-  }));
+  });
   $$("#bookform [data-go]").forEach(btn=>btn.addEventListener("click",()=>{
     const step=b.step||1; saveStep();
     const target=Number(btn.dataset.go);
@@ -799,7 +803,7 @@ function validateStep(step){
   (STEP_FIELDS[step]||[]).forEach(k=>{
     const bad=!BOOKING_CHECKS[k](S.booking[k]);
     $("#e-"+k)?.classList.toggle("show",bad);
-    if(bad){ok=false; first=first||(k==="service"?$("#bookform .opt"):$(`#bookform [name="${k}"]`));}
+    if(bad){ok=false; first=first||$(`#bookform [name="${k}"]`);}
   });
   if(first) first.focus();
   return ok;

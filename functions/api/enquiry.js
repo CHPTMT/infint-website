@@ -27,32 +27,52 @@ export async function onRequestPost({ request, env }) {
   let data;
   try { data = await request.json(); } catch { return json({ ok: false, error: "Bad request" }, 400); }
 
-  // Hidden "company" field: real visitors never fill it, spam bots usually do.
-  if (clean(data.company)) return json({ ok: true });
   if (!env.RESEND_API_KEY) return json({ ok: false, error: "Email not configured" }, 500);
 
-  return data.kind === "booking" ? booking(data, request, env) : contact(data, env);
+  // Hidden "company" field: people never see it, spam bots usually fill it. Browser autofill once filled it
+  // for real visitors and their enquiries were silently dropped, so it no longer drops anything: the enquiry
+  // still reaches Tshedza, marked "Possible spam", and no copy goes to the sender.
+  const spam = !!clean(data.company);
+  return data.kind === "booking" ? booking(data, request, env, spam) : contact(data, env, spam);
 }
 
-async function contact(data, env) {
+const SPAM_TAG = "Possible spam: ";
+
+// Sends the email to Tshedza. If Resend has a hiccup it tries up to 3 times; the same Idempotency-Key
+// means a retry can never send the same email twice.
+async function sendToMe(env, msg) {
+  const key = crypto.randomUUID();
+  for (let i = 0; i < 3; i++) {
+    if (i) await new Promise(r => setTimeout(r, 1000 * i));
+    try {
+      const res = await sendEmail(env, msg, key);
+      if (res.ok || (res.status < 500 && res.status !== 429)) return res;
+    } catch { /* network error: try again */ }
+  }
+  return { ok: false };
+}
+
+async function contact(data, env, spam) {
   const name = clean(data.name, 120);
   const message = clean(data.message);
   const email = clean(data.email, 200);
-  if (!name || !message) return json({ ok: false, error: "Missing name or message" }, 400);
+  // A real visitor with a missing name or message is told to fill it in. A suspected bot is never told
+  // anything: whatever it sent goes to Tshedza.
+  if ((!name || !message) && !spam) return json({ ok: false, error: "Missing name or message" }, 400);
 
   // The message already holds the name and contact details, so nothing is appended.
   const msg = {
     from: env.FROM_INFO || SENDERS.contact,
     to: notifyTo(env, "contact"),
-    subject: clean(data.subject, 150) || "New message: Infint site",
-    text: message
+    subject: (spam ? SPAM_TAG : "") + (clean(data.subject, 150) || "New message: Infint site"),
+    text: message || ("Name: " + (name || "-") + "\nEmail: " + (email || "-") + "\n(No message)")
   };
   if (isEmail(email)) msg.reply_to = email;
-  const res = await sendEmail(env, msg);
+  const res = await sendToMe(env, msg);
   if (!res.ok) return json({ ok: false, error: "Email provider error" }, 502);
 
   // Copy to the visitor so they know it arrived. If this one fails the message still reached Tshedza.
-  if (!isEmail(email)) return json({ ok: true, acknowledged: false });
+  if (spam || !isEmail(email)) return json({ ok: true, acknowledged: false });
   const hours = config().booking.replyHours || 24;
   const ack = emailFromBlocks({
     from: env.FROM_INFO || SENDERS.contact,
@@ -71,18 +91,23 @@ async function contact(data, env) {
   return json({ ok: true, acknowledged: !!(ackRes && ackRes.ok) });
 }
 
-async function booking(data, request, env) {
+async function booking(data, request, env, spam) {
   const b = readBooking(data);
   const bad = validateBooking(b);
-  if (bad.length) return json({ ok: false, error: "Check the highlighted fields", fields: bad }, 400);
+  // A real visitor is shown which fields to fix. A suspected bot is never told anything: whatever it sent goes to Tshedza.
+  if (bad.length && !spam) return json({ ok: false, error: "Check the highlighted fields", fields: bad }, 400);
 
   const shoot = serviceName(b.service);
+  const rows = summaryRows(b);
   const blocks = [
     { heading: "New booking enquiry" },
-    { rows: summaryRows(b) }
+    rows.length ? { rows } : "(No details were filled in.)"
   ];
 
-  if (env.BOOKING_SECRET) {
+  if (bad.length) {
+    blocks.push("This one came in with missing or invalid details (" + bad.join(", ") + "), so it has no Accept or Decline buttons." +
+      (isEmail(b.email) ? " Reply to this email to write to them." : ""));
+  } else if (env.BOOKING_SECRET) {
     const token = await makeToken(b, env.BOOKING_SECRET);
     const base = new URL(request.url).origin + "/api/booking-response?t=" + token + "&a=";
     blocks.push(
@@ -97,12 +122,13 @@ async function booking(data, request, env) {
   const toMe = emailFromBlocks({
     from: bookingFrom(env),
     to: notifyTo(env),
-    replyTo: b.email,
-    subject: "Booking enquiry: " + shoot + ", " + niceDate(b) + " (" + b.name + ")",
+    replyTo: isEmail(b.email) ? b.email : undefined,
+    subject: (spam ? SPAM_TAG : "") + "Booking enquiry: " + shoot + ", " + (niceDate(b) || "no date") + " (" + (b.name || "no name") + ")",
     blocks
   });
-  const res = await sendEmail(env, toMe);
+  const res = await sendToMe(env, toMe);
   if (!res.ok) return json({ ok: false, error: "Email provider error" }, 502);
+  if (spam) return json({ ok: true, acknowledged: false });
 
   // Acknowledgement to the client. If this one fails the enquiry still reached Tshedza, so it still counts as sent.
   const hours = config().booking.replyHours || 24;

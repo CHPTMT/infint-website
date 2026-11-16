@@ -441,7 +441,7 @@ V.book = (q,o={}) => {
           <div class="field"><label for="b-source">How did you hear about Infint</label>
             <select class="input" id="b-source" name="source">${opts(["Instagram","TikTok","A friend","Saw you at a shoot","Google","Other"],b.source)}</select></div>
         </div>
-        <div class="hp" aria-hidden="true"><label>Company<input name="company" tabindex="-1" autocomplete="off"></label></div>
+        <div class="hp" aria-hidden="true"><label>Leave this empty<input name="company" tabindex="-1" autocomplete="off"></label></div>
         <div class="notice">Your details are used to prepare a quote and, if you go ahead, a booking agreement. They are not shared with anyone else.</div>
         <div class="form-actions"><button type="button" class="btn ghost" data-go="1">Back</button>
           <button type="button" class="btn magnetic" data-go="3">Review ${ARR}</button></div>
@@ -496,7 +496,7 @@ V.contact = () => {
             <div class="field"><label for="cf-contact">Email or number <span class="req">*</span></label><input class="input" id="cf-contact" name="contact" required></div>
           </div>
           <div class="field"><label for="cf-message">Message <span class="req">*</span></label><textarea class="input" id="cf-message" name="message" required></textarea></div>
-          <div class="hp" aria-hidden="true"><label>Company<input name="company" tabindex="-1" autocomplete="off"></label></div>
+          <div class="hp" aria-hidden="true"><label>Leave this empty<input name="company" tabindex="-1" autocomplete="off"></label></div>
           <div class="form-actions">
             <button class="btn magnetic" type="submit">Send message ${ARR}</button>
             <a class="btn ghost" id="cf-mailto" href="mailto:${esc(c.email)}">Open in email instead</a>

@@ -383,6 +383,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:44px;cursor:p
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFA000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 16px center;background-size:16px}
 select.input option{background:var(--ink-3);color:#fff}
+select.input:invalid{color:rgba(245,245,243,.62)}
 input[type=date].input,input[type=time].input{color-scheme:dark}
 textarea.input{min-height:140px;resize:vertical;line-height:1.5}
 .hint{font-size:.96rem;color:var(--mute);margin-top:8px}
@@ -420,15 +421,6 @@ textarea.input{min-height:140px;resize:vertical;line-height:1.5}
 .stepper div.on::after,.stepper div.done::after{width:100%}
 .stepper b{font-family:var(--heavy);font-weight:900;font-size:1rem;color:var(--accent);margin-right:6px}
 @media(max-width:480px){.stepper div{font-size:.68rem;letter-spacing:.04em}}
-.optrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
-.opt{border:1px solid var(--line-2);border-radius:var(--r-in);padding:16px;cursor:pointer;text-align:left;background:var(--ink-3);position:relative;
-  transition:border-color .2s ease,box-shadow .25s var(--ease),background-color .2s ease,transform .14s var(--ease)}
-.opt:hover{border-color:rgba(255,255,255,.3)}
-.opt:active{transform:scale(.98)}
-.opt.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 0 30px -10px rgba(255,160,0,.7);background:#1B1912}
-.opt.on::after{content:"";position:absolute;top:14px;right:14px;width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
-.opt strong{display:block;font-family:var(--body);font-weight:500;font-size:1.1rem;color:#fff;margin-bottom:4px}
-.opt span{font-size:.96rem;color:var(--mute);line-height:1.4;display:block}
 /* Booking sent: replaces the form inside .split-body */
 #booked .booked-k{color:var(--accent);margin:0 0 16px}
 #booked .lede{margin:20px 0 30px}

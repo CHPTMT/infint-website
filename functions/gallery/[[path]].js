@@ -32,7 +32,8 @@ function unavailable() {
   });
 }
 
-export async function onRequest({ request, env, waitUntil }) {
+export async function onRequest(context) {
+  const { request, env } = context;
   const url = new URL(request.url);
   if (url.pathname !== "/gallery" && !url.pathname.startsWith("/gallery/")) {
     return new Response("Not found", { status: 404 });
@@ -121,7 +122,7 @@ export async function onRequest({ request, env, waitUntil }) {
   const stored = new Response(forCache, out);
   stored.headers.set("X-Gallery-Browser-Cache", out.headers.get("Cache-Control") || "private, max-age=86400");
   stored.headers.set("Cache-Control", `public, max-age=${IMG_CACHE_SECONDS}`);
-  waitUntil(cache.put(cacheKey, stored).catch(() => {}));
+  context.waitUntil(cache.put(cacheKey, stored).catch(() => {}));
 
   const reply = new Response(forVisitor, out);
   reply.headers.set("X-Gallery-Cache", "MISS");

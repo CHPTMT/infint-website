@@ -41,7 +41,7 @@ Plain HTML, CSS and JavaScript with no build step and no framework. Live at http
 - Colours: ink `#0E1115`, white, bone `#F5F5F3`, amber accent `#FFA000` (from his logo). Keep these.
 - Fonts: Work Sans for body and small text (paragraphs, labels, buttons, rate card names, FAQ, menu category list; 400 or 500, white or bone, never thin or grey), Outfit for the large light section headings, and Montserrat Bold or Black (big titles, menu links, prices and big numbers, About text). All self-hosted in `assets/fonts`; the CSS tokens are `--body`, `--display` and `--heavy`. No italic accent words.
 - About photo is black and white with extra contrast; keep it that height.
-- No thin decorative lines beside headings. No client gallery, admin page or database (removed on purpose).
+- No thin decorative lines beside headings. The client gallery lives at infint.co.za/gallery. It is a separate project (infint-gallery); the only gallery code in this repo is the forwarder functions/gallery/[[path]].js. Do not change it unless asked, and do not add other galleries, admin pages or databases to this site.
 - Within each Work category, photos are ordered so frames from the same shoot never sit next to each other. `node tools/order-photos.js --write` does this: it works out shoots from the original file names and checks the real grid at 2 to 6 columns. Run it after adding photos.
 - No low-res photos: `srcset` widths must be each file's real width (thumbs are 720 px on the LONG side). Photos shown big (hero pools, rates teaser) also have 2600 px copies in `assets/hero`; rebuild them with `tools\resize-hero.ps1` after changing a pool, and only put photos into a hero pool whose original is at least 2600 px on the long side.
 

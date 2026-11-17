@@ -19,12 +19,15 @@ const ROBOTS = "noindex, nofollow, noarchive";
 const IMG_CACHE_SECONDS = 600;
 const WAIT_MS = 60000;
 
-// The only POST paths the gallery has (all admin API). It uses no PUT or DELETE.
+// The only POST paths the gallery has (all admin API). It uses no DELETE.
 const POST_PATHS = [
   /^\/gallery\/admin\/api\/(login|logout|galleries|drive\/scan|folders\/title)$/,
   /^\/gallery\/admin\/api\/galleries\/[^/]+\/(remove|sync)$/,
   /^\/gallery\/admin\/api\/shoots\/[^/]+(\/photos)?$/,
 ];
+
+// The only PUT path: a visitor saving the shared favourites of a gallery.
+const PUT_PATHS = [/^\/gallery\/api\/favourites\/[^/]+$/];
 
 function unavailable() {
   return new Response("The gallery is not available right now.", {
@@ -42,7 +45,9 @@ export async function onRequest(context) {
   if (String(env.GALLERY_ENABLED ?? "").trim().toLowerCase() === "false") return unavailable();
 
   const method = request.method;
-  const allowed = method === "GET" || method === "HEAD" || (method === "POST" && POST_PATHS.some((re) => re.test(url.pathname)));
+  const allowed = method === "GET" || method === "HEAD"
+    || (method === "POST" && POST_PATHS.some((re) => re.test(url.pathname)))
+    || (method === "PUT" && PUT_PATHS.some((re) => re.test(url.pathname)));
   if (!allowed) {
     return new Response("Method not allowed", { status: 405, headers: { Allow: "GET, HEAD", "Cache-Control": "no-store", "X-Robots-Tag": ROBOTS } });
   }

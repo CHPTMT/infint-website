@@ -7,6 +7,7 @@
   Settings (Workers & Pages > infint > Settings > Variables and secrets), both optional:
     GALLERY_ORIGIN   where the gallery runs (default https://preview.infint-gallery.pages.dev)
     GALLERY_ENABLED  set to false to switch the gallery off: every /gallery request then gets a 503
+    ORIGIN_AUTH_SECRET  shared secret, same value as in the gallery project; lets the gallery see each visitor
 
   Photo sizes (/gallery/img/...) are kept in Cloudflare's cache for up to 10 minutes. The gallery
   checks access on every image request, so a hidden, revoked or expired gallery stops answering
@@ -74,8 +75,17 @@ export async function onRequest(context) {
       headers.delete(name);
     }
   }
+  headers.delete("x-visitor-ip");
+  headers.delete("x-origin-auth");
   headers.set("X-Forwarded-Host", url.host);
   headers.set("X-Forwarded-Proto", "https");
+  // The visitor's own address, believed by the gallery only together with the shared secret
+  // ORIGIN_AUTH_SECRET (set in both projects). Without the secret nothing is sent.
+  const visitorIp = request.headers.get("CF-Connecting-IP");
+  if (env.ORIGIN_AUTH_SECRET && visitorIp) {
+    headers.set("X-Visitor-IP", visitorIp);
+    headers.set("X-Origin-Auth", env.ORIGIN_AUTH_SECRET);
+  }
 
   // Give up if the gallery has not started answering within the wait time. The timer stops once it
   // answers, so a long download is never cut off.

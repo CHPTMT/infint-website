@@ -628,3 +628,4 @@ body.promo-open{overflow:hidden}
 @keyframes pt{to{transform:translateX(-25%)}}
 @media (max-width:760px){.pm-body{grid-template-columns:1fr;padding-top:64px}.pm-photos{order:-1;margin-top:-34px}.pm-photos .pc{aspect-ratio:1/1.1}}
 @media (prefers-reduced-motion:reduce){.pm-photos .pc,.pt-track,.pm-panel,.promo-modal{animation:none}}
+@media (max-width:760px){.pm-photos{margin-top:0}.pm-body{padding-top:70px}}

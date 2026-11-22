@@ -559,7 +559,9 @@ V.socials = () => `
 
 /* Router */
 /* Graduation page: packages come from CONFIG.rates.grads, so a price change in content.js shows here and on /rates */
-const GRAD_PHOTOS = ["grad-01","portrait-31","grad-05","grad-02","grad-06","portrait-06","grad-03","grad-08","grad-07","portrait-27","grad-04","grad-09","portrait-01","grad-10","detail-23","grad-11"];
+const GRAD_REEL = ["grad-01","portrait-31","grad-05","grad-02","grad-06","portrait-06","grad-03","grad-08","grad-07","portrait-27","grad-04","grad-09","portrait-01","grad-10","detail-23","grad-11"];
+/* The wall shows every graduation photo: the reel ones first, then the rest in the order they were added */
+const GRAD_PHOTOS = [...GRAD_REEL, ...Array.from({length:29},(_,i)=>"grad-"+(i+12))];
 const GRAD_NAMES = ["Aphiwe","Thinasonke","Thulisile","Mihle","Sivuyisiwe","Tetelo","Vhuthu","Asange","Siphesihle","Nosisa","Thembani","Tshedza"];
 V.graduation = () => {
   const r=CONFIG.rates, g=r.grads;
@@ -580,7 +582,7 @@ V.graduation = () => {
   </div></section>
   <section class="grad-reel" aria-label="Graduation photos">
     ${[0,1,2].map(row=>{
-      const ids=(row===1?[...GRAD_PHOTOS].reverse():row===2?[...GRAD_PHOTOS.slice(5),...GRAD_PHOTOS.slice(0,5)]:GRAD_PHOTOS).filter(photo);
+      const ids=(row===1?[...GRAD_REEL].reverse():row===2?[...GRAD_REEL.slice(5),...GRAD_REEL.slice(0,5)]:GRAD_REEL).filter(photo);
       const set=hidden=>`<div class="reel-set"${hidden?' aria-hidden="true"':""}>${ids.map(id=>`<div class="reel-item" style="aspect-ratio:${photo(id).r}">${pic(id,{sizes:"40vw",alt:hidden?"":undefined})}</div>`).join("")}</div>`;
       return `<div class="reel-row ${row===1?"rev":""} r${row}"><div class="reel-track">${set(false)}${set(true)}</div></div>`;}).join("")}
   </section>

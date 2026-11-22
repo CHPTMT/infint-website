@@ -669,16 +669,18 @@ const gradPage = (home=false) => {
 V.graduation = () => gradPage(false);
 
 
-/* Seasonal promotion: a window on top of the home page while a season is on. Closes with the X, Esc, a click outside, or any link inside; once closed it stays closed for the rest of the visit. */
+/* Seasonal promotion: a window on top of the home page while a season is on. The X closes it. The Book button goes to the booking form. A click anywhere else in the window (or its photos) goes to the graduation page. A click outside it, or Esc, closes it. Once closed it stays closed for the rest of the visit. */
 function showSeasonPromo(){
   const s=activeSeason(); if(!s||s.key!=="graduation") return;
   const KEY="promo-closed-"+s.key;
   try{ if(sessionStorage.getItem(KEY)) return; }catch(e){}
   if($("#promo-modal")) return;
   const g=CONFIG.rates.grads;
-  const cards=["grad-01","grad-06","grad-03","grad-26","grad-42","grad-86"].filter(photo).filter(gradOK);
+  const grid=["grad-01","grad-06","grad-03","grad-26","grad-42","grad-86","grad-02","grad-10","grad-11","grad-25","grad-98","grad-44"].filter(photo).filter(gradOK);
+  const strip=GRAD_PHOTOS.filter(photo).filter(gradOK).filter(id=>!grid.includes(id)).slice(0,24);
   const ticker=["Book yours now","Edited photos in five working days",`From ${money(minOf(g.items))}`,"On campus or where you choose"];
   const tk=ticker.map(t=>`<span>${esc(t)}</span>`).join("");
+  const steps=["Pick a package","Pay the 50% booking fee","Shoot day","Photos in five working days"];
   const wrap=document.createElement("div");
   wrap.id="promo-modal"; wrap.className="promo-modal"; wrap.setAttribute("role","dialog"); wrap.setAttribute("aria-modal","true"); wrap.setAttribute("aria-label",s.label);
   wrap.innerHTML=`<div class="pm-panel">
@@ -690,13 +692,25 @@ function showSeasonPromo(){
         <p>Book yours now! Edited photos in five working days, on campus or wherever you choose.</p>
         <div class="pm-price"><span class="label">Packages from</span><span class="mega">${money(minOf(g.items))}</span></div>
         <div class="actions">
-          <a class="btn magnetic" href="/book?service=graduation">Book my shoot ${ARR}</a>
-          <a class="btn ghost" href="/graduation?s=packages">See packages</a>
-          <a class="btn ghost" href="/graduation">All graduation photos</a>
+          <a class="btn magnetic" data-book href="/book?service=graduation">Book my shoot ${ARR}</a>
+          <a class="btn ghost" href="/graduation">See all the photos</a>
         </div>
       </div>
-      <div class="pm-photos" aria-hidden="true">${cards.map((id,i)=>`<div class="pc pc${i}">${pic(id,{sizes:"(max-width:700px) 30vw, 14vw",alt:""})}</div>`).join("")}</div>
+      <div class="pm-photos" aria-hidden="true">${grid.map((id,i)=>`<div class="pc pc${i}">${pic(id,{sizes:"(max-width:760px) 22vw, 11vw",alt:""})}</div>`).join("")}</div>
     </div>
+    <div class="pm-more">
+      <h3>Pick your package</h3>
+      <div class="pm-pkgs">${g.items.map(p=>`<div class="pm-pkg${p.feature?" feat":""}">
+        ${p.feature?'<span class="pm-badge">Most booked</span>':""}
+        <strong>${esc(p.name)}</strong>
+        <span class="mega">${money(p.price)}</span>
+        <span class="pm-sub">${esc(p.dur)}, ${esc(p.images)}</span>
+      </div>`).join("")}</div>
+      <h3>How it works</h3>
+      <ol class="pm-steps">${steps.map(t=>`<li>${esc(t)}</li>`).join("")}</ol>
+      <p class="pm-note">Book two to three weeks ahead. A 50% booking fee secures your date, and the balance is due on or before the shoot day.</p>
+    </div>
+    <div class="pm-strip" aria-hidden="true"><div class="reel-track">${[0,1].map(h=>`<div class="reel-set">${strip.map(id=>`<div class="reel-item" style="aspect-ratio:${photo(id).r}">${pic(id,{sizes:"110px",alt:""})}</div>`).join("")}</div>`).join("")}</div></div>
     <div class="pm-ticker" aria-hidden="true"><div class="pt-track">${tk}${tk}${tk}${tk}</div></div>
   </div>`;
   const prevFocus=document.activeElement;
@@ -706,8 +720,13 @@ function showSeasonPromo(){
     setTimeout(()=>wrap.remove(),260);
     if(prevFocus&&prevFocus.focus) try{prevFocus.focus({preventScroll:true});}catch(e){}
   };
+  const toGrad=()=>{ const a=document.createElement("a"); a.href="/graduation"; document.body.appendChild(a); a.click(); a.remove(); };
   const onKey=e=>{ if(e.key==="Escape") close(); };
-  wrap.addEventListener("click",e=>{ if(e.target===wrap||e.target.closest(".pm-x")||e.target.closest("a[href]")) close(); });
+  wrap.addEventListener("click",e=>{
+    if(e.target.closest(".pm-x")||e.target===wrap){ close(); return; }
+    if(e.target.closest("a[href]")){ close(); return; }   /* the link goes where it points */
+    close(); toGrad();                                      /* anywhere else in the window */
+  });
   setTimeout(()=>{ if(location.pathname!=="/"&&location.pathname!=="") return; document.addEventListener("keydown",onKey); document.body.appendChild(wrap); document.body.classList.add("promo-open"); const x=wrap.querySelector(".pm-x"); if(x) x.focus({preventScroll:true}); },700);
 }
 

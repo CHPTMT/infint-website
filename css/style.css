@@ -629,3 +629,4 @@ footer li a{display:inline-flex;align-items:center;gap:10px}
 .promo-cards .pc4{transform:rotate(-3deg);margin-top:20px;animation-delay:-3.2s}
 .promo-cards .pc5{transform:rotate(4deg);margin-top:0;animation-delay:-5.1s}
 @media (max-width:900px){.promo-cards{min-height:0}}
+.promo-text .actions{display:flex;flex-wrap:wrap;gap:12px}

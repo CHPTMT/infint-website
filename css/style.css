@@ -576,3 +576,6 @@ footer li a{display:inline-flex;align-items:center;gap:10px}
 .grad-names li{font-size:clamp(1.8rem,5.2vw,4.2rem);line-height:1.15;font-weight:600;letter-spacing:-.02em;opacity:.9;transition:transform .4s cubic-bezier(.2,.7,.2,1),opacity .4s}
 .grad-names li:hover{transform:translateY(-4px) skewX(-4deg);opacity:1}
 @media (prefers-reduced-motion:reduce){.reel-track{animation:none}.grad-reel{overflow-x:auto;-webkit-mask-image:none;mask-image:none}.reel-row{overflow:visible}}
+/* Graduation wall: no photo label, and the other photos stay at full brightness while one is hovered */
+#wall .tile .cap{display:none}
+#wall .masonry:has(.tile:hover) .tile:not(:hover) img{opacity:1}

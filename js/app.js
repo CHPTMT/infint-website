@@ -578,7 +578,7 @@ V.graduation = () => {
   return `
   <section class="page-head grad-hero"><div class="wrap">
     <h1 class="display rv">Graduation shoots.</h1>
-    <p class="lede rv" style="--d:.08s">Cap, gown and the campus that got you here.</p>
+    <p class="lede rv" style="--d:.08s">Book yours now!</p>
     <a class="btn ghost rv" style="--d:.16s" href="/graduation?s=packages">See packages and prices ${ARR}</a>
   </div></section>
   <section class="grad-reel" aria-label="Graduation photos">

@@ -558,7 +558,66 @@ V.socials = () => `
   ${ctaBlock()}`;
 
 /* Router */
-const TITLES = {work:"Work",rates:"Rates",book:"Book a shoot",contact:"Contact",about:"About",socials:"Socials"};
+/* Graduation page: packages come from CONFIG.rates.grads, so a price change in content.js shows here and on /rates */
+const GRAD_PHOTOS = ["grad-01","portrait-31","grad-05","grad-02","grad-06","portrait-06","grad-03","grad-08","grad-07","portrait-27","grad-04","grad-09","portrait-01","grad-10","detail-23","grad-11"];
+V.graduation = () => {
+  const r=CONFIG.rates, g=r.grads;
+  const price = n => `<span class="cur">${esc(r.currency)}</span>${num(n)}`;
+  const addon = re => r.addons.find(a=>re.test(a.name));
+  const rush=addon(/rush/i), extra=addon(/extra/i), travel=addon(/travel/i);
+  const steps=[
+    ["Pick a package","Choose the one that fits your day and send the booking form with your date and campus."],
+    ["Secure the date","A 50% booking fee holds your slot. The balance is due on or before the shoot day."],
+    ["Shoot day","Meet me on campus or at a location of your choice. I direct the poses, you bring the gown."],
+    ["Get your photos","Your edited photos arrive by download link within five working days."]
+  ];
+  return `
+  ${pageHead("Graduation shoots.","Cap, gown and the campus that got you here. Three packages, edited photos in five working days.")}
+
+  <section class="section pt0" id="packages"><div class="wrap">
+    <div class="head-row">
+      <div class="rv"><h2 class="h2">${esc(g.title)}</h2><p class="mega startp">${fromPrice(minOf(g.items))}</p></div>
+      <p class="lede rv" style="--d:.08s">${esc(g.note)}</p>
+    </div>
+    <div class="pkgs">
+      ${g.items.map((p,i)=>`<div class="pkg rv ${p.feature?"featured":""}" style="--d:${i*.08}s">
+        <div class="top"><span class="name">${esc(p.name)}</span>${p.feature?'<span class="badge">Most booked</span>':`<span class="label">${esc(p.dur)}</span>`}</div>
+        <div class="mega">${price(p.price)}</div>
+        <div class="sub">${p.feature?esc(p.dur)+", ":""}${esc(p.images)}</div>
+        <ul>${p.includes.map(i=>`<li><span>${esc(i)}</span></li>`).join("")}</ul>
+        <a class="btn ${p.feature?"magnetic":"ghost"}" href="/book?service=graduation&pkg=${encodeURIComponent(p.name)}">Book ${esc(p.name)} ${ARR}</a>
+      </div>`).join("")}
+    </div>
+  </div></section>
+
+  <section class="section pt0" id="how"><div class="wrap">
+    <div class="head-row"><h2 class="h2 rv">How it works.</h2></div>
+    <div class="addons">
+      ${steps.map((s,i)=>`<div class="addon rv" style="--d:${(i%2)*.06}s">
+        <span><strong>${i+1}. ${esc(s[0])}</strong><p>${esc(s[1])}</p></span>
+      </div>`).join("")}
+    </div>
+  </div></section>
+
+  <section class="section pt0" id="know"><div class="wrap">
+    <div class="head-row"><h2 class="h2 rv">Good to know.</h2></div>
+    <div class="addons">
+      <div class="addon rv"><span><strong>Book early</strong><p>Graduation weeks fill up. Book two to three weeks ahead to get the slot you want.</p></span></div>
+      <div class="addon rv" style="--d:.06s"><span><strong>Changing the date</strong><p>Booking fees are non-refundable but transferable once, up to 14 days before the shoot.</p></span></div>
+      ${rush?`<div class="addon rv"><span><strong>${esc(rush.name)}</strong><p>${esc(rush.note)}</p></span><span class="pr"><span class="mega">${money(rush.price)}</span><small>${esc(rush.unit)}</small></span></div>`:""}
+      ${extra?`<div class="addon rv" style="--d:.06s"><span><strong>${esc(extra.name)}</strong><p>${esc(extra.note)}</p></span><span class="pr"><span class="mega">${money(extra.price)}</span><small>${esc(extra.unit)}</small></span></div>`:""}
+      ${travel?`<div class="addon rv"><span><strong>${esc(travel.name)}</strong><p>${esc(travel.note)}</p></span><span class="pr"><span class="mega">${money(travel.price)}</span><small>${esc(travel.unit)}</small></span></div>`:""}
+    </div>
+  </div></section>
+
+  <section class="section pt0" id="photos"><div class="wrap">
+    <div class="head-row"><h2 class="h2 rv">Recent graduates.</h2></div>
+    ${tileGrid(GRAD_PHOTOS,{eager:4})}
+  </div></section>
+
+  ${ctaBlock()}`;
+};
+const TITLES = {work:"Work",rates:"Rates",graduation:"Graduation",book:"Book a shoot",contact:"Contact",about:"About",socials:"Socials"};
 /* Old links (#/work?f=event) are swapped for the path (/work?f=event) without a reload */
 function fromHash(){
   if(!location.hash.startsWith("#/")) return false;

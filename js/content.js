@@ -246,7 +246,18 @@ const PHOTOS = [
   {"id": "detail-15", "cat": "detail", "r": 0.667, "c": "#39281f", "alt": "Detail photograph by Infint"},
   {"id": "detail-11", "cat": "detail", "r": 0.665, "c": "#040404", "alt": "Detail photograph by Infint"},
   {"id": "detail-02", "cat": "detail", "r": 0.665, "c": "#808080", "alt": "Yellow Schweppes activation booth"},
-  {"id": "detail-23", "cat": "detail", "r": 0.667, "c": "#888888", "alt": "Hands holding a Wits graduation scroll"}
+  {"id": "detail-23", "cat": "detail", "r": 0.667, "c": "#888888", "alt": "Hands holding a Wits graduation scroll"},
+  {"id": "grad-01", "cat": "portrait", "r": 0.665, "c": "#040404", "alt": "Smiling graduate in a cap and teal hood under a stone arch at dusk"},
+  {"id": "grad-02", "cat": "portrait", "r": 0.665, "c": "#040404", "alt": "Graduate in a gown with a bouquet of white roses, one foot up on a stone ledge"},
+  {"id": "grad-03", "cat": "portrait", "r": 0.665, "c": "#040404", "alt": "Graduate in a blue-trimmed gown holding her rolled certificate"},
+  {"id": "grad-04", "cat": "portrait", "r": 0.665, "c": "#040404", "alt": "Graduate in a gown holding her scroll over her shoulder at night"},
+  {"id": "grad-05", "cat": "portrait", "r": 1.504, "c": "#651f28", "alt": "Hands holding a rolled Wits graduation scroll against a red dress"},
+  {"id": "grad-06", "cat": "portrait", "r": 0.75, "c": "#040404", "alt": "Graduate smiling and holding out her rolled Wits scroll"},
+  {"id": "grad-07", "cat": "portrait", "r": 1.546, "c": "#040404", "alt": "Graduate celebrating on campus with her family"},
+  {"id": "grad-08", "cat": "portrait", "r": 0.667, "c": "#040404", "alt": "Graduate in a beaded headpiece and traditional print holding her scroll"},
+  {"id": "grad-09", "cat": "portrait", "r": 0.667, "c": "#040404", "alt": "Graduate holding a custom newspaper front page about her degree"},
+  {"id": "grad-10", "cat": "portrait", "r": 0.75, "c": "#040404", "alt": "Graduate smiling in a gown with her scroll on campus"},
+  {"id": "grad-11", "cat": "portrait", "r": 0.75, "c": "#040404", "alt": "Graduate mid pose with her scroll raised and a blue sash"}
 ];
 
 /* Homepage settings */

@@ -232,7 +232,7 @@ V.home = () => {
       <h2 class="h2 rv">Clear prices, before you book.</h2>
       <p class="lede rv">Every price includes editing and delivery by download link. Prices hold for the ${esc(r.updated)} season.</p>
       <div class="pricelist rv">
-        <a href="/rates?s=grads"><span><strong>Graduation packages</strong><small>${r.grads.items.length} packages, ${esc(r.grads.items[0].dur)} to ${esc(r.grads.items[r.grads.items.length-1].dur)}</small></span><span class="mega">${fromPrice(minOf(r.grads.items))}</span><span class="go">${ICON.go}</span></a>
+        <a href="/graduation"><span><strong>Graduation packages</strong><small>${r.grads.items.length} packages, ${esc(r.grads.items[0].dur)} to ${esc(r.grads.items[r.grads.items.length-1].dur)}</small></span><span class="mega">${fromPrice(minOf(r.grads.items))}</span><span class="go">${ICON.go}</span></a>
         <a href="/rates?s=short"><span><strong>Short shoots</strong><small>Portraits, headshots, prom</small></span><span class="mega">${fromPrice(minOf(r.short.items))}</span><span class="go">${ICON.go}</span></a>
         <a href="/rates?s=day"><span><strong>Events and day rates</strong><small>${parseInt(r.day.items[0].hours)} to ${esc(r.day.items[r.day.items.length-1].hours)} of coverage</small></span><span class="mega">${fromPrice(minOf(r.day.items))}</span><span class="go">${ICON.go}</span></a>
       </div>

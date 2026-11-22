@@ -582,7 +582,8 @@ const GRAD_REEL = ["grad-01","portrait-31","grad-05","grad-02","grad-06","portra
 /* Fixed shuffle (the same on every visit), so photos from one shoot are spread through the wall instead of sitting together */
 const GRAD_PHOTOS = (()=>{const a=[...new Set([...GRAD_REEL, ...Array.from({length:89},(_,i)=>"grad-"+(i+12))])]; let s=20261122; const rnd=()=>{s=(s+0x6D2B79F5)|0; let t=Math.imul(s^(s>>>15),1|s); t=(t+Math.imul(t^(t>>>7),61|t))^t; return ((t^(t>>>14))>>>0)/4294967296;}; for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a;})();
 const GRAD_NAMES = ["Aphiwe","Thinasonke","Thulisile","Mihle","Sivuyisiwe","Tetelo","Vhuthu","Asange","Siphesihle","Nosisa","Thembani","Tshedza"];
-V.graduation = () => {
+/* The graduation page. With home=true it is also the home page while graduation season is on (see activeSeason), with the other kinds of work added at the bottom. */
+const gradPage = (home=false) => {
   const r=CONFIG.rates, g=r.grads;
   const price = n => `<span class="cur">${esc(r.currency)}</span>${num(n)}`;
   const addon = re => r.addons.find(a=>re.test(a.name));
@@ -597,7 +598,7 @@ V.graduation = () => {
   <section class="page-head grad-hero"><div class="wrap">
     <h1 class="display rv">Graduation shoots.</h1>
     <p class="lede rv" style="--d:.08s">Book yours now!</p>
-    <a class="btn ghost rv" style="--d:.16s" href="/graduation?s=packages">See packages and prices ${ARR}</a>
+    <a class="btn ghost rv" style="--d:.16s" href="${home?"/":"/graduation"}?s=packages">See packages and prices ${ARR}</a>
   </div></section>
   <section class="grad-reel" aria-label="Graduation photos">
     ${[0,1,2].map(row=>{
@@ -651,8 +652,21 @@ V.graduation = () => {
     <ul class="grad-names">${GRAD_NAMES.map((n,i)=>`<li class="rv" style="--d:${(i%6)*.05}s">${esc(n)}</li>`).join("")}</ul>
   </div></section>
 
-  ${ctaBlock()}`;
+  ${ctaBlock()}
+  ${home?`<section class="section pt0"><div class="wrap wide">
+    <div class="head-row"><h2 class="h2 rv">Everything else I shoot.</h2>
+      <p class="lede rv" style="--d:.08s">Portraits, events, sport, fashion and more.</p></div>
+    <div class="cats">
+      ${CATEGORIES.map((c,i)=>`<a class="cat rv" style="--d:${(i%5)*.06}s" href="/work?f=${c.key}">
+        ${pic(c.cover,{alt:"",sizes:"(max-width:700px) 50vw, (max-width:1200px) 34vw, 22vw"})}
+        <span class="meta"><span><h3>${esc(c.name)}</h3><p>${esc(c.blurb)}</p></span></span>
+      </a>`).join("")}
+    </div></div></section>`:""}`;
 };
+V.graduation = () => gradPage(false);
+/* In graduation season the whole home page is the graduation page; the normal home page comes back when the season ends */
+const homeDefault = V.home;
+V.home = (...a) => { const s=activeSeason(); return s&&s.key==="graduation" ? gradPage(true) : homeDefault(...a); };
 const TITLES = {work:"Work",rates:"Rates",graduation:"Graduation",book:"Book a shoot",contact:"Contact",about:"About",socials:"Socials"};
 /* Old links (#/work?f=event) are swapped for the path (/work?f=event) without a reload */
 function fromHash(){

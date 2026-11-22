@@ -654,3 +654,5 @@ body.promo-open{overflow:hidden}
 .pm-strip .reel-set{gap:10px;padding-right:10px}
 .pm-strip .reel-item{height:clamp(84px,12vw,120px);border-radius:10px}
 @media (max-width:760px){.pm-photos{grid-template-columns:repeat(4,1fr);gap:6px}.pm-pkgs{grid-template-columns:1fr}.pm-steps{grid-template-columns:1fr 1fr}}
+
+.pm-x:focus,.pm-x:focus-visible,.pm-x:active{outline:none;box-shadow:none;border-color:rgba(255,255,255,.25)}

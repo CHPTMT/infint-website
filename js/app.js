@@ -727,7 +727,7 @@ function showSeasonPromo(){
     if(e.target.closest("a[href]")){ close(); return; }   /* the link goes where it points */
     close(); toGrad();                                      /* anywhere else in the window */
   });
-  setTimeout(()=>{ if(location.pathname!=="/"&&location.pathname!=="") return; document.addEventListener("keydown",onKey); document.body.appendChild(wrap); document.body.classList.add("promo-open"); const x=wrap.querySelector(".pm-x"); if(x) x.focus({preventScroll:true}); },700);
+  setTimeout(()=>{ if(location.pathname!=="/"&&location.pathname!=="") return; document.addEventListener("keydown",onKey); document.body.appendChild(wrap); document.body.classList.add("promo-open"); const p=wrap.querySelector(".pm-panel"); if(p){ p.setAttribute("tabindex","-1"); p.style.outline="none"; p.focus({preventScroll:true}); } },700);
 }
 
 const TITLES = {work:"Work",rates:"Rates",graduation:"Graduation",book:"Book a shoot",contact:"Contact",about:"About",socials:"Socials"};

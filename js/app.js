@@ -579,10 +579,10 @@ V.graduation = () => {
     <a class="btn ghost rv" style="--d:.16s" href="/graduation?s=packages">See packages and prices ${ARR}</a>
   </div></section>
   <section class="grad-reel" aria-label="Graduation photos">
-    ${[0,1].map(row=>{
-      const ids=(row?[...GRAD_PHOTOS].reverse():GRAD_PHOTOS).filter(photo);
+    ${[0,1,2].map(row=>{
+      const ids=(row===1?[...GRAD_PHOTOS].reverse():row===2?[...GRAD_PHOTOS.slice(5),...GRAD_PHOTOS.slice(0,5)]:GRAD_PHOTOS).filter(photo);
       const set=hidden=>`<div class="reel-set"${hidden?' aria-hidden="true"':""}>${ids.map(id=>`<div class="reel-item" style="aspect-ratio:${photo(id).r}">${pic(id,{sizes:"40vw",alt:hidden?"":undefined})}</div>`).join("")}</div>`;
-      return `<div class="reel-row ${row?"rev":""}"><div class="reel-track">${set(false)}${set(true)}</div></div>`;}).join("")}
+      return `<div class="reel-row ${row===1?"rev":""} r${row}"><div class="reel-track">${set(false)}${set(true)}</div></div>`;}).join("")}
   </section>
   <section class="section" id="wall"><div class="wrap">
     <div class="head-row"><h2 class="h2 rv">Recent graduates.</h2><p class="lede rv" style="--d:.08s">Tap any photo to see it larger.</p></div>

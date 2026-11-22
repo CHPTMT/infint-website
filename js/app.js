@@ -677,6 +677,7 @@ function showSeasonPromo(){
   if($("#promo-modal")) return;
   const g=CONFIG.rates.grads;
   const grid=["grad-01","grad-06","grad-03","grad-26","grad-42","grad-86","grad-02","grad-10","grad-11","grad-25","grad-98","grad-44"].filter(photo).filter(gradOK);
+  const pool=[...grid,...GRAD_PHOTOS.filter(photo).filter(gradOK).filter(id=>!grid.includes(id))].slice(0,45); const cols=[0,1,2].map(k=>pool.filter((_,i)=>i%3===k));
   const strip=GRAD_PHOTOS.filter(photo).filter(gradOK).filter(id=>!grid.includes(id)).slice(0,24);
   const ticker=["Book yours now","Edited photos in five working days",`From ${money(minOf(g.items))}`,"On campus or where you choose"];
   const tk=ticker.map(t=>`<span>${esc(t)}</span>`).join("");
@@ -696,7 +697,7 @@ function showSeasonPromo(){
           <a class="btn ghost" href="/graduation">See all the photos</a>
         </div>
       </div>
-      <div class="pm-photos" aria-hidden="true">${grid.map((id,i)=>`<div class="pc pc${i}">${pic(id,{sizes:"(max-width:760px) 22vw, 11vw",alt:""})}</div>`).join("")}</div>
+      <div class="pm-cols" aria-hidden="true">${cols.map((ids,ci)=>`<div class="pm-col${ci===1?" down":""}"><div class="pm-col-track">${[0,1].map(()=>`<div class="pm-col-set">${ids.map(id=>`<div class="pm-ph" style="aspect-ratio:${photo(id).r}">${pic(id,{sizes:"(max-width:760px) 30vw, 16vw",alt:""})}</div>`).join("")}</div>`).join("")}</div></div>`).join("")}</div>
     </div>
     <div class="pm-more">
       <h3>Pick your package</h3>

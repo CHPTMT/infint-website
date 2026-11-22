@@ -618,3 +618,14 @@ footer li a{display:inline-flex;align-items:center;gap:10px}
 .promo-note{margin-top:22px;opacity:.8}
 @media (max-width:900px){.promo-in{grid-template-columns:1fr}.promo-cards{min-height:clamp(300px,80vw,460px)}}
 @media (prefers-reduced-motion:reduce){.promo-cards .pc,.pt-track{animation:none}}
+/* Promo fixes: clear the fixed header, and a staggered grid of six photos */
+.promo{padding-top:calc(var(--hdr) + clamp(30px,5vw,80px))}
+.promo-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(8px,1.4vw,18px);min-height:0;align-content:center}
+.promo-cards .pc{position:relative;width:auto;left:auto;right:auto;top:auto;bottom:auto;border-radius:14px}
+.promo-cards .pc0{transform:rotate(-4deg);margin-top:0}
+.promo-cards .pc1{transform:rotate(3deg);margin-top:28px}
+.promo-cards .pc2{transform:rotate(-2deg);margin-top:8px}
+.promo-cards .pc3{transform:rotate(3deg);margin-top:-8px;animation-delay:-1.4s}
+.promo-cards .pc4{transform:rotate(-3deg);margin-top:20px;animation-delay:-3.2s}
+.promo-cards .pc5{transform:rotate(4deg);margin-top:0;animation-delay:-5.1s}
+@media (max-width:900px){.promo-cards{min-height:0}}

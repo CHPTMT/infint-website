@@ -673,10 +673,10 @@ const homeDefault = V.home;
 const promoHome = () => {
   const r=CONFIG.rates, g=r.grads;
   const price = n => `<span class="cur">${esc(r.currency)}</span>${num(n)}`;
-  const cards=["grad-01","grad-06","grad-03"].filter(photo);
+  const cards=["grad-01","grad-06","grad-03","grad-26","grad-42","grad-86"].filter(photo).filter(gradOK);
   const ticker=["Book yours now","Edited photos in five working days",`From ${money(minOf(g.items))}`,"On campus or at a location of your choice","Graduation season"];
   const tk=ticker.map(t=>`<span>${esc(t)}</span>`).join("");
-  const strip=GRAD_REEL.filter(photo).filter(gradOK);
+  const strip=GRAD_PHOTOS.filter(photo).filter(gradOK);
   return `
   <section class="promo glow" style="--gx:75%;--gy:20%"><div class="gridlines" aria-hidden="true"></div><div class="wrap wide promo-in">
     <div class="promo-text">
@@ -709,7 +709,7 @@ const promoHome = () => {
     <p class="promo-note rv">A 50% booking fee secures your date. Book two to three weeks ahead.</p>
   </div></section>
 
-  <section class="grad-reel" aria-label="Graduation photos"><div class="reel-row"><div class="reel-track">${[0,1].map(h=>`<div class="reel-set"${h?' aria-hidden="true"':""}>${strip.map(id=>`<div class="reel-item" style="aspect-ratio:${photo(id).r}">${pic(id,{sizes:"40vw",alt:h?"":undefined})}</div>`).join("")}</div>`).join("")}</div></div></section>
+  <section class="grad-reel" aria-label="Graduation photos">${[0,1].map(row=>{const ids=(row?strip.slice(24):strip.slice(0,24)).filter(photo); return `<div class="reel-row ${row?"rev":""}"><div class="reel-track">${[0,1].map(h=>`<div class="reel-set"${h?' aria-hidden="true"':""}>${ids.map(id=>`<div class="reel-item" style="aspect-ratio:${photo(id).r}">${pic(id,{sizes:"40vw",alt:h?"":undefined})}</div>`).join("")}</div>`).join("")}</div></div>`;}).join("")}</section>
   <section class="section pt0"><div class="wrap"><div class="head-row"><div class="rv"><a class="btn ghost" href="/graduation">See every graduation photo ${ARR}</a></div></div></div></section>
 
   ${ctaBlock()}

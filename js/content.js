@@ -491,6 +491,6 @@ globalThis.INFINT_CONFIG = CONFIG;
 CONFIG.seasons = [
   {key:"graduation", path:"/graduation", label:"Graduation season", headline:"Book your graduation shoot now.",
    sub:"Edited photos in five working days.", cta:"See packages",
-   windows:[[1101,1231],[101,430],[601,815]],
+   windows:[[201,731],[1115,1220]],
    photos:["grad-01","grad-06","grad-03"]}
 ];

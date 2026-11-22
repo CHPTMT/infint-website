@@ -579,3 +579,20 @@ footer li a{display:inline-flex;align-items:center;gap:10px}
 /* Graduation wall: no photo label, and the other photos stay at full brightness while one is hovered */
 #wall .tile .cap{display:none}
 #wall .masonry:has(.tile:hover) .tile:not(:hover) img{opacity:1}
+
+/* Season banner on the home page and the "Now" tag in the menu */
+.season-banner{padding:clamp(14px,2.4vw,28px) 0}
+.season-in{display:flex;align-items:center;gap:clamp(14px,3vw,40px);justify-content:space-between;flex-wrap:wrap;padding:clamp(16px,2.4vw,28px) clamp(18px,3vw,36px);border:1px solid var(--line,rgba(255,255,255,.14));border-radius:20px;background:linear-gradient(100deg,rgba(255,255,255,.06),rgba(255,255,255,.02));text-decoration:none;color:inherit;transition:transform .4s cubic-bezier(.2,.7,.2,1),box-shadow .4s}
+.season-in:hover{transform:translateY(-3px)}
+.season-text{display:grid;gap:6px;flex:1 1 280px}
+.season-text strong{font-size:clamp(1.4rem,3.2vw,2.4rem);line-height:1.1;letter-spacing:-.02em;font-weight:600}
+.season-sub{opacity:.8}
+.season-thumbs{display:flex}
+.season-thumbs span{display:block;width:clamp(54px,7vw,84px);aspect-ratio:3/4;border-radius:12px;overflow:hidden;margin-left:-14px;border:2px solid rgba(0,0,0,.5);transition:transform .4s cubic-bezier(.2,.7,.2,1)}
+.season-thumbs span:first-child{margin-left:0}
+.season-thumbs img,.season-thumbs picture{display:block;width:100%;height:100%;object-fit:cover}
+.season-in:hover .season-thumbs span:nth-child(1){transform:rotate(-5deg) translateY(-4px)}
+.season-in:hover .season-thumbs span:nth-child(3){transform:rotate(5deg) translateY(-4px)}
+.nav-tag{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:99px;font-size:.62em;letter-spacing:.12em;text-transform:uppercase;font-weight:700;vertical-align:middle;background:currentColor;color:inherit}
+.nav-tag{background:none;border:1px solid currentColor}
+@media (max-width:600px){.season-thumbs{display:none}}

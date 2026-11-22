@@ -154,6 +154,22 @@ const PICK = (()=>{
 /* Pages */
 const V = {};
 
+/* Seasons (CONFIG.seasons in content.js): a banner on the home page and a "Now" tag on the menu link while a season's dates are on. Dates are South African time. */
+function activeSeason(d=new Date()){
+  const parts=new Intl.DateTimeFormat("en-GB",{timeZone:"Africa/Johannesburg",month:"2-digit",day:"2-digit"}).formatToParts(d);
+  const md=Number(parts.find(p=>p.type==="month").value)*100+Number(parts.find(p=>p.type==="day").value);
+  return (CONFIG.seasons||[]).find(s=>s.windows.some(([a,b])=>md>=a&&md<=b))||null;
+}
+function seasonBanner(){
+  const s=activeSeason(); if(!s) return "";
+  const r=CONFIG.rates;
+  return `<section class="season-banner" aria-label="${esc(s.label)}"><div class="wrap wide">
+    <a class="season-in rv" href="${esc(s.path)}">
+      <span class="season-text"><span class="label">${esc(s.label)}</span><strong>${esc(s.headline)}</strong><span class="season-sub">${esc(s.sub)} From ${money(minOf(r.grads.items))}.</span></span>
+      <span class="season-thumbs" aria-hidden="true">${s.photos.map(id=>`<span>${pic(id,{sizes:"120px",alt:""})}</span>`).join("")}</span>
+      <span class="btn magnetic">${esc(s.cta)} ${ARR}</span>
+    </a></div></section>`;
+}
 V.home = () => {
   const r=CONFIG.rates, sl=PICK.slides;
   return `
@@ -191,6 +207,8 @@ V.home = () => {
       </div>
     </div>
   </section>
+
+  ${seasonBanner()}
 
   <section class="marquee" aria-label="A moving strip of recent photos">
     ${PICK.strips.map((row,ri)=>{const ok=row;
@@ -961,6 +979,8 @@ function wireContactForm(){
 function paintNav(){
   const link=(href,name)=>`<li><a href="${href}">${esc(name)}</a></li>`;
   $("#nav-cats").innerHTML=`<li class="nav-h label" aria-hidden="true">Work</li>`+link("/work","Everything")+CATEGORIES.map(c=>link("/work?f="+c.key,c.name)).join("");
+  const season=activeSeason();
+  if(season){ const a=$(`.nav-l[href="${season.path}"]`); if(a&&!a.querySelector(".nav-tag")) a.insertAdjacentHTML("beforeend",' <span class="nav-tag">Now</span>'); }
 }
 function markNav(page){
   const set=(a,on)=>{a.classList.toggle("active",on); on?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current");};

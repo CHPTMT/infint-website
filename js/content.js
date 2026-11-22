@@ -485,3 +485,12 @@ const CONFIG = {
 
 /* Lets the Cloudflare functions read CONFIG (booking terms, services, contact details). */
 globalThis.INFINT_CONFIG = CONFIG;
+
+/* Seasons. A season shows as a banner on the home page and a "Now" tag on its menu link while today (South African time) falls in one of its windows.
+   windows are [first day, last day] as month*100+day, so [1101,1231] is 1 November to 31 December. To add a season, add a block here and a page for its path. */
+CONFIG.seasons = [
+  {key:"graduation", path:"/graduation", label:"Graduation season", headline:"Book your graduation shoot now.",
+   sub:"Edited photos in five working days.", cta:"See packages",
+   windows:[[1101,1231],[101,430],[601,815]],
+   photos:["grad-01","grad-06","grad-03"]}
+];

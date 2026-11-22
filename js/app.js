@@ -560,6 +560,7 @@ V.socials = () => `
 /* Router */
 /* Graduation page: packages come from CONFIG.rates.grads, so a price change in content.js shows here and on /rates */
 const GRAD_PHOTOS = ["grad-01","portrait-31","grad-05","grad-02","grad-06","portrait-06","grad-03","grad-08","grad-07","portrait-27","grad-04","grad-09","portrait-01","grad-10","detail-23","grad-11"];
+const GRAD_NAMES = ["Aphiwe","Thinasonke","Thulisile","Mihle","Sivuyisiwe","Tetelo","Vhuthu","Asange","Siphesihle","Nosisa","Thembani","Tshedza"];
 V.graduation = () => {
   const r=CONFIG.rates, g=r.grads;
   const price = n => `<span class="cur">${esc(r.currency)}</span>${num(n)}`;
@@ -572,7 +573,21 @@ V.graduation = () => {
     ["Get your photos","Your edited photos arrive by download link within five working days."]
   ];
   return `
-  ${pageHead("Graduation shoots.","Cap, gown and the campus that got you here. Three packages, edited photos in five working days.")}
+  <section class="page-head grad-hero"><div class="wrap">
+    <h1 class="display rv">Graduation shoots.</h1>
+    <p class="lede rv" style="--d:.08s">Cap, gown and the campus that got you here.</p>
+    <a class="btn ghost rv" style="--d:.16s" href="/graduation?s=packages">See packages and prices ${ARR}</a>
+  </div></section>
+  <section class="grad-reel" aria-label="Graduation photos">
+    ${[0,1].map(row=>{
+      const ids=(row?[...GRAD_PHOTOS].reverse():GRAD_PHOTOS).filter(photo);
+      const set=hidden=>`<div class="reel-set"${hidden?' aria-hidden="true"':""}>${ids.map(id=>`<div class="reel-item" style="aspect-ratio:${photo(id).r}">${pic(id,{sizes:"40vw",alt:hidden?"":undefined})}</div>`).join("")}</div>`;
+      return `<div class="reel-row ${row?"rev":""}"><div class="reel-track">${set(false)}${set(true)}</div></div>`;}).join("")}
+  </section>
+  <section class="section" id="wall"><div class="wrap">
+    <div class="head-row"><h2 class="h2 rv">Recent graduates.</h2><p class="lede rv" style="--d:.08s">Tap any photo to see it larger.</p></div>
+    ${tileGrid(GRAD_PHOTOS,{eager:4})}
+  </div></section>
 
   <section class="section pt0" id="packages"><div class="wrap">
     <div class="head-row">
@@ -611,8 +626,8 @@ V.graduation = () => {
   </div></section>
 
   <section class="section pt0" id="photos"><div class="wrap">
-    <div class="head-row"><h2 class="h2 rv">Recent graduates.</h2></div>
-    ${tileGrid(GRAD_PHOTOS,{eager:4})}
+    <div class="head-row"><h2 class="h2 rv">Honourable mentions.</h2><p class="lede rv" style="--d:.08s">Some of my favourite graduation shoots.</p></div>
+    <ul class="grad-names">${GRAD_NAMES.map((n,i)=>`<li class="rv" style="--d:${(i%6)*.05}s">${esc(n)}</li>`).join("")}</ul>
   </div></section>
 
   ${ctaBlock()}`;

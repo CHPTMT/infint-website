@@ -561,7 +561,8 @@ V.socials = () => `
 /* Graduation page: packages come from CONFIG.rates.grads, so a price change in content.js shows here and on /rates */
 const GRAD_REEL = ["grad-01","portrait-31","grad-05","grad-02","grad-06","portrait-06","grad-03","grad-08","grad-07","portrait-27","grad-04","grad-09","portrait-01","grad-10","detail-23","grad-11"];
 /* The wall shows every graduation photo: the reel ones first, then the rest in the order they were added */
-const GRAD_PHOTOS = [...GRAD_REEL, ...Array.from({length:89},(_,i)=>"grad-"+(i+12))];
+/* Fixed shuffle (the same on every visit), so photos from one shoot are spread through the wall instead of sitting together */
+const GRAD_PHOTOS = (()=>{const a=[...new Set([...GRAD_REEL, ...Array.from({length:89},(_,i)=>"grad-"+(i+12))])]; let s=20261122; const rnd=()=>{s=(s+0x6D2B79F5)|0; let t=Math.imul(s^(s>>>15),1|s); t=(t+Math.imul(t^(t>>>7),61|t))^t; return ((t^(t>>>14))>>>0)/4294967296;}; for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a;})();
 const GRAD_NAMES = ["Aphiwe","Thinasonke","Thulisile","Mihle","Sivuyisiwe","Tetelo","Vhuthu","Asange","Siphesihle","Nosisa","Thembani","Tshedza"];
 V.graduation = () => {
   const r=CONFIG.rates, g=r.grads;

@@ -581,6 +581,9 @@ const GRAD_REEL = ["grad-01","portrait-31","grad-05","grad-02","grad-06","portra
 /* The wall shows every graduation photo: the reel ones first, then the rest in the order they were added */
 /* Fixed shuffle (the same on every visit), so photos from one shoot are spread through the wall instead of sitting together */
 const GRAD_PHOTOS = (()=>{const a=[...new Set([...GRAD_REEL, ...Array.from({length:89},(_,i)=>"grad-"+(i+12))])]; let s=20261122; const rnd=()=>{s=(s+0x6D2B79F5)|0; let t=Math.imul(s^(s>>>15),1|s); t=(t+Math.imul(t^(t>>>7),61|t))^t; return ((t^(t>>>14))>>>0)/4294967296;}; for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a;})();
+/* Photos with two or more people (or a parent on their own) are left out: those people did not agree to be on the site. The files stay in assets, they just are not shown. */
+const GRAD_HIDE = new Set(["grad-07","grad-14","grad-19","grad-32","grad-57","grad-58","grad-59","grad-60","grad-61","grad-62","grad-64","grad-65","grad-66","grad-67","grad-68","grad-69","grad-70","grad-71","grad-72","grad-73","grad-74","grad-76","grad-77","grad-78","grad-79","grad-84","grad-89","grad-90","grad-92","grad-94","grad-96"]);
+const gradOK = id => !GRAD_HIDE.has(id);
 const GRAD_NAMES = ["Aphiwe","Thinasonke","Thulisile","Mihle","Sivuyisiwe","Tetelo","Vhuthu","Asange","Siphesihle","Nosisa","Thembani","Tshedza"];
 /* The graduation page. With home=true it is also the home page while graduation season is on (see activeSeason), with the other kinds of work added at the bottom. */
 const gradPage = (home=false) => {
@@ -602,13 +605,13 @@ const gradPage = (home=false) => {
   </div></section>
   <section class="grad-reel" aria-label="Graduation photos">
     ${[0,1,2].map(row=>{
-      const ids=(row===1?[...GRAD_REEL].reverse():row===2?[...GRAD_REEL.slice(5),...GRAD_REEL.slice(0,5)]:GRAD_REEL).filter(photo);
+      const ids=(row===1?[...GRAD_REEL].reverse():row===2?[...GRAD_REEL.slice(5),...GRAD_REEL.slice(0,5)]:GRAD_REEL).filter(photo).filter(gradOK);
       const set=hidden=>`<div class="reel-set"${hidden?' aria-hidden="true"':""}>${ids.map(id=>`<div class="reel-item" style="aspect-ratio:${photo(id).r}">${pic(id,{sizes:"40vw",alt:hidden?"":undefined})}</div>`).join("")}</div>`;
       return `<div class="reel-row ${row===1?"rev":""} r${row}"><div class="reel-track">${set(false)}${set(true)}</div></div>`;}).join("")}
   </section>
   <section class="section" id="wall"><div class="wrap">
     <div class="head-row"><h2 class="h2 rv">Recent graduates.</h2><p class="lede rv" style="--d:.08s">Tap any photo to see it larger.</p></div>
-    ${tileGrid(GRAD_PHOTOS,{eager:4})}
+    ${tileGrid(GRAD_PHOTOS.filter(gradOK),{eager:4})}
   </div></section>
 
   <section class="section pt0" id="packages"><div class="wrap">

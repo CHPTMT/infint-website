@@ -669,7 +669,62 @@ const gradPage = (home=false) => {
 V.graduation = () => gradPage(false);
 /* In graduation season the whole home page is the graduation page; the normal home page comes back when the season ends */
 const homeDefault = V.home;
-V.home = (...a) => { const s=activeSeason(); return s&&s.key==="graduation" ? gradPage(true) : homeDefault(...a); };
+/* Promo style home page for graduation season: a loud offer first, then the packages, a strip of photos and the rest of the work */
+const promoHome = () => {
+  const r=CONFIG.rates, g=r.grads;
+  const price = n => `<span class="cur">${esc(r.currency)}</span>${num(n)}`;
+  const cards=["grad-01","grad-06","grad-03"].filter(photo);
+  const ticker=["Book yours now","Edited photos in five working days",`From ${money(minOf(g.items))}`,"On campus or at a location of your choice","Graduation season"];
+  const tk=ticker.map(t=>`<span>${esc(t)}</span>`).join("");
+  const strip=GRAD_REEL.filter(photo).filter(gradOK);
+  return `
+  <section class="promo glow" style="--gx:75%;--gy:20%"><div class="gridlines" aria-hidden="true"></div><div class="wrap wide promo-in">
+    <div class="promo-text">
+      <span class="label rv">Graduation season</span>
+      <h1 class="display rv" style="--d:.06s">Your graduation, shot properly.</h1>
+      <p class="lede rv" style="--d:.12s">Book yours now! Edited photos in five working days, on campus or wherever you choose.</p>
+      <div class="promo-price rv" style="--d:.18s"><span class="label">Packages from</span><span class="mega">${money(minOf(g.items))}</span></div>
+      <div class="actions rv" style="--d:.24s">
+        <a class="btn magnetic" href="/book?service=graduation">Book my shoot ${ARR}</a>
+        <a class="btn ghost" href="/?s=promo-packages">See packages</a>
+        <a class="btn ghost" href="/graduation">All graduation photos</a>
+      </div>
+    </div>
+    <div class="promo-cards" aria-hidden="true">${cards.map((id,i)=>`<div class="pc pc${i}">${pic(id,{sizes:"(max-width:900px) 40vw, 22vw",alt:"",eager:true})}</div>`).join("")}</div>
+  </div></section>
+  <section class="promo-ticker" aria-hidden="true"><div class="pt-track">${tk}${tk}${tk}${tk}</div></section>
+
+  <section class="section" id="promo-packages"><div class="wrap">
+    <div class="head-row"><div class="rv"><h2 class="h2">Pick your package.</h2></div>
+      <p class="lede rv" style="--d:.08s">${esc(g.note)}</p></div>
+    <div class="pkgs">
+      ${g.items.map((p,i)=>`<div class="pkg rv ${p.feature?"featured":""}" style="--d:${i*.08}s">
+        <div class="top"><span class="name">${esc(p.name)}</span>${p.feature?'<span class="badge">Most booked</span>':`<span class="label">${esc(p.dur)}</span>`}</div>
+        <div class="mega">${price(p.price)}</div>
+        <div class="sub">${p.feature?esc(p.dur)+", ":""}${esc(p.images)}</div>
+        <ul>${p.includes.map(i=>`<li><span>${esc(i)}</span></li>`).join("")}</ul>
+        <a class="btn ${p.feature?"magnetic":"ghost"}" href="/book?service=graduation&pkg=${encodeURIComponent(p.name)}">Book ${esc(p.name)} ${ARR}</a>
+      </div>`).join("")}
+    </div>
+    <p class="promo-note rv">A 50% booking fee secures your date. Book two to three weeks ahead.</p>
+  </div></section>
+
+  <section class="grad-reel" aria-label="Graduation photos"><div class="reel-row"><div class="reel-track">${[0,1].map(h=>`<div class="reel-set"${h?' aria-hidden="true"':""}>${strip.map(id=>`<div class="reel-item" style="aspect-ratio:${photo(id).r}">${pic(id,{sizes:"40vw",alt:h?"":undefined})}</div>`).join("")}</div>`).join("")}</div></div></section>
+  <section class="section pt0"><div class="wrap"><div class="head-row"><div class="rv"><a class="btn ghost" href="/graduation">See every graduation photo ${ARR}</a></div></div></div></section>
+
+  ${ctaBlock()}
+
+  <section class="section pt0"><div class="wrap wide">
+    <div class="head-row"><h2 class="h2 rv">Everything else I shoot.</h2>
+      <p class="lede rv" style="--d:.08s">Portraits, events, sport, fashion and more.</p></div>
+    <div class="cats">
+      ${CATEGORIES.map((c,i)=>`<a class="cat rv" style="--d:${(i%5)*.06}s" href="/work?f=${c.key}">
+        ${pic(c.cover,{alt:"",sizes:"(max-width:700px) 50vw, (max-width:1200px) 34vw, 22vw"})}
+        <span class="meta"><span><h3>${esc(c.name)}</h3><p>${esc(c.blurb)}</p></span></span>
+      </a>`).join("")}
+    </div></div></section>`;
+};
+V.home = (...a) => { const s=activeSeason(); return s&&s.key==="graduation" ? promoHome() : homeDefault(...a); };
 const TITLES = {work:"Work",rates:"Rates",graduation:"Graduation",book:"Book a shoot",contact:"Contact",about:"About",socials:"Socials"};
 /* Old links (#/work?f=event) are swapped for the path (/work?f=event) without a reload */
 function fromHash(){
